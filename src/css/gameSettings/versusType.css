@@ -1,0 +1,28 @@
+.versusSelectionContainer{
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    height: 60vh;
+}
+
+.versusSelectionContainer>button:hover{
+    background-color: grey;
+}
+
+.versusSelectionContainer > button{
+    width: 300px;
+    font-size: 19px;;
+    border: var(--borderBtn);
+    border-radius: var(--btnRadius);
+    height: 50px;
+}
+
+.versusSelectionContainer > button:nth-child(2){
+margin-left: 8px;
+}
+
+.versusSelectionContainer > button:first-child{
+    margin-right: 8px
+}
+
+

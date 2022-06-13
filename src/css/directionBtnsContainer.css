@@ -1,0 +1,21 @@
+.directionBtnSec{
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.directionBtnSec > button{
+    border: var(--borderBtn);
+    border-radius: var(--btnRadius);
+    width: 100px;
+    height: 30px;
+}
+
+.directionBtnSec>button:nth-child(2){
+    margin-left: 7px;
+}
+
+.directionBtnSec>button:first-child{
+    margin-right: 7px;
+}

@@ -1,26 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import TicTacToePage from './components/TicTacToePage';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+// if there are no users in the local storage, then that means a game is not being played. If that is the case, then take the user back to the home page 
+const TicTacToeApp = () => {
+  return (  
+    <BrowserRouter>
+    <Routes>
+      <Route path='/game' element={<TicTacToePage/>}/>
+      <Route path='/shapeSelection' element={<TicTacToePage/>}/>
+      <Route path='/' element={<TicTacToePage/>}/>
+      <Route path='*' element={<TicTacToePage/>}/>
+    </Routes>
+    </BrowserRouter>
   );
 }
 
-export default App;
+export default TicTacToeApp;
