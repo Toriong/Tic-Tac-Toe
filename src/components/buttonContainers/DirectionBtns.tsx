@@ -3,6 +3,8 @@ import { FC } from 'react'
 import { DirectionBtnsProps, DisabledBtnStyle, UseGetPathVals } from '../../interfaces/interfaces'
 import '../../css/directionBtnsContainer.css'
 import history from '../../history/history'
+import { HookBooleanVal } from '../../types/types'
+import { GiConsoleController } from 'react-icons/gi'
 
 // CASE: the user presses the continue button, the user is on the first versus selection section
 // GOAL: take the user to player info section
@@ -11,17 +13,15 @@ import history from '../../history/history'
 // the path is '/'
 // get the current path 
 
-const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtnDisabled}) => {
+const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtnDisabled, _compRenderToggle}) => {
   const path = window.location.pathname;
-  const [isBackBtnDisabled,] = _isBackBtnDisabled;
-  const [isForwardBtnDisabled] = _isForwardBtnDisabled;
+  const [isBackBtnDisabled,]:HookBooleanVal = _isBackBtnDisabled;
+  const [isForwardBtnDisabled]:HookBooleanVal = _isForwardBtnDisabled;
+  const [compRenderToggle, setCompRenderToggle]: HookBooleanVal = _compRenderToggle;
   const isOnVersusSelection = path === '/';
-  const isOnPlayerInfo = path === 'playerInfo'
+  const isOnPlayerInfo = path === '/playerInfo';
 
-  const disabledBtnStyles: DisabledBtnStyle = {
-    color: 'grey',
-    border: 'solid .001px grey'
-  };
+  console.log('path: ', path)
 
 
 
@@ -29,13 +29,15 @@ const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtn
   const handleContinueBtnClick = ():void => {
     if (isOnVersusSelection) {
       history.push('/playerInfo');
-      }
+    }
+    setCompRenderToggle(!compRenderToggle)
   }
 
   const handleBackBtnClick = (): void => {
-    if (!isOnPlayerInfo) {
+    if (isOnPlayerInfo) {
       history.push('/');
-    }
+    };
+    setCompRenderToggle(!compRenderToggle)
   }
   
   return (
@@ -46,7 +48,7 @@ const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtn
         className={isForwardBtnDisabled && 'disabledBtn'}
         onClick={handleContinueBtnClick}
       >
-        Continue
+        {isOnPlayerInfo ? 'Start game': "Continue"}
       </button>
       </section>
   )

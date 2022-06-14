@@ -13,7 +13,8 @@ export interface VersusTypeSelectionObj{
 
 export interface DirectionBtnsProps{
     _isBackBtnDisabled: HookBooleanVal,
-    _isForwardBtnDisabled: HookBooleanVal
+    _isForwardBtnDisabled: HookBooleanVal,
+    _compRenderToggle: HookBooleanVal
 }
 
 export interface DisabledBtnStyle{
