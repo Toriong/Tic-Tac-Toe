@@ -130,7 +130,7 @@ const TicTacToePage = () => {
       <Navbar />
       <section className='interactionSection'>
         {isOnVersusSelection &&<VersusType _versusTypeSelection={_versusType}/>}
-        {isOnPlayerInfo && <PlayerInfo _player1={_player1} _player2={_player2}/>}
+        {isOnPlayerInfo && <PlayerInfo />}
         {isDirectionsBtnOn && <DirectionBtns _isBackBtnDisabled={_isBackBtnDisabled} _isForwardBtnDisabled={_isForwardBtnDisabled} _compRenderToggle={_compRenderToggle}/>}
       </section>
     </div>

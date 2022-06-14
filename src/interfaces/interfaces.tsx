@@ -32,8 +32,13 @@ export interface Player{
     name: String
 }
 
-export interface PlayerCompProp{
+export interface SettingsVal{
     _player1: PlayerState,
-    _player2?:PlayerState
+    _player2: PlayerState
+}
+
+export interface SettingContextInterface{
+    _player1: PlayerState,
+    _player2: PlayerState
 }
 

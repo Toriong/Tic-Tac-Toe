@@ -1,11 +1,15 @@
 import React, { useState, createContext } from 'react'
 
 import { FC } from 'react';
-import { Player, SettingsVal } from '../interfaces/interfaces';
+import { Player, SettingContextInterface, SettingsVal } from '../interfaces/interfaces';
 import { PlayerState } from '../types/types';
 
+const _createContextVal = {
+        _player1: [],
+        _player2: []
+  }
 
-export const SettingContext = createContext({});
+export const SettingContext = createContext<SettingContextInterface>(_createContextVal);
 
 interface ProviderProps{
     [key: string]: any
