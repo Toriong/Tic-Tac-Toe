@@ -19,3 +19,8 @@
 .directionBtnSec>button:first-child{
     margin-right: 7px;
 }
+
+.disabledBtn{
+    color:grey;
+    border: solid .001px grey;
+}

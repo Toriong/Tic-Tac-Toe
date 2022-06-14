@@ -1,4 +1,4 @@
-import { HookBooleanVal, VersusTypeSelection } from "../types/types";
+import { HookBooleanVal, PlayerState, VersusTypeSelection } from "../types/types";
 
 
 export interface VersusTypeProps{
@@ -14,5 +14,25 @@ export interface VersusTypeSelectionObj{
 export interface DirectionBtnsProps{
     _isBackBtnDisabled: HookBooleanVal,
     _isForwardBtnDisabled: HookBooleanVal
+}
+
+export interface DisabledBtnStyle{
+    color: String,
+    border: String
+}
+
+export interface UseGetPathVals{
+    isOnVersusSelection: Boolean,
+    isOnPlayerInfo: Boolean
+}
+
+export interface Player{
+    isSquareChosen: Boolean,
+    name: String
+}
+
+export interface PlayerCompProp{
+    _player1: PlayerState,
+    _player2?:PlayerState
 }
 

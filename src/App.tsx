@@ -9,7 +9,7 @@ const TicTacToeApp = () => {
     <BrowserRouter>
     <Routes>
       <Route path='/game' element={<TicTacToePage/>}/>
-      <Route path='/shapeSelection' element={<TicTacToePage/>}/>
+      <Route path='/playerInfo' element={<TicTacToePage/>}/>
       <Route path='/' element={<TicTacToePage/>}/>
       <Route path='*' element={<TicTacToePage/>}/>
     </Routes>
