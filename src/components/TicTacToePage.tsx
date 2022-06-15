@@ -111,6 +111,7 @@ const TicTacToePage = () => {
     const versusType = localStorage.getItem('versusType');
     const player1 = localStorage.getItem('Player 1') && JSON.parse(localStorage.getItem('Player 1') as string);
     const player2 = localStorage.getItem('Player 2') && JSON.parse(localStorage.getItem('Player 2') as string);
+    debugger
     if (versusType) {
       const _versusType:VersusTypeSelectionObj = JSON.parse(versusType);
       setVersusType(_versusType);
@@ -122,21 +123,18 @@ const TicTacToePage = () => {
     if (player1) {
       const { name, isXChosen } = player1;
       setPlayer1({ name: name, isXChosen: isXChosen });
-    } else {
-      setPlayer1(player1 => { return { ...player1, name: "Player 1"}});
     }
 
     if (player2) {
       const { name, isXChosen } = player2;
       setPlayer2({ name: name, isXChosen: isXChosen });
-    } else {
-      setPlayer2(player2 => {return {...player2, name: 'Player 2'}})
     }
-
-    
-
-
   }, []);
+
+  useEffect(() => {
+    console.log('player 1: ', player1)
+    console.log('player 2: ', player2)
+  })
 
 
   return (

@@ -17,11 +17,11 @@ const PlayerInfoSec:FC<PlayerInfoSecProps> = ({isTwoPlayer}) => {
     <section className='playerInfoSec'>
       {isTwoPlayer ?
         <>
-          <PlayerInfo player={player1 as Player} setPlayer={setPlayer1} isPlayer1/>
-          <PlayerInfo player={player2 as Player} setPlayer={setPlayer2} isPlayer1={false}/>
+          <PlayerInfo player={player1 as Player} setPlayer={setPlayer1}/>
+          <PlayerInfo player={player2 as Player} setPlayer={setPlayer2}/>
         </>
         :
-        <PlayerInfo player={player1 as Player} setPlayer={setPlayer1} isPlayer1/>
+        <PlayerInfo player={player1 as Player} setPlayer={setPlayer1}/>
       }        
     </section>
   )

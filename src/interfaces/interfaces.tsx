@@ -29,8 +29,9 @@ export interface UseGetPathVals{
 }
 
 export interface Player{
-    isXChosen?: Boolean,
-    name?: String
+    isXChosen: Boolean,
+    name: String
+    isPlayer1?: Boolean,
 }
 
 export interface SettingsVal{
@@ -43,7 +44,6 @@ export interface SettingsVal{
 export interface PlayerInfoProps{
     player: Player,
     setPlayer: Dispatch<SetStateAction<Partial<Player>>>,
-    isPlayer1: Boolean
 }
 
 export interface PlayerInfoSecProps{
