@@ -1,3 +1,4 @@
+import React, {  Dispatch, SetStateAction } from 'react'
 import { HookBooleanVal, PlayerState, VersusTypeSelection } from "../types/types";
 
 
@@ -28,8 +29,8 @@ export interface UseGetPathVals{
 }
 
 export interface Player{
-    isSquareChosen: Boolean,
-    name: String
+    isXChosen?: Boolean,
+    name?: String
 }
 
 export interface SettingsVal{
@@ -37,8 +38,16 @@ export interface SettingsVal{
     _player2: PlayerState
 }
 
-export interface SettingContextInterface{
-    _player1: PlayerState,
-    _player2: PlayerState
+
+// GOAL: pass down the name of the player and if the player has chosen square
+export interface PlayerInfoProps{
+    player: Player,
+    setPlayer: Dispatch<SetStateAction<Partial<Player>>>,
+    isPlayer1: Boolean
 }
+
+export interface PlayerInfoSecProps{
+    isTwoPlayer: Boolean,
+}
+
 

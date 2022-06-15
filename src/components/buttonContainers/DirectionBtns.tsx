@@ -42,9 +42,9 @@ const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtn
   
   return (
     <section className='directionBtnSec'>
-      <button disabled={isBackBtnDisabled ? true : false} onClick={handleBackBtnClick} className={isBackBtnDisabled && 'disabledBtn'}>Back</button>
+      <button disabled={isBackBtnDisabled as boolean} onClick={handleBackBtnClick} className={isBackBtnDisabled && 'disabledBtn'}>Back</button>
       <button
-        disabled={isForwardBtnDisabled ? true : false}
+        disabled={isForwardBtnDisabled as boolean}
         className={isForwardBtnDisabled && 'disabledBtn'}
         onClick={handleContinueBtnClick}
       >

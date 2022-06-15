@@ -6,10 +6,12 @@ import { useState } from 'react';
 import { HookBooleanVal, PlayerState, VersusTypeSelection } from '../types/types';
 import DirectionBtns from './buttonContainers/DirectionBtns';
 import { useEffect } from 'react';
-import { Player, VersusTypeSelectionObj } from '../interfaces/interfaces';
-import PlayerInfo from './gameSettings/PlayerInfo';
+import { Player, SettingsVal, VersusTypeSelectionObj } from '../interfaces/interfaces';
+import PlayerInfoSec from './gameSettings/PlayerInfoSec';
 import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
+import { useContext } from 'react';
+import { SettingsContext } from '../provider/Providers';
 
 // have the direction button only appear on the UI when the user is not in the process of a playing a game
 
@@ -17,19 +19,12 @@ import { useLayoutEffect } from 'react';
 
 
 const TicTacToePage = () => {
+  const { player1, player2, setPlayer1, setPlayer2 } = useContext(SettingsContext);
   const [isDirectionsBtnOn, setIsDirectionsBtnOn]:HookBooleanVal = useState(true);
   const [isForwardBtnDisabled, setIsForwardBtnDisabled]:HookBooleanVal = useState(true);
   const [isBackBtnDisabled, setIsBackBtnDisabled]:HookBooleanVal = useState(true);
   const [compRenderToggle, setCompRenderToggle]:HookBooleanVal = useState(false);
   // why does telling the function that it will return an object throws an error
-  const getPlayerDefaultVal = (isPlayerOne: Boolean = false) => {
-    const playerDefaultVal:Player = isPlayerOne ? { isSquareChosen: false, name: 'Player 1' } : { isSquareChosen: false, name: 'Player 2' };
-    return playerDefaultVal;
-  }
-  const [player1, setPlayer1]:PlayerState = useState(getPlayerDefaultVal(true));
-  const [player2, setPlayer2]:PlayerState = useState(getPlayerDefaultVal());
-  const _player1:PlayerState = [player1, setPlayer1];
-  const _player2:PlayerState = [player2, setPlayer2]
   const _compRenderToggle:HookBooleanVal = [compRenderToggle, setCompRenderToggle]
   const _isBackBtnDisabled: HookBooleanVal = [isBackBtnDisabled, setIsBackBtnDisabled];
   const _isForwardBtnDisabled: HookBooleanVal = [isForwardBtnDisabled, setIsForwardBtnDisabled];
@@ -67,8 +62,8 @@ const TicTacToePage = () => {
   // CASE: neither of players has chosen a shape
   // GOAL: disable forward button
   // the forward button is disabled
-  // the following fields for both players is false: isSquareChosen
-  // check if for both players have the field isSquareChosen as false
+  // the following fields for both players is false: isXChosen
+  // check if for both players have the field isXChosen as false
   // the users are on the playerInfo section
 
       // if one player,
@@ -79,11 +74,10 @@ const TicTacToePage = () => {
   // CASE: if both players has chosen a shape and there are no empty strings for their names, then enable the start button 
   // the start button is enable
   // B)both users have names (there are no empty strings in the field of name)
-  //A) there are no false booleans in both in the following fields: 'isSquareChosen'
+  //A) there are no false booleans in both in the following fields: 'isXChosen'
   // if A and B, then enable the start button
   // the user is on the player info section
-  useLayoutEffect(() => {
-
+  useEffect(() => {
     if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
       setIsForwardBtnDisabled(false);
       setIsBackBtnDisabled(true);
@@ -95,10 +89,10 @@ const TicTacToePage = () => {
     if (isOnPlayerInfo) {
       setIsBackBtnDisabled(false);
       if (isTwoPlayer) {
-        const { isSquareChosen: isSquareChosenPlayer1, name: player1Name }:Player = player1;
-        const { isSquareChosen: isSquareChosenPlayer2, name: player2Name }:Player = player2;
-        const isNoShapeChosen = (isSquareChosenPlayer1 === false) && (isSquareChosenPlayer2 === false)
-        const isANameEmpty = (player1Name === "") || (player2Name === "")
+        const { isXChosen: isPlayer1Square, name: player1Name } = player1;
+        const { isXChosen: isPlayer2Square, name: player2Name} = player2; 
+        const isNoShapeChosen = (isPlayer1Square === false) && (isPlayer2Square === false)
+        const isANameEmpty = (player1Name === "") || (player2Name === "");
         if (isANameEmpty || isNoShapeChosen) {
           setIsForwardBtnDisabled(true);
         } else {
@@ -115,6 +109,8 @@ const TicTacToePage = () => {
   
   useLayoutEffect(() => {
     const versusType = localStorage.getItem('versusType');
+    const player1 = localStorage.getItem('Player 1') && JSON.parse(localStorage.getItem('Player 1') as string);
+    const player2 = localStorage.getItem('Player 2') && JSON.parse(localStorage.getItem('Player 2') as string);
     if (versusType) {
       const _versusType:VersusTypeSelectionObj = JSON.parse(versusType);
       setVersusType(_versusType);
@@ -122,6 +118,24 @@ const TicTacToePage = () => {
     if (isOnPlayerInfo) {
       setIsBackBtnDisabled(false);
     }
+  
+    if (player1) {
+      const { name, isXChosen } = player1;
+      setPlayer1({ name: name, isXChosen: isXChosen });
+    } else {
+      setPlayer1(player1 => { return { ...player1, name: "Player 1"}});
+    }
+
+    if (player2) {
+      const { name, isXChosen } = player2;
+      setPlayer2({ name: name, isXChosen: isXChosen });
+    } else {
+      setPlayer2(player2 => {return {...player2, name: 'Player 2'}})
+    }
+
+    
+
+
   }, []);
 
 
@@ -130,7 +144,7 @@ const TicTacToePage = () => {
       <Navbar />
       <section className='interactionSection'>
         {isOnVersusSelection &&<VersusType _versusTypeSelection={_versusType}/>}
-        {isOnPlayerInfo && <PlayerInfo />}
+        {isOnPlayerInfo && <PlayerInfoSec isTwoPlayer={isTwoPlayer}/>}
         {isDirectionsBtnOn && <DirectionBtns _isBackBtnDisabled={_isBackBtnDisabled} _isForwardBtnDisabled={_isForwardBtnDisabled} _compRenderToggle={_compRenderToggle}/>}
       </section>
     </div>

@@ -1,0 +1,19 @@
+.playerInfo{
+    /* background-color: #2d2e30; */
+    background-color: var(--backgroundColor);
+        border-radius: 8px;
+        display: inline-block;
+        cursor: pointer;
+        height: 385px;
+        margin: 1rem;
+        position: relative;
+        width: 360px;
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.playerInfo > section:first-child h3{
+    font-size: 25px;;
+    font-weight: 300;
+    text-align: center;
+}
+

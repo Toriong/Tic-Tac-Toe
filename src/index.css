@@ -18,19 +18,23 @@ input {
   outline: none;
   border: var(--borderColor);
   border-radius: 8px;
+  color: white;
   ;
 }
 
 
 button {
   padding: 0;
-  cursor: pointer;
-  background: none;
-  display: flex;
-  justify-content: center;
-  place-items: center;
-  color: white;
-}
+    cursor: pointer;
+    outline: none;
+    border-style: none;
+    background-color: none;
+    background: none;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    color: white;
+  }
 
 body {
   margin: 0;
