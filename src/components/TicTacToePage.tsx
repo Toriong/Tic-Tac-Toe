@@ -12,6 +12,8 @@ import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
 import { useContext } from 'react';
 import { SettingsContext } from '../provider/Providers';
+import history from '../history/history';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // have the direction button only appear on the UI when the user is not in the process of a playing a game
 
@@ -19,6 +21,7 @@ import { SettingsContext } from '../provider/Providers';
 
 
 const TicTacToePage = () => {
+  // useNavigate();
   const { player1, player2, setPlayer1, setPlayer2 } = useContext(SettingsContext);
   const { name: player1Name, isXChosen: isXPlayer1} = player1;
   const { name: player2Name, isXChosen: isXPlayer2  } = player2;
@@ -38,10 +41,23 @@ const TicTacToePage = () => {
   const [versusType, setVersusType] = useState(versusTypeDefaultVal);
   const { isTwoPlayer, isBot }: VersusTypeSelectionObj = versusType;
   const _versusType: VersusTypeSelection = [versusType, setVersusType];
-  const path = window.location.pathname;
+  const path = history.location.pathname;
   const isOnVersusSelection = path === '/';
   const isOnPlayerInfo = path === '/playerInfo';
+  console.log('isOnVersusSelection: ', isOnVersusSelection)
+  console.log('isOnPlayerInfo: ', isOnPlayerInfo)
+
+  // const _history = useNavigate();
+  // const location = useLocation();
+
   
+    
+  
+
+    useEffect(() =>  history.listen((location: Object) => {
+          console.log('location: ', location)
+        })
+    ,[history])
   
   
 
@@ -84,11 +100,18 @@ const TicTacToePage = () => {
   // FIX BUG:
   // WHAT IS HAPPENING: when it is just one user, the start game is enable even though the user hasn't chosen a shape yet
   // WHAT I WANT: when it is just a single user and the user hasn't chosen a shape yet, disable the forward button
+  // HOW I SOLVED THIS BUG: added an else conditional and the logic for it for the case when the user chooses to play by himself
 
 
   // FIX BUG:
   // WHAT IS HAPPENING: when the user is on the playerInfo page, use the back arrow on the web browser to go back to the previous page, the player info section is still being displayed 
   // WHAT I WANT: if the player info is a single player and the user goes back to the versus type section by using back button on the browser, display the versus type section on the dom 
+
+  useEffect(() => {
+    console.log(history.location.pathname)
+    console.log('window.location.pathname: ', window.location.pathname)
+    console.log('hello there')
+  })
 
 
   useEffect(() => {
@@ -116,7 +139,7 @@ const TicTacToePage = () => {
           setIsForwardBtnDisabled(false);
         }
       } else { 
-        const isANameEmpty = (player1.name === "");
+        const isANameEmpty = player1.name === "";
         if (isANameEmpty) {
           setIsForwardBtnDisabled(true);
         } else {
@@ -125,7 +148,7 @@ const TicTacToePage = () => {
       }
     }
     }
-  }, [versusType, window.location.pathname, player2Name, player1Name, isXPlayer1, isXPlayer2])
+  }, [versusType, history.location.pathname, player2Name, player1Name, isXPlayer1, isXPlayer2])
   
   useLayoutEffect(() => {
     const versusType = localStorage.getItem('versusType');
