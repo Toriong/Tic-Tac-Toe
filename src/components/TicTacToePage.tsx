@@ -20,6 +20,8 @@ import { SettingsContext } from '../provider/Providers';
 
 const TicTacToePage = () => {
   const { player1, player2, setPlayer1, setPlayer2 } = useContext(SettingsContext);
+  const { name: player1Name, } = player1;
+  const { name: player2Name  } = player2;
   const [isDirectionsBtnOn, setIsDirectionsBtnOn]:HookBooleanVal = useState(true);
   const [isForwardBtnDisabled, setIsForwardBtnDisabled]:HookBooleanVal = useState(true);
   const [isBackBtnDisabled, setIsBackBtnDisabled]:HookBooleanVal = useState(true);
@@ -78,7 +80,10 @@ const TicTacToePage = () => {
   // if A and B, then enable the start button
   // the user is on the player info section
   useEffect(() => {
-    if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
+    if (!firstRender.current.didOccur) {
+      firstRender.current.didOccur = true
+    } else {
+      if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
       setIsForwardBtnDisabled(false);
       setIsBackBtnDisabled(true);
     } 
@@ -89,9 +94,9 @@ const TicTacToePage = () => {
     if (isOnPlayerInfo) {
       setIsBackBtnDisabled(false);
       if (isTwoPlayer) {
-        const { isXChosen: isPlayer1Square, name: player1Name } = player1;
-        const { isXChosen: isPlayer2Square, name: player2Name} = player2; 
-        const isNoShapeChosen = (isPlayer1Square === false) && (isPlayer2Square === false)
+        const { isXChosen: isPlayer1X, name: player1Name } = player1;
+        const { isXChosen: isPlayer2X, name: player2Name} = player2; 
+        const isNoShapeChosen = (isPlayer1X === false) && (isPlayer2X === false)
         const isANameEmpty = (player1Name === "") || (player2Name === "");
         if (isANameEmpty || isNoShapeChosen) {
           setIsForwardBtnDisabled(true);
@@ -101,11 +106,11 @@ const TicTacToePage = () => {
       }
       // if the users hasn't chosen there name and their shape, then disable the forward button
     }
-
-    if (!firstRender.current.didOccur) {
-      firstRender.current.didOccur = true;
     }
-  }, [versusType, window.location.pathname])
+    
+
+    
+  }, [versusType, window.location.pathname, player2Name, player1Name])
   
   useLayoutEffect(() => {
     const versusType = localStorage.getItem('versusType');
@@ -118,16 +123,7 @@ const TicTacToePage = () => {
     }
     if (isOnPlayerInfo) {
       setIsBackBtnDisabled(false);
-    }
-  
-    if (player1) {
-      const { name, isXChosen } = player1;
-      setPlayer1({ name: name, isXChosen: isXChosen });
-    }
-
-    if (player2) {
-      const { name, isXChosen } = player2;
-      setPlayer2({ name: name, isXChosen: isXChosen });
+      setIsForwardBtnDisabled(true);
     }
   }, []);
 

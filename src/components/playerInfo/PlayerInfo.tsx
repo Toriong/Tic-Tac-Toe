@@ -79,12 +79,17 @@ const PlayerInfo:FC<PlayerInfoProps> = ({player, setPlayer}) => {
 
         setPlayer1(player1 => { return { ...player1, isXChosen: !isXChosen } })
         const _player1 = player1 && JSON.parse(player1);
-        const player1ObjToSave = _player1 ? { ..._player1, isXChosen: !isXChosen } : { isXChosen: !isXChosen };
+        const player1ObjToSave = _player1 ? { ..._player1, isXChosen: isXChosen ? false :true } : { isXChosen: isXChosen ? false :true };
         localStorage.setItem('Player 1', JSON.stringify(player1ObjToSave))
+        
       }
       setWillSaveShapeChanges(false);
     }
   }, [willSaveNameChanges, willSaveShapeChanges])
+
+
+  // BUG: when player 2 chooses X, player 1's isXChosen field remains true   
+  // WHAT I WANT: when player 2 chooses X, store the opposite boolean into the field 'isXChosen' for player 1 
 
   // CASE: the user choose X
   // GOAL: if the user clicks on the X, then insert a false boolean into for isXChosen for the current user, then for the other user insert a true boolean
@@ -96,13 +101,6 @@ const PlayerInfo:FC<PlayerInfoProps> = ({player, setPlayer}) => {
   // CASE: the user choose o
   // GOAL: if the user clicks on the o, then insert a true boolean into for isXChosen
 
-  const handleOBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setPlayer1(player => {return {...player, isXChosen: false}})
-  }
-
-  const handleXBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
-    console.log('event: ', event.currentTarget.name)
-  }
 
   const handleShapeBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
     const isXChosen = event.currentTarget.name === 'X';
