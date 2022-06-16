@@ -17,7 +17,6 @@ input {
   all: unset;
   outline: none;
   border: var(--borderColor);
-  border-radius: 8px;
   color: white;
   ;
 }

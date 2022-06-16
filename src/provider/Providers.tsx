@@ -11,13 +11,13 @@ export const SettingsContext = createContext({
 });
 
 
-export const SettingsProvider = ({ children, value = {name: '', isXChosen: false} as Player }: { children: ReactNode, value?: Partial<Player>}) => {
+export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     const _player1 = localStorage.getItem('Player 1') && JSON.parse(localStorage.getItem('Player 1') as string);
     const _player2 = localStorage.getItem('Player 2') && JSON.parse(localStorage.getItem('Player 2') as string);
   const { name: player1Name, isXChosen: isXPlayer1 } = _player1 ?? {};
   const { name: player2Name, isXChosen: isXPlayer2 } = _player2 ?? {};
-  const _defaultValPlayer1 = _player1 ? {isPlayer1: true, name: (player1Name || player1Name === "") ? player1Name : "Player 2", isXChosen: !!isXPlayer1} : value;
-  const _defaultValPlayer2 = _player1 ? { name: (player2Name || player2Name === "") ? player2Name : "Player 2", isXChosen: !!isXPlayer2} : value;
+  const _defaultValPlayer1 = {isPlayer1: true, name: (player1Name || player1Name === "") ? player1Name : "Player 1", isXChosen: !!isXPlayer1}
+  const _defaultValPlayer2 = { name: (player2Name || player2Name === "") ? player2Name : "Player 2", isXChosen: !!isXPlayer2}
 
   const [player1, setPlayer1] = useState(_defaultValPlayer1 as Object);
   const [player2, setPlayer2] = useState(_defaultValPlayer2 as Object);

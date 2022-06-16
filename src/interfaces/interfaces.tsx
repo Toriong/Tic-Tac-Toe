@@ -50,4 +50,8 @@ export interface PlayerInfoSecProps{
     isTwoPlayer: Boolean,
 }
 
+export interface SelectedBtnStyles{
+    backgroundColor: String
+}
+
 

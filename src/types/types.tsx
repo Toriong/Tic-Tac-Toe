@@ -1,5 +1,5 @@
 import React, {  Dispatch, SetStateAction } from 'react'
-import { Player, VersusTypeSelectionObj } from "../interfaces/interfaces";
+import { Player, SelectedBtnStyles, VersusTypeSelectionObj } from "../interfaces/interfaces";
 
 
 // THINGS TO DO MORE RESEARCH ON:
@@ -14,5 +14,7 @@ export type GlobalValuesSettings = {player1: Player, player2: Player, setPlayer1
 export type VersusTypeSelection = [VersusTypeSelectionObj, Function];
 
 export type PlayerState = [Player, Dispatch<SetStateAction<Partial<Player>>>];
+
+export type SelectedBtnStylesObj = SelectedBtnStyles | Object
 
 

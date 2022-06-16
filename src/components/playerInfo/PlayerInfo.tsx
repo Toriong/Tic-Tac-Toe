@@ -4,23 +4,18 @@ import { useContext } from 'react';
 import { SettingsContext } from '../../provider/Providers';
 import { MdOutlineClose } from "react-icons/md";
 import { BsCircle } from "react-icons/bs";
-import '../../css/gameSettings/playerInfo.css'
-import { Player, PlayerInfoProps } from '../../interfaces/interfaces';
-import { HookBooleanVal, PlayerState } from '../../types/types';
-import { FormEvent } from 'react';
+import { Player, PlayerInfoProps, SelectedBtnStyles } from '../../interfaces/interfaces';
+import { HookBooleanVal, SelectedBtnStylesObj} from '../../types/types';
 import { useEffect } from 'react';
 import { ChangeEvent } from 'react';
-import { useRef } from 'react';
 import { useState } from 'react';
+import '../../css/gameSettings/playerInfo.css'
 
 
 
 const PlayerInfo:FC<PlayerInfoProps> = ({player, setPlayer}) => {
   const {name, isXChosen, isPlayer1}:Player = player;
-  useEffect(() => {
-    console.log('name: ', name)
-  })
-  const {setPlayer2, setPlayer1, player1, player2} = useContext(SettingsContext)
+  const { setPlayer2, setPlayer1, player1, player2 } = useContext(SettingsContext);
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
 
@@ -109,27 +104,46 @@ const PlayerInfo:FC<PlayerInfoProps> = ({player, setPlayer}) => {
   }
 
 
-
-
-
+  // CASE 1: the current user chooses the x button
+  // GOAL: make the X button grey, make the O button for the other user grey
+  // the O button for the other user is grey
+  // the identity of the other user is found
+  // find the identity of the other user
+  // the current user selected shape button is changed to silver
+  // the current user selects X
+  // the identity of the current user is found
+  let xShapeStyles: SelectedBtnStylesObj = {};
+  let oShapeStyles: SelectedBtnStylesObj = {};
+  if (isPlayer1 && isXChosen) {
+     xShapeStyles = { backgroundColor: 'darkgray' };
+  } else if ((isPlayer1 && !isXChosen) && player2.isXChosen) {
+     oShapeStyles = { backgroundColor: 'darkgray' };
+  } else if (!isPlayer1 && isXChosen) {
+     xShapeStyles = { backgroundColor: 'darkgray' };
+  } else if((!isPlayer1 && !isXChosen) && player1.isXChosen){
+     oShapeStyles =  { backgroundColor: 'darkgray' }
+  } 
+  
     
 
 return (
       <div className='playerInfo'>
           <section>
-              <h3>Name</h3>
-          <input
-            defaultValue={name as string}
-            onChange={event => {handleOnChange(event)}}
-          />
+          <h3>{isPlayer1 ? "Player 1's name: " : "Player 2's name: "  }</h3>
+          <div>
+            <input
+              defaultValue={name as string}
+              onChange={event => {handleOnChange(event)}}
+              />
+            </div>
           </section>
-        <section>
-              <h3>Select a shape</h3>
-              <div>
-              <button name='X'onClick={event => {handleShapeBtnClick(event)}}>
+        <section className='shapeSelectionSec'>
+              <h3>Select a shape:</h3>
+              <div className='shapeButtonsContainer'>
+        <button name='X' id='XShape' style={xShapeStyles as Object} onClick={event => {handleShapeBtnClick(event)}}>
                 <MdOutlineClose/>
               </button>
-              <button name='O' onClick={event => {handleShapeBtnClick(event)}}>
+              <button name='O' id='OShape' style={oShapeStyles as Object} onClick={event => {handleShapeBtnClick(event)}}>
                 <BsCircle/>
               </button>
               </div>

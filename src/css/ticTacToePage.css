@@ -10,4 +10,6 @@
 
 .interactionSection{
     min-height: 77vh;
+    padding-top: 10px;
+    position: relative;
 }
