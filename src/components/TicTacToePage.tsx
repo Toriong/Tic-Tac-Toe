@@ -21,6 +21,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const TicTacToePage = () => {
+  // this allows the useEffect to respond to changes to the url 
   // useNavigate();
   const { player1, player2, setPlayer1, setPlayer2 } = useContext(SettingsContext);
   const { name: player1Name, isXChosen: isXPlayer1} = player1;
@@ -52,10 +53,42 @@ const TicTacToePage = () => {
 
   
     
-  
+  // GOAL: update the page when the url changes by using the code below
 
     useEffect(() =>  history.listen((location: Object) => {
-          console.log('location: ', location)
+          if (!firstRender.current.didOccur) {
+      firstRender.current.didOccur = true
+    } else {
+      if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur){
+        setIsForwardBtnDisabled(false);
+        setIsBackBtnDisabled(true);
+      } 
+      if (isOnVersusSelection && firstRender.current.didOccur) {
+        setIsBackBtnDisabled(true);
+      }
+    
+      if (isOnPlayerInfo) {
+        setIsBackBtnDisabled(false);
+      if (isTwoPlayer) {
+        const { isXChosen: isPlayer1X, name: player1Name } = player1;
+        const { isXChosen: isPlayer2X, name: player2Name} = player2; 
+        const isNoShapeChosen = (isPlayer1X === false) && (isPlayer2X === false);
+        const isANameEmpty = (player1Name === "") || (player2Name === "");
+        if (isANameEmpty || isNoShapeChosen) {
+          setIsForwardBtnDisabled(true);
+        } else {
+          setIsForwardBtnDisabled(false);
+        }
+      } else { 
+        const isANameEmpty = player1.name === "";
+        if (isANameEmpty) {
+          setIsForwardBtnDisabled(true);
+        } else {
+          setIsForwardBtnDisabled(false);
+        }
+      }
+    }
+    }
         })
     ,[history])
   
