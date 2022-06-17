@@ -14,6 +14,7 @@ import { useContext } from 'react';
 import { SettingsContext } from '../provider/Providers';
 import history from '../history/history';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { GiConsoleController } from 'react-icons/gi';
 
 // have the direction button only appear on the UI when the user is not in the process of a playing a game
 
@@ -55,10 +56,9 @@ const TicTacToePage = () => {
     
   // GOAL: update the page when the url changes by using the code below
 
-    useEffect(() =>  history.listen((location: Object) => {
-          if (!firstRender.current.didOccur) {
-      firstRender.current.didOccur = true
-    } else {
+    useEffect(() =>  history.listen(location => {
+      const isOnVersusSelection = location.location.pathname === '/';
+      const isOnPlayerInfo = location.location.pathname === '/playerInfo'
       if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur){
         setIsForwardBtnDisabled(false);
         setIsBackBtnDisabled(true);
@@ -87,7 +87,6 @@ const TicTacToePage = () => {
           setIsForwardBtnDisabled(false);
         }
       }
-    }
     }
         })
     ,[history])
@@ -181,7 +180,7 @@ const TicTacToePage = () => {
       }
     }
     }
-  }, [versusType, history.location.pathname, player2Name, player1Name, isXPlayer1, isXPlayer2])
+  }, [versusType, player2Name, player1Name, isXPlayer1, isXPlayer2])
   
   useLayoutEffect(() => {
     const versusType = localStorage.getItem('versusType');
