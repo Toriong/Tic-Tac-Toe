@@ -2,12 +2,17 @@
   --backgroundColor: #282c34;
   --borderBtn: solid grey .1px;
   --btnRadius: 8px;
+  --ticTacToeGridBorderColor: solid silver .5px;
 }
 
 .App {
   text-align: center;
 }
 
+
+table{
+  border-collapse: collapse;
+}
 
 
 
