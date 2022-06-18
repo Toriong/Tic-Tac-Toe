@@ -8,6 +8,11 @@ import { GameContext } from '../../provider/Providers'
 import '../../css/directionBtnsContainer.css'
 
 
+// BUG: 
+// WHAT IS HAPPENING: when the user starts a new game, presses on the two players, goes to the game section, the confirm button is enabled
+// WHAT I WANT: when the user is on the player info section, and the users hasn't chosen a shape, don't enable the forward button (the start game button)
+
+
 const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled, _compRenderToggle }) => {
   const { currentTurn, setCurrentTurn } = useContext(GameContext)
   const path = window.location.pathname;
@@ -24,7 +29,9 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
     if (isOnVersusSelection) {
       history.push('/playerInfo');
     } else {
-      setCurrentTurn(currentTurn => { return { ...currentTurn, isPlayerOne: true } });
+      const _currentTurn = { ...currentTurn, isPlayerOne: true }
+      setCurrentTurn(_currentTurn);
+      localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
       history.push('/game');
     }
     setCompRenderToggle(!compRenderToggle)
@@ -45,12 +52,12 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
       <button
         disabled={isBackBtnDisabled as boolean}
         onClick={handleBackBtnClick}
-        className={isBackBtnDisabled && 'disabledBtn'}>
+        className={isBackBtnDisabled ? 'disabledBtn' : ''}>
         Back
       </button>
       <button
         disabled={isForwardBtnDisabled as boolean}
-        className={isForwardBtnDisabled && 'disabledBtn'}
+        className={isForwardBtnDisabled ? 'disabledBtn' : ''}
         onClick={handleContinueBtnClick}
       >
         {isOnPlayerInfo ? 'Start game' : "Continue"}

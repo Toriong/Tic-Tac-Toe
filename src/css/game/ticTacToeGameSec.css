@@ -6,10 +6,23 @@
     height: 75vh;
 }
 
+
+
 .ticTacToeMainGameContainer{
     height: 95%;
     width: 50%;
 }
+
+.ticTacToeMainGameContainer td{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+}
+
+.ticTacToeMainGameContainer td svg{
+    font-size: 90px !important;;
+}
+
 
 #ticTacToeGrid{
     width: 100%;

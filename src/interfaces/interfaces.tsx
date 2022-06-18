@@ -34,7 +34,6 @@ export interface Player {
     isPlayer1?: Boolean,
     isBot?: Boolean,
     // research the array type
-    choices?: Array<String>,
     spotsChosen: Array<Number>
 }
 
@@ -50,9 +49,7 @@ export interface PlayerInfoProps {
     setPlayer: Dispatch<SetStateAction<Partial<Player>>>,
 }
 
-export interface PlayerInfoSecProps {
-    isTwoPlayer: Boolean,
-}
+
 
 export interface SelectedBtnStyles {
     backgroundColor: String

@@ -1,30 +1,41 @@
 import React from 'react'
+import { useContext } from 'react'
 import { FC } from 'react'
+import { BsCircle } from 'react-icons/bs'
+import { MdOutlineClose } from 'react-icons/md'
 import { TicTacToeSpaceProps } from '../../interfaces/interfaces'
+import { GameContext, SettingsContext } from '../../provider/Providers'
 
-
-// BRAIN DUMP NOTES:
-// the user clicks on the spot 
-// when the user clicks on a spot, get the following info on the user who click on the spot:
-// who the user is 
-// what shape is the user 
-// and the position that the user clicked on 
-// when the user clicks on the spot, get the position (gridPosition)
-// find out who the currentPlayer is
-// store the number of the position selected into the field of positionSelected of the target user
-// the comp will re-render
-// get the gridPosition
-// get all of the users 
-// get the type of game that is being played 
-// for all of the users, get the field of spotsChosen
-// 
 
 const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition }) => {
-  // GOAL: when the user clicks on the spot, present 
+  const { player1, player2, bot, versusType, setPlayer1, setPlayer2 } = useContext(SettingsContext);
+  const { currentTurn, setCurrentTurn } = useContext(GameContext);
+  const { isPlayerOne, isBot } = currentTurn;
+  const player = isPlayerOne ? player1 : player2;
+  const updatePlayer = isPlayerOne ? setPlayer1 : setPlayer2;
+  const didPlayer1PickSpot = !!player1?.spotsChosen?.length && player1?.spotsChosen.includes(gridPosition);
+  const didPlayer2PickSpot = !!player2?.spotsChosen?.length && player2?.spotsChosen.includes(gridPosition)
+  const didBotPickSpot = !!bot?.spotsChosen?.length && bot.spotsChosen.includes(gridPosition);
+  const wasSpotChosen = didBotPickSpot || didPlayer1PickSpot || didPlayer2PickSpot;
+
+  const handleOnClick = (): void => {
+    if (versusType.isTwoPlayer) {
+      const _player = { ...player, spotsChosen: player?.spotsChosen?.length ? [...player.spotsChosen, gridPosition] : [gridPosition] };
+      const _currentTurn = currentTurn.isPlayerOne ? { ...currentTurn, isPlayerTwo: true, isPlayerOne: false } : { ...currentTurn, isPlayerOne: true, isPlayerTwo: false }
+      localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
+      localStorage.setItem(`${player.name}`, JSON.stringify(_player));
+      updatePlayer(_player);
+      setCurrentTurn(_currentTurn);
+    };
+  }
+
+
 
   return (
-    <td defaultValue={JSON.stringify(gridPosition)}>
-
+    <td defaultValue={JSON.stringify(gridPosition)} onClick={handleOnClick} style={{ pointerEvents: (isBot || wasSpotChosen) ? 'none' : 'auto' }}>
+      {didPlayer1PickSpot && (player1.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
+      {didPlayer2PickSpot && (player2.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
+      {didBotPickSpot && (bot.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
     </td>
   )
 }

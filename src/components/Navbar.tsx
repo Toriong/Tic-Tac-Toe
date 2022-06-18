@@ -10,19 +10,18 @@ import '../css/navbar.css'
 const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
   const { currentTurn } = useContext(GameContext);
   const { player1, player2 } = useContext(SettingsContext);
-  const { isPlayerOne, isPlayerTwo } = currentTurn;
+  const { isPlayerOne, isPlayerTwo, isBot } = currentTurn;
   const navbarSubContainerCss = isOnGame ? 'navbarSubContainer onGame' : 'navbarSubContainer';
+  let currentPlayer = ''
 
   if (isPlayerOne) {
-    var currentPlayer = player1?.name ?? 'Player 1';
+    currentPlayer = (player1?.name as string) ?? 'Player 1';
   } else if (isPlayerTwo) {
-    currentPlayer = player2?.name ?? 'Player 2';
-  } else {
+    currentPlayer = (player2?.name as string) ?? 'Player 2';
+  } else if (isBot) {
     currentPlayer = 'Bot';
-  }
-
-
-
+  };
+  debugger
 
   return (
     <div className='unfixed-wrapper'>

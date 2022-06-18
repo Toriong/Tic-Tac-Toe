@@ -1,86 +1,82 @@
-.playerInfo{
+.playerInfo {
     background-color: var(--backgroundColor);
-        border-radius: 8px;
-        display: inline-block;
-        cursor: pointer;
-        height: 385px;
-        margin: 1rem;
-        position: relative;
-        width: 360px;
-        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+    border-radius: 8px;
+    display: inline-block;
+    cursor: pointer;
+    height: 385px;
+    margin: 1rem;
+    position: relative;
+    width: 360px;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
-.playerInfo > section h3{
-    font-size: 25px;;
+.playerInfo>section h3 {
+    font-size: 25px;
+    ;
     font-weight: 300;
 }
 
-.playerInfo>section:first-child > div{
+.playerInfo>section:first-child>div {
     width: 100%;
     display: flex;
     justify-content: center;
     place-items: center;
 }
 
-.playerInfo>section:first-child input{
-    font-size: 22px;;
+.playerInfo>section:first-child input {
+    font-size: 22px;
+    ;
     border-bottom: solid silver .001px;
     padding-bottom: 4px;
 }
 
 
 
-.playerInfo>section:last-child>div{
+.playerInfo>section:last-child>div {
     display: flex;
     height: 60px;
-} 
+}
 
 
 .playerInfo>section h3,
-.playerInfo>section:first-child input{
+.playerInfo>section:first-child input {
     text-align: center;
 }
 
-#XShape{
+#XShape {
+    font-size: 75px;
     color: turquoise
 }
 
-#OShape{
-color: orange;
+#OShape {
+    font-size: 60px;
+    color: orange;
 }
 
-#XShape{
-    font-size: 75px;;
-}
-
-#OShape{
-    font-size: 60px;;
-}
-
-.shapeSelectionSec{
+.shapeSelectionSec {
     margin-top: 55px;
 }
 
-.shapeButtonsContainer > button:first-child{
+.shapeButtonsContainer>button:first-child {
     margin-right: 12px;
 }
 
-.shapeButtonsContainer > button:nth-child(2){
+.shapeButtonsContainer>button:nth-child(2) {
     margin-left: 12px;
 }
 
 .shapeButtonsContainer {
-     display: flex;
-     justify-content: center;
-     place-items: center;
-     padding-top: 5px;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    padding-top: 5px;
 }
 
-.shapeButtonsContainer button{
+.shapeButtonsContainer button {
     height: 78px;
     border: #2d2e30 .1px solid;
     box-shadow: 0 19px 38px;
     width: 76px;
-    border-radius: 8px;;
+    border-radius: 8px;
+    ;
 }
-
