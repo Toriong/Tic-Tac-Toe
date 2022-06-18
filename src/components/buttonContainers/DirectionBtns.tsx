@@ -1,29 +1,30 @@
 import React from 'react'
 import { FC } from 'react'
 import { DirectionBtnsProps } from '../../interfaces/interfaces'
-import '../../css/directionBtnsContainer.css'
 import history from '../../history/history'
 import { HookBooleanVal } from '../../types/types'
- 
+import { useContext } from 'react'
+import { GameContext } from '../../provider/Providers'
+import '../../css/directionBtnsContainer.css'
 
-const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtnDisabled, _compRenderToggle}) => {
+
+const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled, _compRenderToggle }) => {
+  const { currentTurn, setCurrentTurn } = useContext(GameContext)
   const path = window.location.pathname;
-  const [isBackBtnDisabled,]:HookBooleanVal = _isBackBtnDisabled;
-  const [isForwardBtnDisabled]:HookBooleanVal = _isForwardBtnDisabled;
+  const [isBackBtnDisabled,]: HookBooleanVal = _isBackBtnDisabled;
+  const [isForwardBtnDisabled]: HookBooleanVal = _isForwardBtnDisabled;
   const [compRenderToggle, setCompRenderToggle]: HookBooleanVal = _compRenderToggle;
   const isOnVersusSelection = path === '/';
   const isOnPlayerInfo = path === '/playerInfo';
-  const isGameOn = path === '/game';
-
-  console.log('path: ', path)
 
 
 
-  
-  const handleContinueBtnClick = ():void => {
+
+  const handleContinueBtnClick = (): void => {
     if (isOnVersusSelection) {
       history.push('/playerInfo');
     } else {
+      setCurrentTurn(currentTurn => { return { ...currentTurn, isPlayerOne: true } });
       history.push('/game');
     }
     setCompRenderToggle(!compRenderToggle)
@@ -38,7 +39,7 @@ const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtn
     };
     setCompRenderToggle(!compRenderToggle)
   }
-  
+
   return (
     <section className='directionBtnSec'>
       <button
@@ -52,9 +53,9 @@ const DirectionBtns:FC<DirectionBtnsProps> = ({_isBackBtnDisabled, _isForwardBtn
         className={isForwardBtnDisabled && 'disabledBtn'}
         onClick={handleContinueBtnClick}
       >
-        {isOnPlayerInfo ? 'Start game': "Continue"}
+        {isOnPlayerInfo ? 'Start game' : "Continue"}
       </button>
-      </section>
+    </section>
   )
 }
 

@@ -218,7 +218,7 @@ const TicTacToePage = () => {
 
   return (
       <div className='ticTacToeMainPage'>
-      <Navbar />
+      <Navbar isOnGame={isGameOn}/>
       <section className='interactionSection'>
         {isOnVersusSelection &&<VersusType _versusTypeSelection={_versusType}/>}
         {isOnPlayerInfo && <PlayerInfoSec isTwoPlayer={isTwoPlayer}/>}

@@ -1,45 +1,56 @@
-.navbar{
+.navbar {
     height: 130px;
-        width: 100%;
-        border-right: none;
-        border-left: none;
-        border-top: none;
-        display: flex;
-        flex-direction: column;
-        background-color: var(--backgroundColor);
-        position: fixed;
-        z-index: 100002;
-        top: 0;
-        border-bottom: silver .05px solid;
+    width: 100%;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--backgroundColor);
+    position: fixed;
+    z-index: 100002;
+    top: 0;
+    border-bottom: silver .05px solid;
 }
 
 .navbarSubContainer{
-    display: flex;
-    justify-content: space-between;
-        max-width: 2560px;
-        height: 100%;
-        min-width: 280px;
+    height: 100%;
 }
 
-.navbarSubContainer > section:first-child{
-    width: 30%;
+.gameSection{
+    position: relative;
 }
 
-.navbarSubContainer>section:last-child{
-    width: 10%;
+.gameSection button{
+    position: absolute;
+    right: 20px;
+    font-size: 30px;;
 }
 
-.navbarSubContainer>section{
+.gameSection,
+.nonGameSection{
+    width: 99.8%;
+}
+
+
+.nonGameSection,
+.gameSection{
+    height: 100%;
+}
+
+.nonGameSection,
+.gameSection {
     display: flex;
     justify-content: center;
     place-items: center;
 }
 
-.navbarSubContainer>section:first-child h1{
+.nonGameSection h1,
+.gameSection h1 {
     font-weight: 350;
 }
 
-.unfixed-wrapper{
+.unfixed-wrapper {
     height: 130px;
     width: 100vw;
 }

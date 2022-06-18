@@ -1,5 +1,5 @@
 import React, {  Dispatch, SetStateAction } from 'react'
-import { Player, SelectedBtnStyles, VersusTypeSelectionObj } from "../interfaces/interfaces";
+import { CurrentTurn, Player, SelectedBtnStyles, VersusTypeSelectionObj } from "../interfaces/interfaces";
 
 
 // THINGS TO DO MORE RESEARCH ON:
@@ -15,6 +15,8 @@ export type VersusTypeSelection = [VersusTypeSelectionObj, Function];
 
 export type PlayerState = [Player, Dispatch<SetStateAction<Partial<Player>>>];
 
-export type SelectedBtnStylesObj = SelectedBtnStyles | Object
+export type SelectedBtnStylesObj = SelectedBtnStyles | Object;
+
+export type CurrentTurnState = [CurrentTurn, Dispatch<SetStateAction<Partial<CurrentTurn>>>];
 
 

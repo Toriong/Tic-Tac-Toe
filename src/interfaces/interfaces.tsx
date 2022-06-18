@@ -60,4 +60,16 @@ export interface TicTacToeSpaceProps{
     gridPosition: Number
 }
 
+export interface NavbarProps{
+    isOnGame: Boolean,
+}
+
+export interface CurrentTurn{
+    isPlayerOne: Boolean,
+    isPlayerTwo?: Boolean,
+    isBot?: Boolean
+}
+
+
+
 
