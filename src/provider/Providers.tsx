@@ -30,3 +30,13 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     </SettingsContext.Provider>
   );
 };
+
+
+// the state of currentTurnPlayer will consist of 
+
+export const GameContext = createContext({
+    player1: {} as Partial<Player>,
+    player2: {} as Partial<Player>,
+    setPlayer1: {} as Dispatch<SetStateAction<Partial<Player>>>,
+    setPlayer2: {} as Dispatch<SetStateAction<Partial<Player>>>,
+});

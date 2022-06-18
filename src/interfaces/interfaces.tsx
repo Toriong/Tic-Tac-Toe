@@ -32,6 +32,8 @@ export interface Player{
     isXChosen: Boolean,
     name: String
     isPlayer1?: Boolean,
+    // research the array type
+    choices?: Array<String>
 }
 
 export interface SettingsVal{
@@ -52,6 +54,10 @@ export interface PlayerInfoSecProps{
 
 export interface SelectedBtnStyles{
     backgroundColor: String
+}
+
+export interface TicTacToeSpaceProps{
+    gridPosition: Number
 }
 
 
