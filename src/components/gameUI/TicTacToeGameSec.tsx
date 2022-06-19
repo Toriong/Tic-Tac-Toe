@@ -5,48 +5,51 @@ import { useState } from 'react';
 import winningNumsLists from '../../data/winningNumsLists.json'
 import { useContext } from 'react';
 import { GameContext, ModalContext, SettingsContext } from '../../provider/Providers';
-import '../../css/game/ticTacToeGameSec.css'
 import { FC } from 'react';
 import { useLayoutEffect } from 'react';
+import '../../css/game/ticTacToeGameSec.css'
+import RedLine from './RedLine';
 
 
 
 const TicTacToeGrid: FC = () => {
   const { player1, player2, bot, versusType } = useContext(SettingsContext);
   const { setIsResultModalOn } = useContext(ModalContext);
-  const { currentTurn, setCurrentTurn, setIsGameDone } = useContext(GameContext);
+  const { currentTurn, setCurrentTurn, setIsGameDone, setWinningListName, isGameDone, isStaleMate } = useContext(GameContext);
   const [willCheckIfPlayerWon, setWillCheckIfPlayerWon] = useState(false);
   const ticTacToeNumRows = new Array(3).fill('');
 
 
-  const checkingForAWinner = () => winningNumsLists.find(numsList => {
+  const checkingForAWinner = () => winningNumsLists.find(list => {
     let didPlayer1Win;
-    if ((player1.spotsChosen?.length as number) >= 3) {
-      didPlayer1Win = player1.spotsChosen?.every(num => numsList.includes(num));
+    if ((player1?.spotsChosen?.length as number) >= 3) {
+      didPlayer1Win = player1?.spotsChosen?.every(num => list.nums.includes(num));
+      // if player1 is the winner, then return true, else check if the other player or bot has won.
       if (didPlayer1Win) {
         return true;
       }
     }
 
-    if (versusType.isTwoPlayer && ((player2.spotsChosen?.length as number) >= 3)) {
-      return (player2.spotsChosen as number[]).every(num => numsList.includes(num));
+    if (versusType.isTwoPlayer && ((player2?.spotsChosen?.length as number) >= 3)) {
+      return (player2?.spotsChosen as number[]).every(num => list.nums.includes(num));
     } else if (versusType.isTwoPlayer) {
-      return null
+      return false;
     }
 
     if ((bot?.spotsChosen?.length as number) >= 3) {
-      return bot.spotsChosen?.every(num => numsList.includes(num));
+      return bot?.spotsChosen?.every(num => list.nums.includes(num))
     }
 
-    return null;
-  })
+    return false;;
+  })?.name
 
   useEffect(() => {
     if (willCheckIfPlayerWon) {
-      const isWinnerPresent = checkingForAWinner();
-      if (isWinnerPresent) {
+      const numListName = checkingForAWinner();
+      if (numListName) {
         setIsResultModalOn(true);
-        localStorage.setItem('isGameDone', JSON.stringify(true));
+        setWinningListName(numListName);
+        // localStorage.setItem('isGameDone', JSON.stringify(true));
         setIsGameDone(true);
       } else {
         const _currentTurn = currentTurn.isPlayerOne ? { ...currentTurn, isPlayerTwo: true, isPlayerOne: false } : { ...currentTurn, isPlayerOne: true, isPlayerTwo: false }
@@ -70,6 +73,7 @@ const TicTacToeGrid: FC = () => {
   return (
     <section className='ticTacToeGridSection'>
       <div className='ticTacToeMainGameContainer'>
+        {/* {(isGameDone && !isStaleMate) && <RedLine />} */}
         <table id='ticTacToeGrid'>
           <tr className='ticTacToeRow'>
             {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 1} setWillCheckIfPlayerWon={setWillCheckIfPlayerWon} />)}

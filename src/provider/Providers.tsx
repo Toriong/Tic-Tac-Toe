@@ -44,9 +44,11 @@ export const GameContext = createContext({
   currentTurn: {} as Partial<CurrentTurn>,
   isStaleMate: false,
   isGameDone: false,
+  winningListName: "" as String,
   setCurrentTurn: {} as Dispatch<SetStateAction<Partial<CurrentTurn>>>,
   setIsGameDone: {} as Function,
-  setIsStaleMate: {} as Function
+  setIsStaleMate: {} as Function,
+  setWinningListName: {} as Function
 });
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
@@ -55,9 +57,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [currentTurn, setCurrentTurn] = useState(currentTurnDefaultVal as Object);
   const [isStaleMate, setIsStaleMate] = useState(false);
   const [isGameDone, setIsGameDone] = useState(false);
+  const [winningListName, setWinningListName] = useState("");
 
   return (
-    <GameContext.Provider value={{ currentTurn, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone }}>
+    <GameContext.Provider value={{ currentTurn, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, winningListName, setWinningListName }}>
       {children}
     </GameContext.Provider>
   )

@@ -1,0 +1,14 @@
+.redLine{
+    position: absolute;
+    background-color: #ff0000;
+    /* border-radius-left: 8px; */
+    height: 20px;
+    width: 102%;;
+    /* width: 60%; */
+    z-index: 1000;
+}
+
+.redLine.winningNums1{
+    /* transform: rotate(-90deg) translate(950%, 60%); */
+    transform: translateY(-60px);
+}

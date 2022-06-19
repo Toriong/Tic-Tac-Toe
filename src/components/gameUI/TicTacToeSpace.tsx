@@ -5,11 +5,12 @@ import { BsCircle } from 'react-icons/bs'
 import { MdOutlineClose } from 'react-icons/md'
 import { TicTacToeSpaceProps } from '../../interfaces/interfaces'
 import { GameContext, SettingsContext } from '../../provider/Providers'
+import RedLine from './RedLine'
 
 
 const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillCheckIfPlayerWon }) => {
   const { player1, player2, bot, versusType, setPlayer1, setPlayer2 } = useContext(SettingsContext);
-  const { currentTurn, isGameDone } = useContext(GameContext);
+  const { currentTurn, isGameDone, isStaleMate } = useContext(GameContext);
   const { isPlayerOne, isBot } = currentTurn;
   const player = isPlayerOne ? player1 : player2;
   const updatePlayer = isPlayerOne ? setPlayer1 : setPlayer2;
@@ -21,7 +22,7 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillCheckIfP
   const handleOnClick = (): void => {
     if (versusType.isTwoPlayer) {
       const _player = { ...player, spotsChosen: player?.spotsChosen?.length ? [...player.spotsChosen, gridPosition] : [gridPosition] };
-      localStorage.setItem(`${player.name}`, JSON.stringify(_player));
+      // localStorage.setItem(`${player.name}`, JSON.stringify(_player));
       updatePlayer(_player as Object);
     };
     setWillCheckIfPlayerWon(true);
@@ -34,6 +35,7 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillCheckIfP
       {didPlayer1PickSpot && (player1.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
       {didPlayer2PickSpot && (player2.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
       {didBotPickSpot && (bot.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
+      {(!isStaleMate && isGameDone) && <RedLine gridPosition={gridPosition as number} />}
     </td>
   )
 }

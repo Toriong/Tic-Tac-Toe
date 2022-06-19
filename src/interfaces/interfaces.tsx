@@ -18,6 +18,10 @@ export interface DirectionBtnsProps {
     _compRenderToggle: HookBooleanVal
 }
 
+export interface RedLineProps {
+    gridPosition: number
+}
+
 export interface DisabledBtnStyle {
     color: String,
     border: String

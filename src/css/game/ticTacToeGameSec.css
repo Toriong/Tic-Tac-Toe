@@ -17,6 +17,8 @@
     width: 100px;
     height: 100px;
     text-align: center;
+    position: relative;
+    display: table-cell;
 }
 
 .ticTacToeMainGameContainer td svg{
@@ -36,6 +38,8 @@
 
 
 
+
+
 #firstRow > td{
     border-top: none;
 }
@@ -45,4 +49,5 @@
     border-left: var(--ticTacToeGridBorderColor);
     border-right: var(--ticTacToeGridBorderColor);
 }
+
 
