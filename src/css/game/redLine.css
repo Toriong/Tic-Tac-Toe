@@ -8,6 +8,13 @@
     z-index: 1000;
 }
 
+
+.redLine.winningNums4.one{
+    transform: rotate(45deg) translateY(-23px);
+    width: 110%;
+    /* top: -50%; */
+    /* left: -50%; */
+}
 .redLine.winningNums1{
     /* transform: rotate(-90deg) translate(950%, 60%); */
     transform: translateY(-60px);

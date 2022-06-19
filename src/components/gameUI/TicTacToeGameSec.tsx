@@ -8,7 +8,11 @@ import { GameContext, ModalContext, SettingsContext } from '../../provider/Provi
 import { FC } from 'react';
 import { useLayoutEffect } from 'react';
 import '../../css/game/ticTacToeGameSec.css'
-import RedLine from './RedLine';
+import { GiBottledShadow } from 'react-icons/gi';
+
+
+// GOAL: if the numbers in nums in winningNumsList are all in the array that is stored in spotsChosen of a player, then that user has won the game 
+
 
 
 
@@ -23,21 +27,20 @@ const TicTacToeGrid: FC = () => {
   const checkingForAWinner = () => winningNumsLists.find(list => {
     let didPlayer1Win;
     if ((player1?.spotsChosen?.length as number) >= 3) {
-      didPlayer1Win = player1?.spotsChosen?.every(num => list.nums.includes(num));
-      // if player1 is the winner, then return true, else check if the other player or bot has won.
+      didPlayer1Win = list.nums?.every(num => player1?.spotsChosen?.includes(num));
       if (didPlayer1Win) {
         return true;
       }
     }
 
     if (versusType.isTwoPlayer && ((player2?.spotsChosen?.length as number) >= 3)) {
-      return (player2?.spotsChosen as number[]).every(num => list.nums.includes(num));
+      return list.nums.every(num => player2?.spotsChosen?.includes(num));
     } else if (versusType.isTwoPlayer) {
       return false;
     }
 
     if ((bot?.spotsChosen?.length as number) >= 3) {
-      return bot?.spotsChosen?.every(num => list.nums.includes(num))
+      return list.nums.every(num => bot?.spotsChosen?.includes(num))
     }
 
     return false;;
