@@ -29,12 +29,12 @@ export interface UseGetPathVals {
 }
 
 export interface Player {
-    isXChosen: Boolean,
-    name?: String
-    isPlayer1?: Boolean,
-    isBot?: Boolean,
+    isXChosen: boolean,
+    name?: String,
+    isPlayer1?: boolean,
+    isBot?: boolean,
     // research the array type
-    spotsChosen: Array<Number>
+    spotsChosen: Array<number>
 }
 
 export interface SettingsVal {
@@ -42,8 +42,6 @@ export interface SettingsVal {
     _player2: PlayerState
 }
 
-
-// GOAL: pass down the name of the player and if the player has chosen square
 export interface PlayerInfoProps {
     player: Player,
     setPlayer: Dispatch<SetStateAction<Partial<Player>>>,
@@ -56,7 +54,8 @@ export interface SelectedBtnStyles {
 }
 
 export interface TicTacToeSpaceProps {
-    gridPosition: Number
+    gridPosition: Number,
+    setWillCheckIfPlayerWon: Function
 }
 
 export interface NavbarProps {

@@ -11,10 +11,11 @@ import PlayerInfoSec from './gameSettings/PlayerInfoSec';
 import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
 import { useContext } from 'react';
-import { SettingsContext } from '../provider/Providers';
+import { ModalContext, ModalProvider, SettingsContext } from '../provider/Providers';
 import history from '../history/history';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TicTacToeGameSec from './gameUI/TicTacToeGameSec';
+import Result from './modal/Result';
 
 // have the direction button only appear on the UI when the user is not in the process of a playing a game
 
@@ -25,6 +26,7 @@ const TicTacToePage = () => {
   // this allows the useEffect to respond to changes to the url 
   // useNavigate();
   const { player1, player2, versusType, setVersusType } = useContext(SettingsContext);
+  const { isResultModalOn, setIsResultModalOn } = useContext(ModalContext);
   const { name: player1Name, isXChosen: isXPlayer1 } = player1;
   const { name: player2Name, isXChosen: isXPlayer2 } = player2;
   const [isDirectionsBtnOn, setIsDirectionsBtnOn]: HookBooleanVal = useState(true);
@@ -44,6 +46,7 @@ const TicTacToePage = () => {
   // const _history = useNavigate();
   // const location = useLocation();
 
+  const handleOnClick = () => { setIsResultModalOn(false); };
 
 
   // GOAL: update the page when the url changes by using the code below
@@ -175,9 +178,7 @@ const TicTacToePage = () => {
           }
         }
       }
-
       isGameOn && setIsDirectionsBtnOn(false);
-      debugger
     }
   }, [isGameOn, versusType, player2Name, player1Name, isXPlayer1, isXPlayer2, isOnPlayerInfo])
 
@@ -196,11 +197,6 @@ const TicTacToePage = () => {
 
   }, []);
 
-  useEffect(() => {
-    console.log('player 1: ', player1)
-    console.log('player 2: ', player2)
-  })
-
 
   return (
     <div className='ticTacToeMainPage'>
@@ -211,6 +207,12 @@ const TicTacToePage = () => {
         {isDirectionsBtnOn && <DirectionBtns _isBackBtnDisabled={_isBackBtnDisabled} _isForwardBtnDisabled={_isForwardBtnDisabled} _compRenderToggle={_compRenderToggle} />}
         {isGameOn && <TicTacToeGameSec />}
       </section>
+      {isResultModalOn &&
+        <>
+          <div className='blocker' onClick={handleOnClick} />
+          <Result />
+        </>
+      }
     </div>
   )
 }

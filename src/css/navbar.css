@@ -38,6 +38,11 @@
     height: 100%;
 }
 
+.gameSection > div svg{
+    margin-left: 8px;
+}
+
+.gameSection > div,
 .nonGameSection,
 .gameSection {
     display: flex;
@@ -48,6 +53,10 @@
 .nonGameSection h1,
 .gameSection h1 {
     font-weight: 350;
+}
+
+.gameSection h1{
+    display: flex;;
 }
 
 .unfixed-wrapper {

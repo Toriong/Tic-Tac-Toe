@@ -4,24 +4,34 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { NavbarProps } from '../interfaces/interfaces';
 import { GameContext, SettingsContext } from '../provider/Providers';
 import { useContext } from 'react';
+import { BsCircle } from 'react-icons/bs'
+import { MdOutlineClose } from 'react-icons/md'
 import '../css/navbar.css'
 
 
 const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
-  const { currentTurn } = useContext(GameContext);
-  const { player1, player2 } = useContext(SettingsContext);
+  const { currentTurn, isGameDone, isStaleMate } = useContext(GameContext);
+  const { player1, player2, bot } = useContext(SettingsContext);
   const { isPlayerOne, isPlayerTwo, isBot } = currentTurn;
   const navbarSubContainerCss = isOnGame ? 'navbarSubContainer onGame' : 'navbarSubContainer';
-  let currentPlayer = ''
+  let currentPlayer;
 
   if (isPlayerOne) {
-    currentPlayer = (player1?.name as string) ?? 'Player 1';
+    currentPlayer = player1;
   } else if (isPlayerTwo) {
-    currentPlayer = (player2?.name as string) ?? 'Player 2';
+    currentPlayer = player2;
   } else if (isBot) {
-    currentPlayer = 'Bot';
+    currentPlayer = bot;
   };
-  debugger
+
+  if (isStaleMate) {
+    var gameInfoTxt = 'STALEMATE'
+  } else if (isGameDone) {
+    gameInfoTxt = 'WINNER'
+  } else {
+    gameInfoTxt = 'Turn'
+  }
+
 
   return (
     <div className='unfixed-wrapper'>
@@ -29,9 +39,16 @@ const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
         <div className={navbarSubContainerCss}>
           {isOnGame ?
             <section className='gameSection'>
-              <h1>
-                Turn: {currentPlayer}
-              </h1>
+              <div>
+                <h1>
+                  {gameInfoTxt}: {currentPlayer?.isBot ? 'Bot' : currentPlayer?.name}
+                </h1>
+                {currentPlayer?.isXChosen ?
+                  <MdOutlineClose id='XShape' />
+                  :
+                  <BsCircle id='OShape' />
+                }
+              </div>
               <button>
                 <GiHamburgerMenu />
               </button>
