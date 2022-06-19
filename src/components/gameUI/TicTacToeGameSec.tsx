@@ -9,6 +9,7 @@ import { FC } from 'react';
 import { useLayoutEffect } from 'react';
 import '../../css/game/ticTacToeGameSec.css'
 import { GiBottledShadow } from 'react-icons/gi';
+import RedLine from './RedLine';
 
 
 // GOAL: if the numbers in nums in winningNumsList are all in the array that is stored in spotsChosen of a player, then that user has won the game 
@@ -76,7 +77,7 @@ const TicTacToeGrid: FC = () => {
   return (
     <section className='ticTacToeGridSection'>
       <div className='ticTacToeMainGameContainer'>
-        {/* {(isGameDone && !isStaleMate) && <RedLine />} */}
+        {(isGameDone && !isStaleMate) && <RedLine />}
         <table id='ticTacToeGrid'>
           <tr className='ticTacToeRow'>
             {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 1} setWillCheckIfPlayerWon={setWillCheckIfPlayerWon} />)}

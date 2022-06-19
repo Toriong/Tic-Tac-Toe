@@ -35,7 +35,7 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillCheckIfP
       {didPlayer1PickSpot && (player1.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
       {didPlayer2PickSpot && (player2.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
       {didBotPickSpot && (bot.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
-      {(!isStaleMate && isGameDone) && <RedLine gridPosition={gridPosition as number} />}
+      {/* {(!isStaleMate && isGameDone) && <RedLine gridPosition={gridPosition as number} />} */}
     </td>
   )
 }

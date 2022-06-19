@@ -12,19 +12,19 @@
         "nums": [7,8,9]
     },
     {
-        "name": "winningNums4",
+        "name": "diagonalRight",
         "nums": [1,5,9]
     },
     {
-        "name": "winningNums5",
+        "name": "diagonalLeft",
         "nums": [3,5,7]
     },
     {
-        "name": "winningNums6",
+        "name": "verticalLeft",
         "nums": [1,4,7]
     },
     {
-        "name": "winningNums7",
+        "name": "verticalMiddle",
         "nums": [2,5,8]
     },
     {

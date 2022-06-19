@@ -1,21 +1,144 @@
-.redLine{
+.redLine {
     position: absolute;
     background-color: #ff0000;
-    /* border-radius-left: 8px; */
     height: 20px;
-    width: 102%;;
-    /* width: 60%; */
+    width: 100%;
+    border-radius: 8px;
     z-index: 1000;
 }
 
+.redLine.winningNums2,
+.redLine.winningNums8,
+.redLine.verticalMiddle,
+.redLine.verticalLeft,
+.redLine.diagonalLeft,
+.redLine.diagonalRight {
+    top: 50%;
+    left: 50%;
+}
 
-.redLine.winningNums4.one{
-    transform: rotate(45deg) translateY(-23px);
-    width: 110%;
-    /* top: -50%; */
-    /* left: -50%; */
+.redLine.verticalLeft,
+.redLine.verticalMiddle,
+.redLine.winningNums8 {
+    height: 95%;
+    width: 13px;
 }
-.redLine.winningNums1{
-    /* transform: rotate(-90deg) translate(950%, 60%); */
-    transform: translateY(-60px);
+
+
+
+
+
+.redLine.redLine.winningNums2 {
+    transform: translate(-50%, -50%);
 }
+
+.redLine.winningNums8,
+.redLine.verticalMiddle {
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.redLine.winningNums8 {
+    left: 83%;
+}
+
+
+
+
+.redLine.verticalLeft {
+    transform: translate(-50%, -50%) rotate(180deg);
+    left: 16.5%;
+}
+
+
+@media(min-width: 768px) {
+
+    .redLine.diagonalLeft,
+    .redLine.diagonalRight {
+        width: 20px;
+        height: 130%;
+    }
+
+    .redLine.diagonalLeft {
+        transform: translate(-50%, -50%) rotate(50deg);
+    }
+}
+
+
+@media(min-width: 1200px) {
+    .redLine.diagonalRight {
+        transform: translate(-50%, -50%) rotate(-50deg);
+    }
+}
+
+
+
+
+.redLine.winningNums1 {
+    transform: translateY(80px);
+}
+
+.redLine.winningNums3 {
+    bottom: 85px;
+}
+
+
+
+
+@media (min-width: 768px) and (max-width: 1200px) {
+
+    .redLine.diagonalLeft,
+    .redLine.diagonalRight {
+        height: 120%;
+        width: 20px;
+    }
+}
+
+@media(max-width: 1200px) and (min-width: 1000px) {
+    .redLine.diagonalLeft {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .redLine.diagonalRight {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 999px) {
+    .redLine.diagonalLeft {
+        transform: translate(-50%, -50%) rotate(39deg);
+    }
+
+    .redLine.diagonalRight {
+        transform: translate(-50%, -50%) rotate(-39deg);
+    }
+}
+
+@media(max-width: 767px){
+    .ticTacToeMainGameContainer {
+        height: fit-content;
+    }
+}
+
+@media (max-width: 767px) and (min-width: 425px){
+    .redLine.diagonalRight{
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .redLine.diagonalLeft {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+}
+
+@media(max-width: 424px){
+    .redLine.diagonalLeft,
+    .redLine.diagonalRight{
+        width: 140%;
+    }
+
+     .redLine.diagonalRight{
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .redLine.diagonalLeft {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+}
+

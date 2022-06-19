@@ -4,20 +4,21 @@
     justify-content: center;
     align-items: center;
     height: 75vh;
+    max-height: 750px;
 }
 
 
 
 .ticTacToeMainGameContainer{
     height: 95%;
-    width: 50%;
+    /* width: 50%; */
+    position: relative;
 }
 
 .ticTacToeMainGameContainer td{
     width: 100px;
     height: 100px;
     text-align: center;
-    position: relative;
     display: table-cell;
 }
 
@@ -27,7 +28,7 @@
 
 
 #ticTacToeGrid{
-    width: 100%;
+    width: 50vw;
     height: 100%;
 }
 
@@ -50,4 +51,42 @@
     border-right: var(--ticTacToeGridBorderColor);
 }
 
+#ticTacToeGrid{
+    /* min-width: 265px; */
+    max-width: 720px;
+}
+
+
+@media(max-width: 767px){
+
+    .ticTacToeMainGameContainer td svg{
+        font-size: 60px !important;    
+    }
+
+    .ticTacToeMainGameContainer td{
+        width: 105px !important;
+    }
+}
+
+@media (max-width: 767px) and (min-width: 425px){
+    #ticTacToeGrid{
+        height: 60%;
+        width: 388px;
+    }
+}
+
+@media(max-width: 424px){
+    #ticTacToeGrid{
+        height: 300px;
+        width: 250px;
+    }
+
+    .ticTacToeMainGameContainer td{
+        width: 70px !important;
+        min-width: 70px !important;
+        max-width:70px !important;
+    }
+
+    
+}
 
