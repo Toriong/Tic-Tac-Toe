@@ -22,7 +22,7 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillCheckIfP
   const handleOnClick = (): void => {
     if (versusType.isTwoPlayer) {
       const _player = { ...player, spotsChosen: player?.spotsChosen?.length ? [...player.spotsChosen, gridPosition] : [gridPosition] };
-      // localStorage.setItem(`${player.name}`, JSON.stringify(_player));
+      localStorage.setItem(`${player.name}`, JSON.stringify(_player));
       updatePlayer(_player as Object);
     };
     setWillCheckIfPlayerWon(true);
@@ -35,7 +35,6 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillCheckIfP
       {didPlayer1PickSpot && (player1.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
       {didPlayer2PickSpot && (player2.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
       {didBotPickSpot && (bot.isXChosen ? <MdOutlineClose id='XShape' /> : <BsCircle id='OShape' />)}
-      {/* {(!isStaleMate && isGameDone) && <RedLine gridPosition={gridPosition as number} />} */}
     </td>
   )
 }

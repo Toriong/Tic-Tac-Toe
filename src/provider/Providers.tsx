@@ -69,13 +69,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 export const ModalContext = createContext({
   isResultModalOn: false,
   setIsResultModalOn: {} as Function,
+  isSideModalOn: false,
+  setIsSideModalOn: {} as Function,
 });
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [isResultModalOn, setIsResultModalOn]: HookBooleanVal = useState(false);
+  const [isSideModalOn, setIsSideModalOn] = useState(false);
 
   return (
-    <ModalContext.Provider value={{ isResultModalOn, setIsResultModalOn }}>
+    <ModalContext.Provider value={{ isResultModalOn, setIsResultModalOn, isSideModalOn, setIsSideModalOn }}>
       {children}
     </ModalContext.Provider>
   )

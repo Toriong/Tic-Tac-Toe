@@ -1,0 +1,28 @@
+.sideModal{
+    position: fixed;
+    width: 20vw;
+    background-color: var(--backgroundColor);
+    border-left: silver .05px solid;
+    border-top: silver .05px solid;;
+    height: 100vh;
+    right: 0;
+    padding: 20px 0px 0px 0px;
+}
+
+.sideModal > div{
+    height: 90px;
+    margin-left: 20px;
+}
+
+.sideModal > div button:hover{
+text-decoration: underline;
+}
+
+.sideModal > div button{
+    font-size: 20px;
+}
+
+.sideModal > div button:last-child{
+    margin-top: 15px;
+    color: red;
+}

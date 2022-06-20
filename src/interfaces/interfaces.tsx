@@ -72,6 +72,13 @@ export interface CurrentTurn {
     isBot?: Boolean
 }
 
+export interface SideModalProps {
+    setIsModalOn: Function
+}
+
+export interface ResetButtonProps {
+    setIsModalOn: Function
+}
 
 
 

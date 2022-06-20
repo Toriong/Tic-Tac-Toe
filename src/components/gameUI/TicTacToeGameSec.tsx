@@ -53,7 +53,7 @@ const TicTacToeGrid: FC = () => {
       if (numListName) {
         setIsResultModalOn(true);
         setWinningListName(numListName);
-        // localStorage.setItem('isGameDone', JSON.stringify(true));
+        localStorage.setItem('isGameDone', JSON.stringify(true));
         setIsGameDone(true);
       } else {
         const _currentTurn = currentTurn.isPlayerOne ? { ...currentTurn, isPlayerTwo: true, isPlayerOne: false } : { ...currentTurn, isPlayerOne: true, isPlayerTwo: false }

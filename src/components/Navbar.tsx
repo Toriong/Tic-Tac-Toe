@@ -2,19 +2,24 @@ import React from 'react'
 import { FC } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { NavbarProps } from '../interfaces/interfaces';
-import { GameContext, SettingsContext } from '../provider/Providers';
+import { GameContext, ModalContext, SettingsContext } from '../provider/Providers';
 import { useContext } from 'react';
 import { BsCircle } from 'react-icons/bs'
 import { MdOutlineClose } from 'react-icons/md'
+import { AiFillCloseCircle } from "react-icons/ai";
+import SideModal from './modal/SideModal';
 import '../css/navbar.css'
 
 
 const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
   const { currentTurn, isGameDone, isStaleMate } = useContext(GameContext);
   const { player1, player2, bot } = useContext(SettingsContext);
+  const { setIsSideModalOn, isSideModalOn } = useContext(ModalContext)
   const { isPlayerOne, isPlayerTwo, isBot } = currentTurn;
   const navbarSubContainerCss = isOnGame ? 'navbarSubContainer onGame' : 'navbarSubContainer';
   let currentPlayer;
+
+  const toggleModal = () => { setIsSideModalOn((isSideModalOn: Boolean) => !isSideModalOn); };
 
   if (isPlayerOne) {
     currentPlayer = player1;
@@ -49,8 +54,8 @@ const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
                   <BsCircle id='OShape' />
                 }
               </div>
-              <button>
-                <GiHamburgerMenu />
+              <button onClick={toggleModal}>
+                {isSideModalOn ? <AiFillCloseCircle /> : <GiHamburgerMenu />}
               </button>
             </section>
             :
@@ -60,6 +65,9 @@ const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
               </h1>
             </section>
           }
+        </div>
+        <div className='modalContainer'>
+          {isSideModalOn && <SideModal />}
         </div>
       </div>
     </div>

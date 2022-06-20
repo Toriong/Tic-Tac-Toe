@@ -13,6 +13,10 @@
     border-bottom: silver .05px solid;
 }
 
+.modalContainer{
+    position: relative;
+}
+
 .navbarSubContainer{
     height: 100%;
     /* max-width: 1440px; */
