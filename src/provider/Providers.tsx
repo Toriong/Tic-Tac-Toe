@@ -44,23 +44,26 @@ export const GameContext = createContext({
   currentTurn: {} as Partial<CurrentTurn>,
   isStaleMate: false,
   isGameDone: false,
+  isOnGameSec: false,
   winningListName: "" as String,
   setCurrentTurn: {} as Dispatch<SetStateAction<Partial<CurrentTurn>>>,
   setIsGameDone: {} as Function,
   setIsStaleMate: {} as Function,
-  setWinningListName: {} as Function
+  setWinningListName: {} as Function,
+  setIsOnGameSec: {} as Function
 });
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const currentTurnSavedVal = localStorage.getItem('currentTurn') && JSON.parse(localStorage.getItem('currentTurn') as string);
   const currentTurnDefaultVal = currentTurnSavedVal ?? { isPlayerOne: false, isPlayerTwo: false, isBot: false };
   const [currentTurn, setCurrentTurn] = useState(currentTurnDefaultVal as Object);
-  const [isStaleMate, setIsStaleMate] = useState(false);
-  const [isGameDone, setIsGameDone] = useState(false);
+  const [isStaleMate, setIsStaleMate]: HookBooleanVal = useState(false);
+  const [isGameDone, setIsGameDone]: HookBooleanVal = useState(false);
+  const [isOnGameSec, setIsOnGameSec]: HookBooleanVal = useState(false);
   const [winningListName, setWinningListName] = useState("");
 
   return (
-    <GameContext.Provider value={{ currentTurn, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, winningListName, setWinningListName }}>
+    <GameContext.Provider value={{ currentTurn, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, winningListName, setWinningListName, isOnGameSec, setIsOnGameSec }}>
       {children}
     </GameContext.Provider>
   )

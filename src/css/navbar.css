@@ -8,7 +8,9 @@
     flex-direction: column;
     background-color: var(--backgroundColor);
     position: fixed;
-    /* z-index: 100002; */
+    color: white;
+    font-size: calc(10px + 2vmin);
+    z-index: 100002;
     top: 0;
     border-bottom: silver .05px solid;
 }

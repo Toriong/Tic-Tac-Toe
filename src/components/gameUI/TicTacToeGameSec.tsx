@@ -21,7 +21,7 @@ const SPOTS_NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const TicTacToeGrid: FC = () => {
   const { player1, player2, bot, versusType, setBot } = useContext(SettingsContext);
   const { setIsResultModalOn } = useContext(ModalContext);
-  const { currentTurn, setCurrentTurn, setIsGameDone, setWinningListName, isGameDone, isStaleMate, setIsStaleMate } = useContext(GameContext);
+  const { currentTurn, setCurrentTurn, setIsGameDone, setWinningListName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec } = useContext(GameContext);
   const [willRotate, setWillRotate] = useState(false);
   const { isBot, isTwoPlayer } = versusType;
   const ticTacToeNumRows = new Array(3).fill('');
@@ -107,6 +107,10 @@ const TicTacToeGrid: FC = () => {
     if (localStorage.getItem('isGameDone')) {
       setIsGameDone(JSON.parse(localStorage.getItem('isGameDone') as string));
       setIsResultModalOn(true);
+    };
+    setIsOnGameSec(true);
+    return () => {
+      setIsOnGameSec(false);
     }
   }, []);
 

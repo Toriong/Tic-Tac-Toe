@@ -62,9 +62,9 @@ export interface TicTacToeSpaceProps {
     setWillRotate: Function
 }
 
-export interface NavbarProps {
-    isOnGame: Boolean,
-}
+// export interface NavbarProps {
+//     isOnGame: Boolean,
+// }
 
 export interface CurrentTurn {
     isPlayerOne: Boolean,

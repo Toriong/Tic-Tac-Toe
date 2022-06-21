@@ -1,7 +1,6 @@
 import React from 'react'
 import { FC } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
-import { NavbarProps } from '../interfaces/interfaces';
 import { GameContext, ModalContext, SettingsContext } from '../provider/Providers';
 import { useContext } from 'react';
 import { BsCircle } from 'react-icons/bs'
@@ -11,12 +10,12 @@ import SideModal from './modal/SideModal';
 import '../css/navbar.css'
 
 
-const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
-  const { currentTurn, isGameDone, isStaleMate } = useContext(GameContext);
+const Navbar: FC = () => {
+  const { currentTurn, isGameDone, isStaleMate, isOnGameSec } = useContext(GameContext);
   const { player1, player2, bot } = useContext(SettingsContext);
   const { setIsSideModalOn, isSideModalOn } = useContext(ModalContext)
   const { isPlayerOne, isPlayerTwo, isBot } = currentTurn;
-  const navbarSubContainerCss = isOnGame ? 'navbarSubContainer onGame' : 'navbarSubContainer';
+  const navbarSubContainerCss = isOnGameSec ? 'navbarSubContainer onGame' : 'navbarSubContainer';
   let currentPlayer;
 
   const toggleModal = () => { setIsSideModalOn((isSideModalOn: Boolean) => !isSideModalOn); };
@@ -42,7 +41,7 @@ const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
     <div className='unfixed-wrapper'>
       <div className='navbar'>
         <div className={navbarSubContainerCss}>
-          {isOnGame ?
+          {isOnGameSec ?
             <section className='gameSection'>
               <div>
                 <h1>

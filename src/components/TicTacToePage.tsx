@@ -138,7 +138,6 @@ const TicTacToePage = () => {
 
   useLayoutEffect(() => {
     const versusType = localStorage.getItem('versusType');
-
     if (versusType) {
       const _versusType: VersusTypeSelectionObj = JSON.parse(versusType);
       setVersusType(_versusType);
@@ -154,19 +153,13 @@ const TicTacToePage = () => {
 
   return (
     <div className='ticTacToeMainPage'>
-      <Navbar isOnGame={isGameOn} />
       <section className='interactionSection'>
         {isOnVersusSelection && <VersusType />}
         {isOnPlayerInfo && <PlayerInfoSec />}
         {isDirectionsBtnOn && <DirectionBtns _isBackBtnDisabled={_isBackBtnDisabled} _isForwardBtnDisabled={_isForwardBtnDisabled} _compRenderToggle={_compRenderToggle} />}
         {isGameOn && <TicTacToeGameSec />}
       </section>
-      {isResultModalOn &&
-        <>
-          <div className='blocker' onClick={closeResultsModal} />
-          <Result />
-        </>
-      }
+      {isResultModalOn && <Result />}
     </div>
   )
 }
