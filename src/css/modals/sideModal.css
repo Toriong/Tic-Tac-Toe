@@ -2,16 +2,19 @@
     position: fixed;
     width: 20vw;
     background-color: var(--backgroundColor);
-    border-left: silver .05px solid;
-    border-top: silver .05px solid;;
+    border-left: var(--borderModal);
+    border-top:var(--borderModal);;
     height: 100vh;
     right: 0;
     padding: 20px 0px 0px 0px;
+    z-index: 1000000005;
+    min-width: 280px;
 }
 
 .sideModal > div{
     height: 90px;
     margin-left: 20px;
+    min-width: 280px;
 }
 
 .sideModal > div button:hover{
@@ -25,4 +28,17 @@ text-decoration: underline;
 .sideModal > div button:last-child{
     margin-top: 15px;
     color: red;
+}
+
+@media (max-width: 767px){
+    .sideModal{
+        padding-top: 15px;
+        width: 100vw;
+        height:75px;    
+        border-bottom: var(--borderModal);
+        left: 0;
+        min-width: 280px;
+    }
+
+
 }

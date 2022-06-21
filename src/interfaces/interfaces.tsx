@@ -59,7 +59,7 @@ export interface SelectedBtnStyles {
 
 export interface TicTacToeSpaceProps {
     gridPosition: Number,
-    setWillCheckIfPlayerWon: Function
+    setWillRotate: Function
 }
 
 export interface NavbarProps {

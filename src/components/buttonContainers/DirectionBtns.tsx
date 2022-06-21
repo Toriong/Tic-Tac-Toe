@@ -29,6 +29,7 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
     if (isOnVersusSelection) {
       history.push('/playerInfo');
     } else {
+      // when the user starts a game
       const _currentTurn = { ...currentTurn, isPlayerOne: true }
       setCurrentTurn(_currentTurn);
       localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
@@ -37,7 +38,6 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
     setCompRenderToggle(!compRenderToggle)
   }
 
-  // if the user is on the game page and then presses the back button or changes the url, notify the user the following: 'You are in the middle of a game. Are you sure you want to leave the game? Progress might not be saved.'  
 
 
   const handleBackBtnClick = (): void => {

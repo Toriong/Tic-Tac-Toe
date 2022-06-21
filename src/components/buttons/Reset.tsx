@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect } from 'react';
 import { useContext } from 'react';
 import { FC } from 'react';
 import { GameContext, ModalContext, SettingsContext } from '../../provider/Providers';
@@ -10,10 +11,14 @@ const Reset: FC = () => {
     const { isBot, isTwoPlayer } = versusType;
 
     // Write an article about this
-    const selectionsArray = [player1?.spotsChosen?.length && (player1?.spotsChosen as Array<number>), player2?.spotsChosen?.length && (player2?.spotsChosen as Array<number>), bot?.spotsChosen?.length && (bot?.spotsChosen as Array<number>)]
-    const didGameStart = selectionsArray.find(val => !!val === true);
+    const selectionsArray = [!!player1?.spotsChosen?.length && !!(player1?.spotsChosen as Array<number>), player2?.spotsChosen?.length && (player2?.spotsChosen as Array<number>), bot?.spotsChosen?.length && (bot?.spotsChosen as Array<number>)]
+    const didGameStart = selectionsArray.find(boolean => boolean === true);
 
 
+    useEffect(() => {
+        console.log('didGameStart: ', didGameStart);
+        console.log('_pointerEvents: ', _pointerEvents)
+    })
     const handleResetGameBtnClick = () => {
         const willResetGame = window.confirm('Are you sure you want to reset this game?')
         if (willResetGame) {
@@ -36,11 +41,13 @@ const Reset: FC = () => {
             localStorage.removeItem('isGameDone');
             setIsSideModalOn(false);
         }
-    }
+    };
+
+    const _pointerEvents = !didGameStart ? 'none' : 'initial'
 
 
 
-    return <button onClick={handleResetGameBtnClick} disabled={!didGameStart} style={{ pointerEvents: !didGameStart ? 'none' : 'initial' }}>Reset</button>
+    return <button onClick={handleResetGameBtnClick} disabled={!didGameStart} style={{ pointerEvents: _pointerEvents }}>Reset</button>
 }
 
 export default Reset

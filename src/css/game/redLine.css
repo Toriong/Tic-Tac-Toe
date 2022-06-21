@@ -7,8 +7,8 @@
     z-index: 1000;
 }
 
-.redLine.winningNums2,
-.redLine.winningNums8,
+.redLine.horizontalMiddle,
+.redLine.verticalRight,
 .redLine.verticalMiddle,
 .redLine.verticalLeft,
 .redLine.diagonalLeft,
@@ -19,7 +19,7 @@
 
 .redLine.verticalLeft,
 .redLine.verticalMiddle,
-.redLine.winningNums8 {
+.redLine.verticalRight {
     height: 95%;
     width: 13px;
 }
@@ -28,16 +28,16 @@
 
 
 
-.redLine.redLine.winningNums2 {
+.redLine.redLine.horizontalMiddle {
     transform: translate(-50%, -50%);
 }
 
-.redLine.winningNums8,
+.redLine.verticalRight,
 .redLine.verticalMiddle {
     transform: translate(-50%, -50%) rotate(180deg);
 }
 
-.redLine.winningNums8 {
+.redLine.verticalRight {
     left: 83%;
 }
 
@@ -73,11 +73,11 @@
 
 
 
-.redLine.winningNums1 {
+.redLine.horizontalTop {
     transform: translateY(80px);
 }
 
-.redLine.winningNums3 {
+.redLine.horizontalBottom {
     bottom: 85px;
 }
 
@@ -115,8 +115,9 @@
 
 @media(max-width: 767px){
     .ticTacToeMainGameContainer {
-        height: fit-content;
+        height: fit-content !important;
     }
+
 }
 
 @media (max-width: 767px) and (min-width: 425px){

@@ -26,7 +26,7 @@ const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
   } else if (isPlayerTwo) {
     currentPlayer = player2;
   } else if (isBot) {
-    currentPlayer = bot;
+    currentPlayer = { isBot: true };
   };
 
   if (isStaleMate) {
@@ -46,12 +46,13 @@ const Navbar: FC<NavbarProps> = ({ isOnGame }) => {
             <section className='gameSection'>
               <div>
                 <h1>
-                  {gameInfoTxt}: {currentPlayer?.isBot ? 'Bot' : currentPlayer?.name}
+                  {(gameInfoTxt === 'STALEMATE') ? 'STALEMATE' : `${gameInfoTxt}: ${currentPlayer?.isBot ? 'Bot' : currentPlayer?.name}`}
                 </h1>
-                {currentPlayer?.isXChosen ?
-                  <MdOutlineClose id='XShape' />
-                  :
-                  <BsCircle id='OShape' />
+                {!(gameInfoTxt === 'STALEMATE') &&
+                  (currentPlayer?.isXChosen ?
+                    <MdOutlineClose id='XShape' />
+                    :
+                    <BsCircle id='OShape' />)
                 }
               </div>
               <button onClick={toggleModal}>

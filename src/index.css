@@ -1,6 +1,7 @@
 :root{
   --backgroundColor: #282c34;
   --borderBtn: solid grey .1px;
+  --borderModal: silver .05px solid;
   --btnRadius: 8px;
   --ticTacToeGridBorderColor: solid silver .5px;
 }
@@ -27,7 +28,9 @@ input {
 }
 
 .blocker{
-  z-index: 100004;;
+  z-index: 100004;
+  /* z-index: 1000000004; */
+
   background-color: rgb(0, 0, 0, .3);
   position: fixed;
   width: 100%;

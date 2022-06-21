@@ -8,46 +8,45 @@
     flex-direction: column;
     background-color: var(--backgroundColor);
     position: fixed;
-    z-index: 100002;
+    /* z-index: 100002; */
     top: 0;
     border-bottom: silver .05px solid;
 }
 
-.modalContainer{
+.modalContainer {
     position: relative;
+    min-width: 280px;
 }
 
-.navbarSubContainer{
+.navbarSubContainer {
     height: 100%;
-    /* max-width: 1440px; */
 }
 
-.gameSection{
+.gameSection {
     position: relative;
 }
 
-.gameSection button{
+.gameSection button {
     position: absolute;
     right: 20px;
-    font-size: 30px;;
+    font-size: 30px;
+    ;
 }
 
 .gameSection,
-.nonGameSection{
+.nonGameSection {
     width: 99.8%;
 }
 
 
 .nonGameSection,
-.gameSection{
+.gameSection {
     height: 100%;
 }
 
-.gameSection > div svg{
-    margin-left: 8px;
-}
 
-.gameSection > div,
+
+.gameSection>div,
 .nonGameSection,
 .gameSection {
     display: flex;
@@ -60,11 +59,46 @@
     font-weight: 350;
 }
 
-.gameSection h1{
-    display: flex;;
+.gameSection h1 {
+    display: flex;
+    ;
 }
 
 .unfixed-wrapper {
     height: 130px;
     width: 100vw;
+}
+
+@media(min-width: 768px) {
+    .gameSection>div svg {
+        margin-left: 8px;
+    }
+}
+
+@media(max-width: 767px) {
+    .gameSection > div h1 {
+        font-size: clamp(25px, 3vw, 33px);
+        transform: translateY(8px);
+    }
+
+    #XShape,
+    #OShape{
+        font-size: 50px !important;;
+    }
+
+    .gameSection > div svg{
+        transform: translateY(-8px);
+    }
+
+    .gameSection>div {
+        flex-direction: column;
+        padding-bottom: 25px;
+    }
+}
+
+@media(max-width: 576px){
+    .gameSection button{
+        right: 5px;
+        font-size: 20px;
+    }
 }
