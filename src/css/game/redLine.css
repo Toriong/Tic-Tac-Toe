@@ -113,33 +113,40 @@
     }
 }
 
-@media(max-width: 767px){
+@media(max-width: 767px) {
     .ticTacToeMainGameContainer {
         height: fit-content !important;
     }
 
+    .redLine.horizontalTop {
+        transform: translateY(40px);
+    }
+
+
 }
 
-@media (max-width: 767px) and (min-width: 425px){
-    .redLine.diagonalRight{
+@media (max-width: 767px) and (min-width: 425px) {
+    .redLine.diagonalRight {
         transform: translate(-50%, -50%) rotate(45deg);
     }
+
     .redLine.diagonalLeft {
         transform: translate(-50%, -50%) rotate(-45deg);
     }
 }
 
-@media(max-width: 424px){
+@media(max-width: 424px) {
+
     .redLine.diagonalLeft,
-    .redLine.diagonalRight{
+    .redLine.diagonalRight {
         width: 140%;
     }
 
-     .redLine.diagonalRight{
+    .redLine.diagonalRight {
         transform: translate(-50%, -50%) rotate(45deg);
     }
+
     .redLine.diagonalLeft {
         transform: translate(-50%, -50%) rotate(-45deg);
     }
 }
-

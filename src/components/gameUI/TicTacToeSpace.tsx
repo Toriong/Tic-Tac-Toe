@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect } from 'react'
 import { useContext } from 'react'
 import { FC } from 'react'
 import { BsCircle } from 'react-icons/bs'
@@ -25,7 +26,9 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillRotate }
     setWillRotate(true);
   }
 
-
+  useEffect(() => {
+    console.log('currentTurn: ', currentTurn)
+  })
 
   return (
     <td defaultValue={JSON.stringify(gridPosition)} onClick={handleOnClick} style={{ pointerEvents: (isBot || wasSpotChosen || isGameDone) ? 'none' : 'auto' }}>

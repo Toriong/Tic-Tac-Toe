@@ -11,8 +11,15 @@ const Reset: FC = () => {
     const { isBot, isTwoPlayer } = versusType;
 
     // Write an article about this
-    const selectionsArray = [!!player1?.spotsChosen?.length && !!(player1?.spotsChosen as Array<number>), player2?.spotsChosen?.length && (player2?.spotsChosen as Array<number>), bot?.spotsChosen?.length && (bot?.spotsChosen as Array<number>)]
-    const didGameStart = selectionsArray.find(boolean => boolean === true);
+    // const selectionsArray = [!!player1?.spotsChosen?.length && !!(player1?.spotsChosen as Array<number>), player2?.spotsChosen?.length && (player2?.spotsChosen as Array<number>), bot?.spotsChosen?.length && (bot?.spotsChosen as Array<number>)]
+
+    //CASE: the user is playing is against a bot 
+    // GOAL: if there a selections made either by the current user or the or the bot that means that game has started
+
+    // CASE: the user is playing against another player
+    // GOAL: if there selection made by the player one, then the game has started 
+    const didGameStart = player1?.spotsChosen?.length;
+    const _pointerEvents = !didGameStart ? 'none' : 'initial';
 
 
     useEffect(() => {
@@ -35,7 +42,7 @@ const Reset: FC = () => {
                 localStorage.setItem('bot', JSON.stringify(_bot));
                 setBot(_bot);
             };
-            !currentTurn.isPlayerOne && setCurrentTurn(currentTurn => { return { ...currentTurn, isPlayerOne: true } });
+            !currentTurn.isPlayerOne && setCurrentTurn(isTwoPlayer ? { isPlayerOne: true, isPlayerTwo: false } : { isPlayerOne: true, isBot: false });
             isGameDone && setIsGameDone(false);
             isStaleMate && setIsStaleMate(false);
             localStorage.removeItem('isGameDone');
@@ -43,7 +50,6 @@ const Reset: FC = () => {
         }
     };
 
-    const _pointerEvents = !didGameStart ? 'none' : 'initial'
 
 
 

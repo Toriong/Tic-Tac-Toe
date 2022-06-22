@@ -95,9 +95,6 @@ const TicTacToeGrid: FC = () => {
     const freeSpots = takenSpots?.length && SPOTS_NUMS.filter(spotNum => !takenSpots?.includes(spotNum));
     debugger
     if ((typeof freeSpots === 'object') && freeSpots.length) {
-      //CASE: the user is on 1,2 and spot 3 is open
-      // GOAL: place the bot's shape onto spot 3
-
       const isUserOn1 = player1.spotsChosen?.includes(1);
       const isUserOn2 = player1.spotsChosen?.includes(2);
       const isUserOn3 = player1.spotsChosen?.includes(3);
@@ -117,27 +114,73 @@ const TicTacToeGrid: FC = () => {
       const isBotOn8 = bot.spotsChosen?.includes(8);
       const isBotOn9 = bot.spotsChosen?.includes(9);
 
-      // OFFENSE MANEUVERS
-
-
-      // DEFENSE MANEUVERS
-      if (((isUserOn1 && isUserOn2) || (isUserOn9 && isUserOn6)) && !isBotOn3 && !isUserOn3) {
-        updateBotSpotsChosen(3);
+      // MANEUVERS FOR THE WIN
+      if (((isBotOn2 && isBotOn3) || (isBotOn5 && isBotOn9) || (isBotOn4 && isBotOn6)) && !isUserOn1 && !isBotOn1) {
+        updateBotSpotsChosen(1);
         debugger
         return;
-      };
+      }
 
-      if ((isUserOn4 && isUserOn1 && !isBotOn5) || (isUserOn5 && isUserOn3 && !isBotOn7)) {
+      if (((isBotOn1 && isBotOn3) || (isBotOn5 && isBotOn8)) && !isUserOn2 && !isBotOn2) {
+        updateBotSpotsChosen(2);
+        debugger
+        return;
+      }
+
+      if (((isBotOn1 && isBotOn2) || (isBotOn5 && isBotOn7) || (isBotOn6 && isBotOn9)) && !isBotOn3 && !isUserOn3) {
+        updateBotSpotsChosen(3);
+        return;
+      }
+
+      if (((isBotOn5 && isBotOn6) || (isBotOn1 && isBotOn7)) && !isBotOn4 && !isUserOn4) {
+        updateBotSpotsChosen(4);
+        return;
+      }
+
+      if (((isBotOn1 && isBotOn4) || (isBotOn5 && isBotOn3) || (isBotOn9 && isBotOn8)) && !isBotOn7 && !isUserOn7) {
         updateBotSpotsChosen(7);
         debugger
         return;
       }
 
-      if (isUserOn5 && isUserOn7 && !isBotOn4) {
-        updateBotSpotsChosen(3);
+      if (((isBotOn3 && isBotOn9) || (isBotOn4 && isBotOn5)) && !isBotOn6 && !isUserOn6) {
+        updateBotSpotsChosen(6);
         debugger
         return;
       }
+
+      if (((isBotOn1 && isBotOn4) || (isBotOn3 && isBotOn5) || (isBotOn8 && isBotOn9)) && !isBotOn7 && !isUserOn7) {
+        updateBotSpotsChosen(7);
+        return;
+      }
+
+      if (((isBotOn2 && isBotOn5) || (isBotOn7 && isBotOn9)) && !isBotOn8 && !isUserOn8) {
+        updateBotSpotsChosen(8);
+        debugger
+        return;
+      }
+
+      if (((isBotOn7 && isBotOn8) || (isBotOn3 && isBotOn6) || (isBotOn5 && isBotOn1)) && !isBotOn9 && !isUserOn9) {
+        updateBotSpotsChosen(9);
+        debugger
+        return;
+      }
+
+
+      // DEFENSE MANEUVERS
+      if (((isUserOn1 && isUserOn2) || (isUserOn9 && isUserOn6) || (isUserOn5 && isUserOn7)) && !isBotOn3 && !isUserOn3) {
+        updateBotSpotsChosen(3);
+        return;
+      };
+
+
+
+      if (((isUserOn4 && isUserOn1) || (isUserOn5 && isUserOn3) || (isUserOn8 && isUserOn9)) && !isBotOn7 && !isUserOn7) {
+        updateBotSpotsChosen(7);
+        debugger
+        return;
+      }
+
 
       if (((isUserOn2 && isUserOn5) || (isUserOn7 && isUserOn9)) && !isBotOn8 && !isUserOn8) {
         updateBotSpotsChosen(8);
@@ -157,7 +200,6 @@ const TicTacToeGrid: FC = () => {
         return;
       }
 
-      debugger
       if (((isUserOn3 && isUserOn9) || (isUserOn4 && isUserOn5)) && !isBotOn6 && !isUserOn6) {
         updateBotSpotsChosen(6);
         debugger
@@ -174,10 +216,6 @@ const TicTacToeGrid: FC = () => {
         return;
       }
 
-      if (((isUserOn8 && isUserOn9) && !isBotOn7 && !isUserOn7)) {
-        updateBotSpotsChosen(7);
-        return;
-      }
 
 
 
@@ -189,7 +227,7 @@ const TicTacToeGrid: FC = () => {
 
 
 
-
+      // if there no options on defense nor any options for the win, then choose a spot at random
       const index = Math.floor(Math.random() * freeSpots.length);
       const spotChosen = freeSpots[index];
       const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, spotChosen] : [spotChosen] } : { spotsChosen: [spotChosen] };
@@ -219,6 +257,10 @@ const TicTacToeGrid: FC = () => {
       setIsOnGameSec(false);
     }
   }, []);
+
+  useEffect(() => {
+    console.log('isGameDone: ', isGameDone)
+  })
 
 
 
