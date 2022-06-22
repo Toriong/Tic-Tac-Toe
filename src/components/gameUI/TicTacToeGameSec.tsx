@@ -78,27 +78,133 @@ const TicTacToeGrid: FC = () => {
     }
   }, [willRotate]);
 
+  const updateBotSpotsChosen = (num: number): void => {
+    const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, num] : [num] } : { spotsChosen: [num] };
+    setBot(_bot);
+    setWillRotate(true);
+  }
+
+  const placeBotShape = () => {
+    let takenSpots: Array<number> = [];
+    if (player1?.spotsChosen?.length) {
+      takenSpots = takenSpots.concat(player1.spotsChosen);
+    };
+    if (bot?.spotsChosen?.length) {
+      takenSpots = takenSpots.concat(bot.spotsChosen)
+    };
+    const freeSpots = takenSpots?.length && SPOTS_NUMS.filter(spotNum => !takenSpots?.includes(spotNum));
+    debugger
+    if ((typeof freeSpots === 'object') && freeSpots.length) {
+      //CASE: the user is on 1,2 and spot 3 is open
+      // GOAL: place the bot's shape onto spot 3
+
+      const isUserOn1 = player1.spotsChosen?.includes(1);
+      const isUserOn2 = player1.spotsChosen?.includes(2);
+      const isUserOn3 = player1.spotsChosen?.includes(3);
+      const isUserOn4 = player1.spotsChosen?.includes(4);
+      const isUserOn5 = player1.spotsChosen?.includes(5);
+      const isUserOn6 = player1.spotsChosen?.includes(6);
+      const isUserOn7 = player1.spotsChosen?.includes(7);
+      const isUserOn8 = player1.spotsChosen?.includes(8);
+      const isUserOn9 = player1.spotsChosen?.includes(9);
+      const isBotOn1 = bot.spotsChosen?.includes(1);
+      const isBotOn2 = bot.spotsChosen?.includes(2);
+      const isBotOn3 = bot.spotsChosen?.includes(3);
+      const isBotOn4 = bot.spotsChosen?.includes(4);
+      const isBotOn5 = bot.spotsChosen?.includes(5);
+      const isBotOn6 = bot.spotsChosen?.includes(6);
+      const isBotOn7 = bot.spotsChosen?.includes(7);
+      const isBotOn8 = bot.spotsChosen?.includes(8);
+      const isBotOn9 = bot.spotsChosen?.includes(9);
+
+      // OFFENSE MANEUVERS
+
+
+      // DEFENSE MANEUVERS
+      if (((isUserOn1 && isUserOn2) || (isUserOn9 && isUserOn6)) && !isBotOn3 && !isUserOn3) {
+        updateBotSpotsChosen(3);
+        debugger
+        return;
+      };
+
+      if ((isUserOn4 && isUserOn1 && !isBotOn5) || (isUserOn5 && isUserOn3 && !isBotOn7)) {
+        updateBotSpotsChosen(7);
+        debugger
+        return;
+      }
+
+      if (isUserOn5 && isUserOn7 && !isBotOn4) {
+        updateBotSpotsChosen(3);
+        debugger
+        return;
+      }
+
+      if (((isUserOn2 && isUserOn5) || (isUserOn7 && isUserOn9)) && !isBotOn8 && !isUserOn8) {
+        updateBotSpotsChosen(8);
+        debugger
+        return;
+      }
+
+      if (((isUserOn7 && isUserOn8) || (isUserOn3 && isUserOn6) || (isUserOn5 && isUserOn1)) && !isBotOn9 && !isUserOn9) {
+        updateBotSpotsChosen(9);
+        debugger
+        return;
+      }
+
+      if (((isUserOn2 && isUserOn3) || (isUserOn5 && isUserOn9) || (isUserOn7 && isUserOn4)) && !isBotOn1 && !isUserOn1) {
+        updateBotSpotsChosen(1);
+        debugger
+        return;
+      }
+
+      debugger
+      if (((isUserOn3 && isUserOn9) || (isUserOn4 && isUserOn5)) && !isBotOn6 && !isUserOn6) {
+        updateBotSpotsChosen(6);
+        debugger
+        return;
+      }
+
+      if ((((isUserOn5 && isUserOn6) || (isUserOn7 && isUserOn1) || (isBotOn5 && isBotOn6)) && !isBotOn4 && !isUserOn4)) {
+        updateBotSpotsChosen(4);
+        return;
+      }
+
+      if ((((isUserOn8 && isUserOn5) || (isUserOn1 && isUserOn3)) && !isBotOn2 && !isUserOn2)) {
+        updateBotSpotsChosen(2);
+        return;
+      }
+
+      if (((isUserOn8 && isUserOn9) && !isBotOn7 && !isUserOn7)) {
+        updateBotSpotsChosen(7);
+        return;
+      }
+
+
+
+
+      if ((!isBotOn5 && !isUserOn5) || (isBotOn7 && isBotOn3)) {
+        updateBotSpotsChosen(5);
+        return;
+      };
+
+
+
+
+      const index = Math.floor(Math.random() * freeSpots.length);
+      const spotChosen = freeSpots[index];
+      const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, spotChosen] : [spotChosen] } : { spotsChosen: [spotChosen] };
+      setBot(_bot);
+      debugger
+      // localStorage.setItem('Bot', JSON.stringify(_bot));
+    };
+    debugger
+    setWillRotate(true);
+  }
+
   useEffect(() => {
     if (currentTurn.isBot && !isGameDone) {
       setTimeout(() => {
-        let takenSpots: Array<number> = [];
-        if (player1?.spotsChosen?.length) {
-          takenSpots = takenSpots.concat(player1.spotsChosen);
-        };
-        if (bot?.spotsChosen?.length) {
-          takenSpots = takenSpots.concat(bot.spotsChosen)
-        };
-        console.log('takenSpots: ', takenSpots)
-        debugger
-        const freeSpots = takenSpots?.length && SPOTS_NUMS.filter(spotNum => !takenSpots?.includes(spotNum));
-        if ((typeof freeSpots === 'object') && freeSpots.length) {
-          const index = Math.floor(Math.random() * freeSpots.length);
-          const spotChosen = freeSpots[index];
-          const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, spotChosen] : [spotChosen] } : { spotsChosen: [spotChosen] };
-          localStorage.setItem('Bot', JSON.stringify(_bot));
-          setBot(_bot);
-        };
-        setWillRotate(true);
+        placeBotShape();
       }, 1000);
     }
   }, [currentTurn.isBot])

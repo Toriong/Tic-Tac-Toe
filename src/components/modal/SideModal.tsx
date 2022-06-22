@@ -14,7 +14,6 @@ const SideModal: FC = () => {
     const { setPlayer1, setPlayer2, setBot, versusType, player2, player1, bot } = useContext(SettingsContext)
     const { setIsGameDone, setIsStaleMate, isGameDone, isStaleMate, setCurrentTurn, currentTurn } = useContext(GameContext)
     const { isBot, isTwoPlayer } = versusType;
-    const { widthPixels } = useGetWidth()
 
 
     const handleEndGameBtnClick = () => {

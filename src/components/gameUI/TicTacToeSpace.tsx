@@ -20,7 +20,7 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillRotate }
 
   const handleOnClick = (): void => {
     const _player = { ...player, spotsChosen: player?.spotsChosen?.length ? [...player.spotsChosen, gridPosition] : [gridPosition] };
-    localStorage.setItem(`${player.name}`, JSON.stringify(_player));
+    // localStorage.setItem(`${player.name}`, JSON.stringify(_player));
     updatePlayer(_player as Object);
     setWillRotate(true);
   }
