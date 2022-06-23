@@ -7,21 +7,28 @@ import { GameContext, ModalContext, SettingsContext } from '../../provider/Provi
 const EndGame: FC = () => {
     const { setIsSideModalOn } = useContext(ModalContext);
     const { setPlayer1, setPlayer2, setBot, setVersusType } = useContext(SettingsContext)
-    const { setIsGameBeingPlayed, setIsGameDone } = useContext(GameContext)
+    const { setIsGameBeingPlayed, setIsGameDone, isGameDone, setIsStaleMate } = useContext(GameContext)
+
+    const resetGameUI = () => {
+        setPlayer1({ name: 'Player 1', isXChosen: false, spotsChosen: [], isPlayer1: true });
+        setPlayer2({ name: 'Player 2', isXChosen: false, spotsChosen: [] });
+        setBot({ isBot: true });
+        setVersusType({ isBot: false, isTwoPlayer: false });
+        setIsGameBeingPlayed(false);
+        setIsGameDone(false);
+        setIsStaleMate(false);
+        localStorage.clear();
+        history.push('/');
+        setIsSideModalOn(false);
+    }
 
     const handleEndGameBtnClick = () => {
-        const willEndGame = window.confirm('Are you sure you want to end the game? Game settings will be set to default.');
+        const willEndGame = !isGameDone && window.confirm('Are you sure you want to end the game? Game settings will be set to default.');
         if (willEndGame) {
-            setPlayer1({ name: 'Player 1', isXChosen: false, spotsChosen: [], isPlayer1: true });
-            setPlayer2({ name: 'Player 2', isXChosen: false, spotsChosen: [] });
-            setBot({ isBot: true });
-            setVersusType({ isBot: false, isTwoPlayer: false });
-            setIsGameBeingPlayed(false);
-            setIsGameDone(false);
-            localStorage.clear();
-            history.push('/');
-            setIsSideModalOn(false);
-        }
+            resetGameUI();
+            return;
+        };
+        resetGameUI();
     };
 
     return <button onClick={handleEndGameBtnClick}>End game</button>

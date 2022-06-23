@@ -82,12 +82,14 @@ export interface SideModalProps {
 }
 
 export interface ResetButtonProps {
-    setIsModalOn: Function
+    resetBtnTxt?: String | undefined
 }
 
 export interface TicTacToePageProps {
     willGoToHome?: Boolean
 }
+
+
 
 
 

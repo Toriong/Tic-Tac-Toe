@@ -15,7 +15,6 @@ import history from '../history/history';
 import TicTacToeGameSec from './gameUI/TicTacToeGameSec';
 import Result from './modal/Result';
 import GameIsOn from './modal/GameIsOn';
-import { AiOutlineConsoleSql } from 'react-icons/ai';
 import { FC } from 'react';
 
 // have the direction button only appear on the UI when the user is not in the process of a playing a game

@@ -51,9 +51,10 @@ const TicTacToeGrid: FC = () => {
       const isStaleMateVersusBot = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !numListName;
       const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !numListName;
       if (isStaleMateTwoPlayers || isStaleMateVersusBot) {
-        setIsStaleMate(true);
         localStorage.setItem('isStaleMate', JSON.stringify(true))
+        setIsStaleMate(true);
         setIsGameDone(true);
+        setIsResultModalOn(true);
       } else if (numListName) {
         setIsResultModalOn(true);
         // to find the other winning list name, reverse the array to check if there is another winning nums 
