@@ -14,7 +14,7 @@ import '../../css/directionBtnsContainer.css'
 
 
 const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled, _compRenderToggle }) => {
-  const { currentTurn, setCurrentTurn } = useContext(GameContext)
+  const { currentTurn, setCurrentTurn, setIsGameBeingPlayed } = useContext(GameContext)
   const path = window.location.pathname;
   const [isBackBtnDisabled,]: HookBooleanVal = _isBackBtnDisabled;
   const [isForwardBtnDisabled]: HookBooleanVal = _isForwardBtnDisabled;
@@ -33,6 +33,8 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
       const _currentTurn = { ...currentTurn, isPlayerOne: true }
       setCurrentTurn(_currentTurn);
       localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
+      localStorage.setItem('isGameBeingPlayed', JSON.stringify(true))
+      setIsGameBeingPlayed(true);
       history.push('/game');
     }
     setCompRenderToggle(!compRenderToggle)

@@ -15,9 +15,9 @@ const SPOTS_NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 
 const TicTacToeGrid: FC = () => {
-  const { player1, player2, bot, versusType, setBot } = useContext(SettingsContext);
-  const { setIsResultModalOn, isResultModalOn } = useContext(ModalContext);
-  const { currentTurn, setCurrentTurn, setIsGameDone, setWinningListName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec } = useContext(GameContext);
+  const { player1, player2, bot, versusType, setBot, } = useContext(SettingsContext);
+  const { setIsResultModalOn, setIsGameOnNotifyModalOn } = useContext(ModalContext);
+  const { currentTurn, setCurrentTurn, setIsGameDone, setWinningListName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec, setIsGameBeingPlayed } = useContext(GameContext);
   const [willRotate, setWillRotate] = useState(false);
   const { isTwoPlayer } = versusType;
   const ticTacToeNumRows = new Array(3).fill('');
@@ -48,12 +48,11 @@ const TicTacToeGrid: FC = () => {
   useEffect(() => {
     if (willRotate) {
       const numListName = (player1?.spotsChosen?.length as number >= 3) && checkingForAWinner();
-      // BRAIN DUMP NOTES:
-      // for all players, (either player 1 and player 2 or player 1 and the bot), check if the sum of the array of spotChosen is equal to 9. If equal to nine and checkingForAWinner doesn't return anything, then that means the game ended in a tie. 
       const isStaleMateVersusBot = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !numListName;
       const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !numListName;
       if (isStaleMateTwoPlayers || isStaleMateVersusBot) {
         setIsStaleMate(true);
+        localStorage.setItem('isStaleMate', JSON.stringify(true))
         setIsGameDone(true);
       } else if (numListName) {
         setIsResultModalOn(true);
@@ -76,6 +75,7 @@ const TicTacToeGrid: FC = () => {
 
   const updateBotSpotsChosen = (num: number): void => {
     const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, num] : [num] } : { spotsChosen: [num] };
+    localStorage.setItem('Bot', JSON.stringify(_bot));
     setBot(_bot);
     setWillRotate(true);
   }
@@ -229,7 +229,7 @@ const TicTacToeGrid: FC = () => {
       const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, spotChosen] : [spotChosen] } : { spotsChosen: [spotChosen] };
       setBot(_bot);
       debugger
-      // localStorage.setItem('Bot', JSON.stringify(_bot));
+      localStorage.setItem('Bot', JSON.stringify(_bot));
     };
     debugger
     setWillRotate(true);
@@ -244,14 +244,17 @@ const TicTacToeGrid: FC = () => {
   }, [currentTurn.isBot])
 
   useLayoutEffect(() => {
-    if (localStorage.getItem('isGameDone')) {
+    if ((localStorage.getItem('isGameDone') as string)) {
       setIsGameDone(JSON.parse(localStorage.getItem('isGameDone') as string));
       setIsResultModalOn(true);
-    };
+    }
     setIsOnGameSec(true);
+    setIsGameOnNotifyModalOn(false);
+    setIsGameBeingPlayed(true);
+    localStorage.getItem('isGameBeingPlayed') && localStorage.setItem('isGameBeingPlayed', JSON.stringify(true));
+
     return () => {
       setIsResultModalOn(false);
-
       setIsOnGameSec(false);
     }
   }, []);

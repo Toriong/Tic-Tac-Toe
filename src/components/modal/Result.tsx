@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { GameContext, SettingsContext } from '../../provider/Providers'
-import '../../css/modals/result.css'
+import '../../css/modals/centerModal.css'
 
 const Result = () => {
     const { player1, player2 } = useContext(SettingsContext);
@@ -15,7 +15,7 @@ const Result = () => {
     }
 
     return (
-        <div className='resultModal'>
+        <div className='modal'>
             <section>
                 <span>WINNER: {winner}</span>
             </section>

@@ -19,7 +19,7 @@ const TicTacToeApp = () => {
               <Route path='/game' element={<TicTacToePage />} />
               <Route path='/playerInfo' element={<TicTacToePage />} />
               <Route path='/' element={<TicTacToePage />} />
-              <Route path='*' element={<TicTacToePage />} />
+              <Route path='*' element={<TicTacToePage willGoToHome={true} />} />
             </Routes>
           </SettingsProvider>
         </GameProvider>

@@ -46,6 +46,7 @@ const Reset: FC = () => {
             isGameDone && setIsGameDone(false);
             isStaleMate && setIsStaleMate(false);
             localStorage.removeItem('isGameDone');
+            localStorage.getItem('isStaleMate') && localStorage.removeItem('isStaleMate');
             setIsSideModalOn(false);
         }
     };

@@ -1,4 +1,4 @@
-.resultModal {
+.modal {
     width: 50vw;
     height: 50vh;
     min-width: 250px;
@@ -14,25 +14,25 @@
     padding: 16px 0px 16px 0px;
 }
 
-.resultModal > section{
+.modal > section{
     height: 50%;
     display: flex;
     justify-content: center;
     place-items: center;
 }
 
-.resultModal > section:last-child > button{
+.modal > section:last-child > button{
     height: 30px;
     width: 80px;
     border: var(--borderBtn);
     border-radius: 8px;
 }
 
-.resultModal > section:last-child > button:first-child{
+.modal > section:last-child > button:first-child{
     margin-right: 8px
 }
 
-.resultModal > section:last-child > button:last-child{
+.modal > section:last-child > button:last-child{
     margin-left: 8px;
 }
 

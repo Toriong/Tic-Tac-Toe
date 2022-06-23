@@ -1,6 +1,6 @@
 import React, { useState, createContext, Dispatch, SetStateAction, ReactNode } from 'react'
 import { CurrentTurn, Player, VersusTypeSelectionObj } from '../interfaces/interfaces';
-import { HookBooleanVal } from '../types/types';
+import { HookBooleanVal, ObjectState, StringState } from '../types/types';
 
 
 // this sets the value for the SettingsContext.Provider
@@ -41,29 +41,33 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const GameContext = createContext({
-  currentTurn: {} as Partial<CurrentTurn>,
   isStaleMate: false,
   isGameDone: false,
   isOnGameSec: false,
+  isGameBeingPlayed: false,
+  currentTurn: {} as Partial<CurrentTurn>,
   winningListName: "" as String,
   setCurrentTurn: {} as Dispatch<SetStateAction<Partial<CurrentTurn>>>,
   setIsGameDone: {} as Function,
   setIsStaleMate: {} as Function,
   setWinningListName: {} as Function,
-  setIsOnGameSec: {} as Function
+  setIsOnGameSec: {} as Function,
+  setIsGameBeingPlayed: {} as Function
 });
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const currentTurnSavedVal = localStorage.getItem('currentTurn') && JSON.parse(localStorage.getItem('currentTurn') as string);
   const currentTurnDefaultVal = currentTurnSavedVal ?? { isPlayerOne: false, isPlayerTwo: false, isBot: false };
+  const _isGameBeingPlayed = localStorage.getItem('isGameBeingPlayed') && JSON.parse(localStorage.getItem('isGameBeingPlayed') as string)
   const [currentTurn, setCurrentTurn] = useState(currentTurnDefaultVal as Object);
-  const [isStaleMate, setIsStaleMate]: HookBooleanVal = useState(false);
+  const [isStaleMate, setIsStaleMate]: HookBooleanVal = useState(localStorage.getItem('isStaleMate') ? JSON.parse(localStorage.getItem('isStaleMate') as string) as boolean : false);
   const [isGameDone, setIsGameDone]: HookBooleanVal = useState(false);
+  const [isGameBeingPlayed, setIsGameBeingPlayed]: HookBooleanVal = useState(!!_isGameBeingPlayed);
   const [isOnGameSec, setIsOnGameSec]: HookBooleanVal = useState(false);
-  const [winningListName, setWinningListName] = useState("");
+  const [winningListName, setWinningListName]: StringState = useState("");
 
   return (
-    <GameContext.Provider value={{ currentTurn, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, winningListName, setWinningListName, isOnGameSec, setIsOnGameSec }}>
+    <GameContext.Provider value={{ currentTurn, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, winningListName, setWinningListName, isOnGameSec, setIsOnGameSec, isGameBeingPlayed, setIsGameBeingPlayed }}>
       {children}
     </GameContext.Provider>
   )
@@ -71,17 +75,20 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
 export const ModalContext = createContext({
   isResultModalOn: false,
-  setIsResultModalOn: {} as Function,
   isSideModalOn: false,
+  isGameOnNotifyModalOn: false,
+  setIsGameOnNotifyModalOn: {} as Function,
+  setIsResultModalOn: {} as Function,
   setIsSideModalOn: {} as Function,
 });
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [isResultModalOn, setIsResultModalOn]: HookBooleanVal = useState(false);
-  const [isSideModalOn, setIsSideModalOn] = useState(false);
+  const [isSideModalOn, setIsSideModalOn]: HookBooleanVal = useState(false);
+  const [isGameOnNotifyModalOn, setIsGameOnNotifyModalOn]: HookBooleanVal = useState(false);
 
   return (
-    <ModalContext.Provider value={{ isResultModalOn, setIsResultModalOn, isSideModalOn, setIsSideModalOn }}>
+    <ModalContext.Provider value={{ isResultModalOn, setIsResultModalOn, isSideModalOn, setIsSideModalOn, isGameOnNotifyModalOn, setIsGameOnNotifyModalOn }}>
       {children}
     </ModalContext.Provider>
   )

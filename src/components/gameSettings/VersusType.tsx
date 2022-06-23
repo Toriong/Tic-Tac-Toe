@@ -25,7 +25,7 @@ const VersusType: FC = () => {
   return (
     <div className='versusSelectionContainer'>
       <button style={{ background: isTwoPlayer ? 'grey' : 'none', pointerEvents: isTwoPlayer ? 'none' : 'auto' }} onClick={handleBtnClick(false, true)}>Two players</button>
-      <button style={{ background: isBot ? 'grey' : 'none', pointerEvents: isBot ? 'none' : 'auto' }} onClick={handleBtnClick(true, false)}>Play against a non-AI bot</button>
+      <button style={{ background: isBot ? 'grey' : 'none', pointerEvents: isBot ? 'none' : 'auto' }} onClick={handleBtnClick(true, false)}>Play against a bot</button>
     </div>
   )
 }

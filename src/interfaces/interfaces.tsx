@@ -85,5 +85,9 @@ export interface ResetButtonProps {
     setIsModalOn: Function
 }
 
+export interface TicTacToePageProps {
+    willGoToHome?: Boolean
+}
+
 
 
