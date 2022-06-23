@@ -19,7 +19,9 @@ export interface DirectionBtnsProps {
 }
 
 export interface RedLineProps {
-    gridPosition?: number
+    redLineClassName?: String,
+    redLine2ClassName?: String,
+    isRedLine1?: true | boolean
 }
 
 export interface DisabledBtnStyle {

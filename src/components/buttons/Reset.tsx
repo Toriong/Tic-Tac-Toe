@@ -7,7 +7,7 @@ import { GameContext, ModalContext, SettingsContext } from '../../provider/Provi
 
 const Reset: FC<ResetButtonProps> = ({ resetBtnTxt }) => {
     const { setPlayer1, setPlayer2, setBot, versusType, player2, player1, bot } = useContext(SettingsContext)
-    const { setIsGameDone, setIsStaleMate, isGameDone, isStaleMate, setCurrentTurn, currentTurn } = useContext(GameContext)
+    const { setIsGameDone, setIsStaleMate, isGameDone, isStaleMate, setCurrentTurn, currentTurn, setRedLine2ClassName, setRedLineClassName } = useContext(GameContext)
     const { setIsSideModalOn, setIsResultModalOn } = useContext(ModalContext);
     const { isBot, isTwoPlayer } = versusType;
 
@@ -33,6 +33,8 @@ const Reset: FC<ResetButtonProps> = ({ resetBtnTxt }) => {
         isStaleMate && setIsStaleMate(false);
         localStorage.removeItem('isGameDone');
         localStorage.getItem('isStaleMate') && localStorage.removeItem('isStaleMate');
+        setRedLine2ClassName("");
+        setRedLineClassName("");
         setIsResultModalOn(false)
         setIsSideModalOn(false);
     }

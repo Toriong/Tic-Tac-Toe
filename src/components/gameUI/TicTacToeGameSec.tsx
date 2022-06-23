@@ -17,13 +17,13 @@ const SPOTS_NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const TicTacToeGrid: FC = () => {
   const { player1, player2, bot, versusType, setBot, } = useContext(SettingsContext);
   const { setIsResultModalOn, setIsGameOnNotifyModalOn } = useContext(ModalContext);
-  const { currentTurn, setCurrentTurn, setIsGameDone, setWinningListName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec, setIsGameBeingPlayed } = useContext(GameContext);
+  const { currentTurn, setCurrentTurn, setIsGameDone, setRedLineClassName, setRedLine2ClassName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec, setIsGameBeingPlayed, redLineClassName, redLine2ClassName } = useContext(GameContext);
   const [willRotate, setWillRotate] = useState(false);
   const { isTwoPlayer } = versusType;
   const ticTacToeNumRows = new Array(3).fill('');
 
 
-  const checkingForAWinner = () => winningNumsLists.find(list => {
+  const checkingForAWinner = (willReverseArray?: boolean) => (willReverseArray ? winningNumsLists.reverse() : winningNumsLists).find(list => {
     let didPlayer1Win;
     if ((player1?.spotsChosen?.length as number) >= 3) {
       didPlayer1Win = list.nums?.every(num => player1?.spotsChosen?.includes(num));
@@ -47,20 +47,26 @@ const TicTacToeGrid: FC = () => {
 
   useEffect(() => {
     if (willRotate) {
-      const numListName = (player1?.spotsChosen?.length as number >= 3) && checkingForAWinner();
-      const isStaleMateVersusBot = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !numListName;
-      const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !numListName;
+      const redLineClassName = (player1?.spotsChosen?.length as number >= 3) && checkingForAWinner();
+      const isStaleMateVersusBot = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !redLineClassName;
+      const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !redLineClassName;
       if (isStaleMateTwoPlayers || isStaleMateVersusBot) {
         localStorage.setItem('isStaleMate', JSON.stringify(true))
         setIsStaleMate(true);
         setIsGameDone(true);
         setIsResultModalOn(true);
-      } else if (numListName) {
+      } else if (redLineClassName) {
+        const redLine2ClassName = checkingForAWinner(true);
+        if (redLine2ClassName !== redLineClassName) {
+          setRedLine2ClassName(redLine2ClassName);
+          localStorage.setItem('redLine2ClassName', JSON.stringify(redLine2ClassName));
+        };
         setIsResultModalOn(true);
-        // to find the other winning list name, reverse the array to check if there is another winning nums 
-        setWinningListName(numListName);
+        setRedLineClassName(redLineClassName);
+        localStorage.setItem('redLineClassName', JSON.stringify(redLineClassName));
         localStorage.setItem('isGameDone', JSON.stringify(true));
         setIsGameDone(true);
+        debugger
       } else if (isTwoPlayer) {
         const _currentTurn = currentTurn.isPlayerOne ? { ...currentTurn, isPlayerTwo: true, isPlayerOne: false } : { ...currentTurn, isPlayerOne: true, isPlayerTwo: false }
         localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
@@ -73,6 +79,10 @@ const TicTacToeGrid: FC = () => {
       setWillRotate(false);
     }
   }, [willRotate]);
+
+  useEffect(() => {
+    console.log('redLineClassName: ', redLineClassName)
+  })
 
   const updateBotSpotsChosen = (num: number): void => {
     const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, num] : [num] } : { spotsChosen: [num] };
@@ -269,7 +279,8 @@ const TicTacToeGrid: FC = () => {
   return (
     <section className='ticTacToeGridSection'>
       <div className='ticTacToeMainGameContainer'>
-        {(isGameDone && !isStaleMate) && <RedLine />}
+        {(isGameDone && !isStaleMate) && <RedLine redLineClassName={redLineClassName} isRedLine1 />}
+        {(isGameDone && !isStaleMate && redLine2ClassName) && <RedLine redLine2ClassName={redLine2ClassName} />}
         <table id='ticTacToeGrid'>
           <tr className='ticTacToeRow'>
             {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 1} setWillRotate={setWillRotate} />)}

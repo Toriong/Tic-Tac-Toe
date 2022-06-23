@@ -45,12 +45,14 @@ export const GameContext = createContext({
   isGameDone: false,
   isOnGameSec: false,
   isGameBeingPlayed: false,
+  redLine2ClassName: "",
   currentTurn: {} as Partial<CurrentTurn>,
-  winningListName: "" as String,
+  redLineClassName: "",
   setCurrentTurn: {} as Dispatch<SetStateAction<Partial<CurrentTurn>>>,
+  setRedLine2ClassName: {} as Function,
   setIsGameDone: {} as Function,
   setIsStaleMate: {} as Function,
-  setWinningListName: {} as Function,
+  setRedLineClassName: {} as Function,
   setIsOnGameSec: {} as Function,
   setIsGameBeingPlayed: {} as Function
 });
@@ -64,10 +66,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [isGameDone, setIsGameDone]: HookBooleanVal = useState(false);
   const [isGameBeingPlayed, setIsGameBeingPlayed]: HookBooleanVal = useState(!!_isGameBeingPlayed);
   const [isOnGameSec, setIsOnGameSec]: HookBooleanVal = useState(false);
-  const [winningListName, setWinningListName]: StringState = useState("");
+  const [redLineClassName, setRedLineClassName]: StringState = useState("");
+  const [redLine2ClassName, setRedLine2ClassName]: StringState = useState("")
 
   return (
-    <GameContext.Provider value={{ currentTurn, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, winningListName, setWinningListName, isOnGameSec, setIsOnGameSec, isGameBeingPlayed, setIsGameBeingPlayed }}>
+    <GameContext.Provider value={{ currentTurn, redLine2ClassName, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, redLineClassName, setRedLineClassName, isOnGameSec, setIsOnGameSec, isGameBeingPlayed, setIsGameBeingPlayed, setRedLine2ClassName }}>
       {children}
     </GameContext.Provider>
   )

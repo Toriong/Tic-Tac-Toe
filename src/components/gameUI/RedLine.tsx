@@ -2,28 +2,38 @@ import React from 'react'
 import { useContext } from 'react'
 import { GameContext } from '../../provider/Providers'
 import { FC } from 'react'
-import '../../css/game/redLine.css'
 import { useEffect } from 'react'
 import { useLayoutEffect } from 'react'
-import { useState } from 'react'
+import { RedLineProps } from '../../interfaces/interfaces'
+import '../../css/game/redLine.css'
 
 
-const RedLine: FC = () => {
-    const { winningListName } = useContext(GameContext);
-    const [savedWinningListName, setWinningListName] = useState(undefined);
-    // save the winningListName into the local storage 
+const RedLine: FC<RedLineProps> = ({ isRedLine1 }) => {
+    const { setRedLineClassName, redLineClassName, redLine2ClassName, setRedLine2ClassName } = useContext(GameContext);
+
+    const getSavedRedLineCssClassNames = (): { redLine2ClassName: String | null, redLineClassName: String | null } => {
+        const redLineClassName = localStorage.getItem('redLineClassName');
+        const redLine2ClassName = localStorage.getItem('redLine2ClassName');
+
+        return { redLine2ClassName, redLineClassName }
+    }
 
     useLayoutEffect(() => {
-        const winningListNameSaved = localStorage.getItem('winningListName');
-        if (winningListName) {
-            localStorage.setItem('winningListName', JSON.stringify(winningListName));
-        } else if (winningListNameSaved) {
-            const _winningListName = JSON.parse(winningListNameSaved as string);
-            setWinningListName(_winningListName);
+        const { redLineClassName, redLine2ClassName } = getSavedRedLineCssClassNames();
+        if (redLineClassName && isRedLine1) {
+            const _redLineClassName = JSON.parse(redLineClassName as string);
+            setRedLineClassName(_redLineClassName);
+        } else if (redLine2ClassName && !isRedLine1) {
+            const _redLine2ClassName = JSON.parse(redLine2ClassName as string);
+            setRedLine2ClassName(_redLine2ClassName);
         }
     }, []);
 
-    return <div className={`redLine ${savedWinningListName ?? winningListName}`} />
+    useEffect(() => {
+        console.log('redLineClassName: ', redLineClassName)
+    })
+
+    return <div className={`redLine ${isRedLine1 ? redLineClassName : redLine2ClassName}`} />
 }
 
 export default RedLine
