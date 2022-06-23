@@ -59,6 +59,7 @@
 .nonGameSection h1,
 .gameSection h1 {
     font-weight: 350;
+    font-size: clamp(23px, 7vw, 40px)
 }
 
 .gameSection h1 {

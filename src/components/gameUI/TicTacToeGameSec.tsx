@@ -49,7 +49,7 @@ const TicTacToeGrid: FC = () => {
     if (willRotate) {
       const redLineClassName = (player1?.spotsChosen?.length as number >= 3) && checkingForAWinner();
       const isStaleMateVersusBot = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !redLineClassName;
-      const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !redLineClassName;
+      const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && player2?.spotsChosen?.length) && ((player1.spotsChosen.length + player2.spotsChosen.length) === 9) && !redLineClassName;
       if (isStaleMateTwoPlayers || isStaleMateVersusBot) {
         localStorage.setItem('isStaleMate', JSON.stringify(true))
         setIsStaleMate(true);
@@ -80,9 +80,6 @@ const TicTacToeGrid: FC = () => {
     }
   }, [willRotate]);
 
-  useEffect(() => {
-    console.log('redLineClassName: ', redLineClassName)
-  })
 
   const updateBotSpotsChosen = (num: number): void => {
     const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, num] : [num] } : { spotsChosen: [num] };

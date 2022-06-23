@@ -2,4 +2,13 @@
     display: flex;
     justify-content: center;
     place-items: center;
+    min-width: 280px;
+}
+
+
+@media(max-width: 576px){
+    .playerInfoSec{
+        display: flex;
+        flex-direction: column;
+    }
 }

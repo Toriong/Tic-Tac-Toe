@@ -5,22 +5,11 @@ import { Player } from '../../interfaces/interfaces';
 import { useContext } from 'react';
 import { SettingsContext } from '../../provider/Providers';
 import PlayerInfo from '../playerInfo/PlayerInfo';
-import { useLayoutEffect } from 'react';
 
 
 
 const PlayerInfoSec: FC = () => {
   const { player1, player2, setPlayer2, setPlayer1, versusType } = useContext(SettingsContext);
-
-
-  // useLayoutEffect(() => {
-  //   const isPlayer1DataSaved = !!localStorage.getItem('Player 1')
-  //   if (!versusType.isTwoPlayer && !isPlayer1DataSaved) {
-  //     const _player1 = { ...player1, isXChosen: true };
-  //     setPlayer1(_player1);
-  //     localStorage.setItem('Player 1', JSON.stringify(_player1));
-  //   }
-  // }, [])
 
   return (
     <section className='playerInfoSec'>

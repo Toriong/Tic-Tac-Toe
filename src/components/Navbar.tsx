@@ -25,7 +25,7 @@ const Navbar: FC = () => {
   } else if (isPlayerTwo) {
     currentPlayer = player2;
   } else if (isBot) {
-    currentPlayer = { isBot: true };
+    currentPlayer = { ...bot, isBot: true };
   };
 
   if (isStaleMate) {

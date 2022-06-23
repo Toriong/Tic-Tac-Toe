@@ -3,6 +3,8 @@
     justify-content: center;
     place-items: center;
     height: 60vh;
+    max-height: 1080px;
+    min-width: 280px;
 }
 
 
@@ -20,6 +22,17 @@ margin-left: 8px;
 
 .versusSelectionContainer > button:first-child{
     margin-right: 8px
+}
+
+@media(max-width: 767px){
+    .versusSelectionContainer > button{
+        font-size: 11px;;
+        /* width: clamp(100px, 10vw, ) */
+        /* width: clamp(100px, 15vw, 300px); */
+        /* width:  */
+        width: 40vw;
+        min-width: 100px;
+    }
 }
 
 

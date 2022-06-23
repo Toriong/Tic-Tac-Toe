@@ -7,10 +7,8 @@ import { BsCircle } from "react-icons/bs";
 import { Player, PlayerInfoProps } from '../../interfaces/interfaces';
 import { HookBooleanVal, SelectedBtnStylesObj } from '../../types/types';
 import { useEffect } from 'react';
-import { ChangeEvent } from 'react';
 import { useState } from 'react';
 import '../../css/gameSettings/playerInfo.css'
-import { spawn } from 'child_process';
 
 
 
@@ -22,25 +20,8 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const [isErrorOnPlayer1, setIsErrorOnPlayer1]: HookBooleanVal = useState(false);
   const [isErrorOnPlayer2, setIsErrorOnPlayer2]: HookBooleanVal = useState(false);
 
-
-  // what is exactly is HTMLInputElement?
-  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value: _name } = event.target;
-    if (_name.length > 10) {
-      setDidErrorOccur(true);
-      isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
-    } else {
-      setDidErrorOccur(false);
-      setIsErrorOnPlayer1(false);
-      setIsErrorOnPlayer2(false);
-      setPlayer(val => { return { ...val, name: _name } })
-      setWillSaveNameChanges(true);
-    };
-  };
-
   const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const { key, target } = event;
-    const _name = (target as HTMLInputElement).value;
+    const _name = (event.target as HTMLInputElement).value;
     if (_name.length > 10) {
       setDidErrorOccur(true);
       isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
@@ -53,9 +34,7 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     };
   }
 
-  useEffect(() => {
-    console.log('didErrorOccur: ', didErrorOccur)
-  })
+
 
 
 
@@ -92,7 +71,8 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
         } else {
           const _bot = bot ? { ...bot, isXChosen: !isXChosen } : { isXChosen: !isXChosen };
           setBot(_bot);
-          localStorage.setItem('Bot', JSON.stringify(_bot))
+          localStorage.setItem('Bot', JSON.stringify(_bot));
+          debugger
         }
       } else {
         const _player2 = player2 && JSON.parse(player2);

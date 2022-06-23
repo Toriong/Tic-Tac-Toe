@@ -1,9 +1,9 @@
 import React from 'react'
 import { FC } from 'react'
-import { VersusTypeProps, VersusTypeSelectionObj } from '../../interfaces/interfaces'
-import '../../css/gameSettings/versusType.css'
+import { VersusTypeSelectionObj } from '../../interfaces/interfaces'
 import { useContext } from 'react'
 import { SettingsContext } from '../../provider/Providers'
+import '../../css/gameSettings/versusType.css'
 
 
 

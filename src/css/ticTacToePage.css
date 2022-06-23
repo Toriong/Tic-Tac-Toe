@@ -1,14 +1,18 @@
+
 .ticTacToeMainPage {
     background-color: #282c34;
-    /* min-height: 100vh; */
     display: flex;
     flex-direction: column;
     font-size: calc(10px + 2vmin);
-    color: white;
+    color: #ffffff;
     width: 100vw;
+    max-height: 1080px;
 }
 
 .interactionSection{
-    min-height: 77vh;
+    height: 80vh;
+    max-height: 1080px;
+    position: relative;
     padding-top: 10px;
+    min-height: 580px;
 }
