@@ -5,10 +5,12 @@ import { HookBooleanVal, ObjectState, StringState } from '../types/types';
 
 // this sets the value for the SettingsContext.Provider
 export const SettingsContext = createContext({
+  didErrorOccur: false,
   player1: {} as Partial<Player>,
   player2: {} as Partial<Player>,
   bot: {} as Partial<Player>,
   versusType: {} as Partial<VersusTypeSelectionObj>,
+  setDidErrorOccur: {} as Function,
   setPlayer1: {} as Dispatch<SetStateAction<Partial<Player>>>,
   setPlayer2: {} as Dispatch<SetStateAction<Partial<Player>>>,
   setBot: {} as Dispatch<SetStateAction<Partial<Player>>>,
@@ -30,10 +32,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [player1, setPlayer1] = useState(_defaultValPlayer1 as Object);
   const [player2, setPlayer2] = useState(_defaultValPlayer2 as Object);
   const [bot, setBot] = useState(_botSavedVal as Object);
+  const [didErrorOccur, setDidErrorOccur]: HookBooleanVal = useState(false);
 
   return (
     <SettingsContext.Provider value={{
-      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot
+      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot, didErrorOccur, setDidErrorOccur
     }}>
       {children}
     </SettingsContext.Provider>

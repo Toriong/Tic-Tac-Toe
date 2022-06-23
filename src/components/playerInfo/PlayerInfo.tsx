@@ -10,21 +10,52 @@ import { useEffect } from 'react';
 import { ChangeEvent } from 'react';
 import { useState } from 'react';
 import '../../css/gameSettings/playerInfo.css'
+import { spawn } from 'child_process';
 
 
 
 const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const { name, isXChosen, isPlayer1 }: Player = player;
-  const { setPlayer2, setPlayer1, player1, player2, versusType, setBot, bot } = useContext(SettingsContext);
+  const { setPlayer2, setPlayer1, player1, player2, versusType, setBot, bot, didErrorOccur, setDidErrorOccur } = useContext(SettingsContext);
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
+  const [isErrorOnPlayer1, setIsErrorOnPlayer1]: HookBooleanVal = useState(false);
+  const [isErrorOnPlayer2, setIsErrorOnPlayer2]: HookBooleanVal = useState(false);
 
 
   // what is exactly is HTMLInputElement?
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPlayer(val => { return { ...val, name: event.target.value } })
-    setWillSaveNameChanges(true);
+    const { value: _name } = event.target;
+    if (_name.length > 10) {
+      setDidErrorOccur(true);
+      isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+    } else {
+      setDidErrorOccur(false);
+      setIsErrorOnPlayer1(false);
+      setIsErrorOnPlayer2(false);
+      setPlayer(val => { return { ...val, name: _name } })
+      setWillSaveNameChanges(true);
+    };
   };
+
+  const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const { key, target } = event;
+    const _name = (target as HTMLInputElement).value;
+    if (_name.length > 10) {
+      setDidErrorOccur(true);
+      isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+    } else {
+      setDidErrorOccur(false);
+      setIsErrorOnPlayer1(false);
+      setIsErrorOnPlayer2(false);
+      setPlayer(val => { return { ...val, name: _name } })
+      setWillSaveNameChanges(true);
+    };
+  }
+
+  useEffect(() => {
+    console.log('didErrorOccur: ', didErrorOccur)
+  })
 
 
 
@@ -101,11 +132,15 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     <div className='playerInfo'>
       <section>
         <h3>{isPlayer1 ? "Player 1's name: " : "Player 2's name: "}</h3>
-        <div>
+        <div className='inputNameContainer'>
           <input
             defaultValue={name as string}
-            onChange={event => { handleOnChange(event) }}
+            style={{ color: (didErrorOccur && (isErrorOnPlayer1 || isErrorOnPlayer2)) ? 'red' : 'white' }}
+            onKeyUp={event => { handleOnKeyUp(event) }}
           />
+          {<span>
+            {(didErrorOccur && (isErrorOnPlayer1 || isErrorOnPlayer2)) && "*Name can't be over 10 characters"}
+          </span>}
         </div>
       </section>
       <section className='shapeSelectionSec'>

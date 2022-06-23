@@ -4,8 +4,9 @@ import { DirectionBtnsProps } from '../../interfaces/interfaces'
 import history from '../../history/history'
 import { HookBooleanVal } from '../../types/types'
 import { useContext } from 'react'
-import { GameContext } from '../../provider/Providers'
+import { GameContext, SettingsContext } from '../../provider/Providers'
 import '../../css/directionBtnsContainer.css'
+import { useEffect } from 'react'
 
 
 // BUG: 
@@ -14,7 +15,8 @@ import '../../css/directionBtnsContainer.css'
 
 
 const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled, _compRenderToggle }) => {
-  const { currentTurn, setCurrentTurn, setIsGameBeingPlayed } = useContext(GameContext)
+  const { currentTurn, setCurrentTurn, setIsGameBeingPlayed } = useContext(GameContext);
+  const { didErrorOccur } = useContext(SettingsContext)
   const path = window.location.pathname;
   const [isBackBtnDisabled,]: HookBooleanVal = _isBackBtnDisabled;
   const [isForwardBtnDisabled]: HookBooleanVal = _isForwardBtnDisabled;
@@ -47,7 +49,8 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
       history.push('/');
     };
     setCompRenderToggle(!compRenderToggle)
-  }
+  };
+
 
   return (
     <section className='directionBtnSec'>
@@ -58,8 +61,9 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
         Back
       </button>
       <button
-        disabled={isForwardBtnDisabled as boolean}
-        className={isForwardBtnDisabled ? 'disabledBtn' : ''}
+        disabled={(isForwardBtnDisabled || didErrorOccur) as boolean}
+        className={(isForwardBtnDisabled || didErrorOccur) ? 'disabledBtn' : ''}
+        style={{ pointerEvents: (isForwardBtnDisabled || didErrorOccur) ? 'none' : 'auto' }}
         onClick={handleContinueBtnClick}
       >
         {isOnPlayerInfo ? 'Start game' : "Continue"}
