@@ -9,13 +9,16 @@ export const SettingsContext = createContext({
   player1: {} as Partial<Player>,
   player2: {} as Partial<Player>,
   bot: {} as Partial<Player>,
+  currentNamePlayer1: "",
+  currentNamePlayer2: "",
   versusType: {} as Partial<VersusTypeSelectionObj>,
   setDidErrorOccur: {} as Function,
   setPlayer1: {} as Dispatch<SetStateAction<Partial<Player>>>,
   setPlayer2: {} as Dispatch<SetStateAction<Partial<Player>>>,
   setBot: {} as Dispatch<SetStateAction<Partial<Player>>>,
-  setVersusType: {} as Dispatch<SetStateAction<Partial<VersusTypeSelectionObj>>>
-
+  setVersusType: {} as Dispatch<SetStateAction<Partial<VersusTypeSelectionObj>>>,
+  setCurrentNamePlayer1: {} as Function,
+  setCurrentNamePlayer2: {} as Function,
 });
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
@@ -32,11 +35,13 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [player1, setPlayer1] = useState(_defaultValPlayer1 as Object);
   const [player2, setPlayer2] = useState(_defaultValPlayer2 as Object);
   const [bot, setBot] = useState(_botSavedVal as Object);
+  const [currentNamePlayer1, setCurrentNamePlayer1] = useState("");
+  const [currentNamePlayer2, setCurrentNamePlayer2] = useState("");
   const [didErrorOccur, setDidErrorOccur]: HookBooleanVal = useState(false);
 
   return (
     <SettingsContext.Provider value={{
-      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot, didErrorOccur, setDidErrorOccur
+      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot, didErrorOccur, setDidErrorOccur, currentNamePlayer2, setCurrentNamePlayer2, currentNamePlayer1, setCurrentNamePlayer1
     }}>
       {children}
     </SettingsContext.Provider>

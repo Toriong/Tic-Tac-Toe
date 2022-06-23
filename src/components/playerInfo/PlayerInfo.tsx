@@ -14,17 +14,32 @@ import '../../css/gameSettings/playerInfo.css'
 
 const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const { name, isXChosen, isPlayer1 }: Player = player;
-  const { setPlayer2, setPlayer1, player1, player2, versusType, setBot, bot, didErrorOccur, setDidErrorOccur } = useContext(SettingsContext);
+  const { setPlayer2, setPlayer1, player1, player2, versusType, setBot, bot, didErrorOccur, setDidErrorOccur, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
   const [isErrorOnPlayer1, setIsErrorOnPlayer1]: HookBooleanVal = useState(false);
   const [isErrorOnPlayer2, setIsErrorOnPlayer2]: HookBooleanVal = useState(false);
+  const [isNoInput, setIsNoInput] = useState(false);
 
   const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const _name = (event.target as HTMLInputElement).value;
+    if (!_name) {
+      setIsNoInput(true);
+      setDidErrorOccur(true);
+      isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+      return;
+    }
+    isPlayer1 ? setCurrentNamePlayer1(_name) : setCurrentNamePlayer2(_name);
+    const otherPlayerName = versusType?.isTwoPlayer && (isPlayer1 ? currentNamePlayer2 : currentNamePlayer1);
+    const isNameErrorForOtherPlayer = otherPlayerName && (otherPlayerName.length > 10)
     if (_name.length > 10) {
       setDidErrorOccur(true);
       isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+    } else if (isNameErrorForOtherPlayer && versusType.isTwoPlayer) {
+      setPlayer(val => { return { ...val, name: _name } })
+      setWillSaveNameChanges(true);
+      isPlayer1 ? setIsErrorOnPlayer1(_name.length > 10) : setIsErrorOnPlayer2(_name.length > 10)
+      setDidErrorOccur(true);
     } else {
       setDidErrorOccur(false);
       setIsErrorOnPlayer1(false);
@@ -119,7 +134,7 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
             onKeyUp={event => { handleOnKeyUp(event) }}
           />
           {<span>
-            {(didErrorOccur && (isErrorOnPlayer1 || isErrorOnPlayer2)) && "*Name can't be over 10 characters"}
+            {(didErrorOccur && (isErrorOnPlayer1 || isErrorOnPlayer2)) && (isNoInput ? '*Please enter in a name.' : "*Name can't be over 10 characters")}
           </span>}
         </div>
       </section>
