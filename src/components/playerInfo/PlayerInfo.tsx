@@ -52,7 +52,8 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
       if (isPlayer1) {
         const _player1 = player1 && JSON.parse(player1);
         const player1ObjToSave = _player1 ? { ..._player1, isXChosen } : { isXChosen };
-        localStorage.setItem('Player 1', JSON.stringify(player1ObjToSave))
+        localStorage.setItem('Player 1', JSON.stringify(player1ObjToSave));
+        debugger
         if (versusType.isTwoPlayer) {
           setPlayer2(player1 => { return { ...player1, isXChosen: !isXChosen } })
           const _player2 = player2 && JSON.parse(player2);
@@ -79,7 +80,7 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
 
   const handleShapeBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
     const isXChosen = event.currentTarget.name === 'X';
-    setPlayer(player => { return { ...player, isXChosen } })
+    setPlayer(player => { return { ...player, isXChosen } });
     setWillSaveShapeChanges(true);
   }
 

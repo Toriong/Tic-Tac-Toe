@@ -25,7 +25,7 @@ import { FC } from 'react';
 
 const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   const { player1, player2, versusType, setVersusType, bot } = useContext(SettingsContext);
-  const { isResultModalOn, setIsResultModalOn, isGameOnNotifyModalOn, setIsGameOnNotifyModalOn } = useContext(ModalContext);
+  const { isResultModalOn, setIsResultModalOn, isGameOnNotifyModalOn, setIsGameOnNotifyModalOn, setIsSideModalOn } = useContext(ModalContext);
   const { isGameBeingPlayed: _isGameBeingPlayed } = useContext(GameContext);;
   const { name: player1Name, isXChosen: isXPlayer1 } = player1;
   const { name: player2Name, isXChosen: isXPlayer2 } = player2;
@@ -40,27 +40,31 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   const firstRender = useRef({ didOccur: false });
   const { isTwoPlayer, isBot } = versusType;
   const path = history.location.pathname;
-  const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed')
   const isOnVersusSelection = path === '/';
   const isOnPlayerInfo = path === '/playerInfo';
   const isOnGameSection = path === '/game';
+  const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
 
-  useLayoutEffect(() => history.listen(location => {
+  useEffect(() => history.listen(location => {
     const isOnVersusSelection = location.location.pathname === '/';
     const isOnPlayerInfo = location.location.pathname === '/playerInfo';
     const isOnGameSection = location.location.pathname === '/game';
+    const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
+    console.log('isGameBeingPlayed: ', isGameBeingPlayed)
     setIsResultModalOn(false);
 
     if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
       setIsForwardBtnDisabled(false);
       setIsBackBtnDisabled(true);
       (isGameBeingPlayed ?? _isGameBeingPlayed) ? setIsGameOnNotifyModalOn(true) : setIsGameOnNotifyModalOn(false);
+      setIsSideModalOn(false);
       debugger
     }
     if (isOnVersusSelection) {
       setIsDirectionsBtnOn(true);
       setIsBackBtnDisabled(true);
       (isGameBeingPlayed ?? _isGameBeingPlayed) ? setIsGameOnNotifyModalOn(true) : setIsGameOnNotifyModalOn(false);
+      setIsSideModalOn(false);
       debugger
     };
 
@@ -84,12 +88,14 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
         isANameEmpty ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
       };
       (isGameBeingPlayed ?? _isGameBeingPlayed) ? setIsGameOnNotifyModalOn(true) : setIsGameOnNotifyModalOn(false);
+      setIsSideModalOn(false);
       debugger
     };
   }), [history]);
 
   useEffect(() => {
-    console.log('isGameOnNotifyModalOn: ', isGameOnNotifyModalOn)
+    console.log('isGameBeingPlayed: ', isGameBeingPlayed)
+    console.log('_isGameBeingPlayed: ', _isGameBeingPlayed)
   })
 
 
@@ -101,6 +107,9 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
     } else {
       if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
         setIsForwardBtnDisabled(false);
+        setIsBackBtnDisabled(true);
+      } else if ((!isBot && !isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
+        setIsForwardBtnDisabled(true);
         setIsBackBtnDisabled(true);
       }
       if (isOnVersusSelection && firstRender.current.didOccur) {
@@ -116,24 +125,16 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
           const { isXChosen: isPlayer2X, name: player2Name } = player2;
           const isNoShapeChosen = (isPlayer1X === false) && (isPlayer2X === false);
           const isANameEmpty = (player1Name === "") || (player2Name === "");
-          if (isANameEmpty || isNoShapeChosen) {
-            setIsForwardBtnDisabled(true);
-          } else {
-            setIsForwardBtnDisabled(false);
-          }
+          (isANameEmpty || isNoShapeChosen) ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
         } else {
           const isANameEmpty = player1?.name === "";
           const isNoShapeChosen = (player1?.isXChosen === false) && (bot?.isXChosen === undefined) && (bot?.isXChosen !== true);
-          if (isANameEmpty || isNoShapeChosen) {
-            setIsForwardBtnDisabled(true);
-          } else {
-            setIsForwardBtnDisabled(false);
-          }
+          (isANameEmpty || isNoShapeChosen) ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
         }
       }
       isOnGameSection && setIsDirectionsBtnOn(false);
     }
-  }, [isOnGameSection, versusType, player2Name, player1Name, isXPlayer1, isXPlayer2, isOnPlayerInfo, bot?.isXChosen])
+  }, [isOnGameSection, isOnVersusSelection, versusType, player2Name, player1Name, isXPlayer1, isXPlayer2, isOnPlayerInfo, bot?.isXChosen])
 
   useLayoutEffect(() => {
     !isDirectionsBtnOn && setIsDirectionsBtnOn(true);
@@ -149,6 +150,12 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log('player1: ', player1);
+    console.log('player2: ', player2);
+    console.log('bot: ', bot)
+  })
+
 
 
 
@@ -160,6 +167,7 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   }, [willShowAlert]);
 
   useEffect(() => {
+    const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
     if (isOnGameSection && !isGameBeingPlayed) {
       setWillShowAlert(true);
       history.replace('/');

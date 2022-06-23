@@ -7,7 +7,7 @@ import { GameContext, ModalContext, SettingsContext } from '../../provider/Provi
 const Reset: FC = () => {
     const { setPlayer1, setPlayer2, setBot, versusType, player2, player1, bot } = useContext(SettingsContext)
     const { setIsGameDone, setIsStaleMate, isGameDone, isStaleMate, setCurrentTurn, currentTurn } = useContext(GameContext)
-    const { setIsSideModalOn } = useContext(ModalContext)
+    const { setIsSideModalOn } = useContext(ModalContext);
     const { isBot, isTwoPlayer } = versusType;
 
     // Write an article about this

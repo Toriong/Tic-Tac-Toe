@@ -3,6 +3,7 @@ import { useContext } from 'react'
 import { useEffect } from 'react'
 import '../../css/modals/centerModal.css'
 import { ModalContext, ModalProvider } from '../../provider/Providers'
+import EndGame from '../buttons/EndGame'
 
 
 // GOAL: present this modal when the user is on game section then goes back to the previous page 
@@ -28,7 +29,7 @@ const GameIsOn = () => {
             </section>
             <section>
                 <button>Back to game</button>
-                <button>RESET</button>
+                <EndGame />
             </section>
         </div>
     )
