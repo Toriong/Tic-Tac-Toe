@@ -10,7 +10,6 @@ import { useEffect } from 'react';
 import { ChangeEvent } from 'react';
 import { useState } from 'react';
 import '../../css/gameSettings/playerInfo.css'
-import { brotliCompress } from 'zlib';
 
 
 

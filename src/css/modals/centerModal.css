@@ -12,6 +12,8 @@
     border-radius: 8px;
     box-shadow: 25px 29px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);;
     padding: 16px 0px 16px 0px;
+    max-height: 349px;
+    max-width: 500px;
 }
 
 .modal > section{
@@ -34,5 +36,14 @@
 
 .modal > section:last-child > button:last-child{
     margin-left: 8px;
+    color: red;
+    border: red solid .5px;
 }
+
+.modal.notifyGameIsOn > section:last-child button:first-child{
+    width: fit-content;
+    padding: 0px 8px 0px 8px;
+    white-space: nowrap; 
+}
+
 

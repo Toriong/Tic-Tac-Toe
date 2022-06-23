@@ -1,7 +1,7 @@
 import React from 'react'
 import { useContext } from 'react'
 import history from '../../history/history'
-import { ModalContext, ModalProvider } from '../../provider/Providers'
+import { ModalContext } from '../../provider/Providers'
 import EndGame from '../buttons/EndGame'
 import '../../css/modals/centerModal.css'
 
@@ -15,7 +15,7 @@ const GameIsOn = () => {
     };
 
     return (
-        <div className='modal'>
+        <div className='modal notifyGameIsOn'>
             <section>
                 <span>Game is in progress.</span>
             </section>
