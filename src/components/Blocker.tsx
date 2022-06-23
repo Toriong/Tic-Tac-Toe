@@ -7,6 +7,8 @@ const Blocker = () => {
 
     const handleOnClick = () => { setIsResultModalOn(false) };
 
+    // GOAL: present the blocker when the modal that tells the user that a game is on is displayed onto the screen 
+
     return isResultModalOn ? <div className='blocker' onClick={handleOnClick} /> : null;
 }
 

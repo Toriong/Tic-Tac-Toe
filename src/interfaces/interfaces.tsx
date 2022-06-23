@@ -51,6 +51,11 @@ export interface PlayerInfoProps {
     setPlayer: Dispatch<SetStateAction<Partial<Player>>>,
 }
 
+export interface HandleBeforeUnloadListenerObj {
+    preventDefault: Function,
+    returnValue: String
+}
+
 
 
 export interface SelectedBtnStyles {

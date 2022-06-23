@@ -13,17 +13,13 @@ import '../../css/game/ticTacToeGameSec.css'
 const SPOTS_NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 
-// GOAL: implement stalemate logic 
-
-// GOAL: when all spots are full end the game 
-
 
 const TicTacToeGrid: FC = () => {
   const { player1, player2, bot, versusType, setBot } = useContext(SettingsContext);
-  const { setIsResultModalOn } = useContext(ModalContext);
+  const { setIsResultModalOn, isResultModalOn } = useContext(ModalContext);
   const { currentTurn, setCurrentTurn, setIsGameDone, setWinningListName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec } = useContext(GameContext);
   const [willRotate, setWillRotate] = useState(false);
-  const { isBot, isTwoPlayer } = versusType;
+  const { isTwoPlayer } = versusType;
   const ticTacToeNumRows = new Array(3).fill('');
 
 
@@ -254,6 +250,8 @@ const TicTacToeGrid: FC = () => {
     };
     setIsOnGameSec(true);
     return () => {
+      setIsResultModalOn(false);
+
       setIsOnGameSec(false);
     }
   }, []);

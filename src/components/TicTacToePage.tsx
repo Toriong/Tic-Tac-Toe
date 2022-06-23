@@ -6,16 +6,18 @@ import { useState } from 'react';
 import { HookBooleanVal, PlayerState, VersusTypeSelection } from '../types/types';
 import DirectionBtns from './buttonContainers/DirectionBtns';
 import { useEffect } from 'react';
-import { Player, SettingsVal, VersusTypeSelectionObj } from '../interfaces/interfaces';
+import { HandleBeforeUnloadListenerObj, Player, SettingsVal, VersusTypeSelectionObj } from '../interfaces/interfaces';
 import PlayerInfoSec from './gameSettings/PlayerInfoSec';
 import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
 import { useContext } from 'react';
-import { ModalContext, ModalProvider, SettingsContext } from '../provider/Providers';
+import { GameContext, ModalContext, ModalProvider, SettingsContext } from '../provider/Providers';
 import history from '../history/history';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TicTacToeGameSec from './gameUI/TicTacToeGameSec';
 import Result from './modal/Result';
+import { BsWindowDock } from 'react-icons/bs';
+import { GiConsoleController } from 'react-icons/gi';
 
 // have the direction button only appear on the UI when the user is not in the process of a playing a game
 
@@ -27,6 +29,7 @@ const TicTacToePage = () => {
   // useNavigate();
   const { player1, player2, versusType, setVersusType, bot } = useContext(SettingsContext);
   const { isResultModalOn, setIsResultModalOn, isSideModalOn, setIsSideModalOn } = useContext(ModalContext);
+  const { isOnGameSec } = useContext(GameContext);;
   const { name: player1Name, isXChosen: isXPlayer1 } = player1;
   const { name: player2Name, isXChosen: isXPlayer2 } = player2;
   const [isDirectionsBtnOn, setIsDirectionsBtnOn]: HookBooleanVal = useState(true);
@@ -43,25 +46,20 @@ const TicTacToePage = () => {
   const isOnVersusSelection = path === '/';
   const isOnPlayerInfo = path === '/playerInfo';
   const isGameOn = path === '/game';
-  // const _history = useNavigate();
-  // const location = useLocation();
-
-  const closeResultsModal = () => { setIsResultModalOn(false); };
-
-  const closeSideModal = () => { setIsSideModalOn(false); };
 
 
-  // GOAL: update the page when the url changes by using the code below
-
-  useEffect(() => history.listen(location => {
+  useLayoutEffect(() => history.listen(location => {
+    console.log('location.location: ', location.location)
     const isOnVersusSelection = location.location.pathname === '/';
     const isOnPlayerInfo = location.location.pathname === '/playerInfo'
+    setIsResultModalOn(false);
+    debugger
     if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
       setIsForwardBtnDisabled(false);
       setIsBackBtnDisabled(true);
     }
     if (isOnVersusSelection) {
-      !isDirectionsBtnOn && setIsDirectionsBtnOn(true);
+      setIsDirectionsBtnOn(true);
       setIsBackBtnDisabled(true);
     };
 
@@ -69,7 +67,7 @@ const TicTacToePage = () => {
     isGameOn && setIsDirectionsBtnOn(false);
 
     if (isOnPlayerInfo) {
-      !isDirectionsBtnOn && setIsDirectionsBtnOn(true);
+      setIsDirectionsBtnOn(true);
       setIsBackBtnDisabled(false);
       if (isTwoPlayer) {
         const { isXChosen: isPlayer1X, name: player1Name } = player1;
@@ -147,8 +145,22 @@ const TicTacToePage = () => {
       setIsBackBtnDisabled(false);
       setIsForwardBtnDisabled(true);
     }
-
   }, []);
+
+
+  const handleBeforeUnloadListener = (event: HandleBeforeUnloadListenerObj) => {
+    event.preventDefault();
+    if (isOnGameSec) {
+      return event.returnValue = "Are you sure you want to exit?";
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleBeforeUnloadListener, { capture: true })
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnloadListener, { capture: true });
+    }
+  }, [])
 
 
   return (
