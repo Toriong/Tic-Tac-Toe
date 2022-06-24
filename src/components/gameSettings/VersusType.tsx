@@ -2,18 +2,22 @@ import React from 'react'
 import { FC } from 'react'
 import { VersusTypeSelectionObj } from '../../interfaces/interfaces'
 import { useContext } from 'react'
-import { SettingsContext } from '../../provider/Providers'
+import { ModalContext, SettingsContext } from '../../provider/Providers'
 import '../../css/gameSettings/versusType.css'
+import { handleElementClick } from '../../fns/handleElementClick'
 
 
 
 
 const VersusType: FC = () => {
   const { versusType, setVersusType } = useContext(SettingsContext);
+  const { setIsGameOnNotifyModalOn } = useContext(ModalContext);
   const { isBot, isTwoPlayer } = versusType
 
-  // why is it void when it is return anonymous function?
+
   const handleBtnClick = (isBot: Boolean, isTwoPlayer: boolean) => () => {
+    const isGameBeingPlayed = handleElementClick(setIsGameOnNotifyModalOn);
+    if (isGameBeingPlayed) return;
     const _versusType: VersusTypeSelectionObj = {
       isBot: isBot,
       isTwoPlayer: isTwoPlayer

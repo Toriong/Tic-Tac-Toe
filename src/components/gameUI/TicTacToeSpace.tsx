@@ -4,6 +4,8 @@ import { useContext } from 'react'
 import { FC } from 'react'
 import { BsCircle } from 'react-icons/bs'
 import { MdOutlineClose } from 'react-icons/md'
+import { handleElementClick } from '../../fns/handleElementClick'
+import history from '../../history/history'
 import { TicTacToeSpaceProps } from '../../interfaces/interfaces'
 import { GameContext, ModalContext, SettingsContext } from '../../provider/Providers'
 
@@ -21,6 +23,8 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillRotate }
   const wasSpotChosen = didBotPickSpot || didPlayer1PickSpot || didPlayer2PickSpot;
 
   const handleOnClick = (): void => {
+    const isGameBeingPlayed = handleElementClick();
+    if (isGameBeingPlayed) return;
     const _player = { ...player, spotsChosen: player?.spotsChosen?.length ? [...player.spotsChosen, gridPosition] : [gridPosition] };
     localStorage.setItem(`${player.name}`, JSON.stringify(_player));
     updatePlayer(_player as Object);

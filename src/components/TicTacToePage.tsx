@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { HookBooleanVal } from '../types/types';
 import DirectionBtns from './buttonContainers/DirectionBtns';
 import { useEffect } from 'react';
-import { HandleBeforeUnloadListenerObj, TicTacToePageProps, VersusTypeSelectionObj } from '../interfaces/interfaces';
+import { TicTacToePageProps, VersusTypeSelectionObj } from '../interfaces/interfaces';
 import PlayerInfoSec from './gameSettings/PlayerInfoSec';
 import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
@@ -17,9 +17,6 @@ import Result from './modal/Result';
 import GameIsOn from './modal/GameIsOn';
 import { FC } from 'react';
 
-// have the direction button only appear on the UI when the user is not in the process of a playing a game
-
-// CASE: the user is on the
 
 
 const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
@@ -92,10 +89,6 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
     };
   }), [history]);
 
-  useEffect(() => {
-    console.log('isGameBeingPlayed: ', isGameBeingPlayed)
-    console.log('_isGameBeingPlayed: ', _isGameBeingPlayed)
-  })
 
 
 
@@ -149,12 +142,6 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log('player1: ', player1);
-    console.log('player2: ', player2);
-    console.log('bot: ', bot)
-  })
-
 
 
 
@@ -187,7 +174,7 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
         {(isOnGameSection && isGameBeingPlayed) && <TicTacToeGameSec />}
       </section>
       {isResultModalOn && <Result />}
-      {(isGameOnNotifyModalOn) && <GameIsOn />}
+      {isGameOnNotifyModalOn && <GameIsOn />}
     </div>
   )
 }
