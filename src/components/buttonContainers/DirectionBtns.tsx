@@ -1,36 +1,33 @@
 import React from 'react'
 import { FC } from 'react'
-import { DirectionBtnsProps } from '../../interfaces/interfaces'
+import { DirectionBtnsProps, GameObj } from '../../interfaces/interfaces'
 import history from '../../history/history'
 import { HookBooleanVal } from '../../types/types'
 import { useContext } from 'react'
 import { GameContext, SettingsContext } from '../../provider/Providers'
+import useNavigate from '../../customHooks/useNavigate'
 import '../../css/directionBtnsContainer.css'
-import { useEffect } from 'react'
-import VersusType from '../gameSettings/VersusType'
 
 
-// BUG: 
-// WHAT IS HAPPENING: when the user starts a new game, presses on the two players, goes to the game section, the confirm button is enabled
-// WHAT I WANT: when the user is on the player info section, and the users hasn't chosen a shape, don't enable the forward button (the start game button)
-
-
-const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled, _compRenderToggle }) => {
+const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled }) => {
   const { currentTurn, setCurrentTurn, setIsGameBeingPlayed } = useContext(GameContext);
   const { didErrorOccur, versusType } = useContext(SettingsContext);
-  const path = window.location.pathname;
+  const { currentLocation, navigateToSec } = useNavigate();
   const [isBackBtnDisabled,]: HookBooleanVal = _isBackBtnDisabled;
   const [isForwardBtnDisabled]: HookBooleanVal = _isForwardBtnDisabled;
-  const [compRenderToggle, setCompRenderToggle]: HookBooleanVal = _compRenderToggle;
-  const isOnVersusSelection = path === '/';
-  const isOnPlayerInfo = path === '/playerInfo';
+  const isOnVersusSelection = currentLocation === 1;
+  const isOnPlayerInfo = currentLocation === 2;
 
 
 
 
   const handleContinueBtnClick = (): void => {
-    if (isOnVersusSelection) {
-      history.push('/playerInfo');
+    let _game: (null | String | GameObj) = localStorage.getItem('game')
+    if (isOnVersusSelection && (typeof _game === 'string')) {
+      // take the user to the player info card section, the section num is 2
+      _game = _game ? { ...JSON.parse(_game), currentLocation: 2 } : { currentLocation: 2 };
+      localStorage.setItem('game', JSON.stringify(_game));
+      navigateToSec(2)
     } else {
       // when the user starts a game
       const _currentTurn = { ...currentTurn, isPlayerOne: true };
@@ -39,19 +36,11 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
       localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
       localStorage.setItem('isGameBeingPlayed', JSON.stringify(true))
       setIsGameBeingPlayed(true);
-      history.push('/game');
+      navigateToSec(3)
     }
-    setCompRenderToggle(!compRenderToggle)
   }
 
-
-
-  const handleBackBtnClick = (): void => {
-    if (isOnPlayerInfo) {
-      history.push('/');
-    };
-    setCompRenderToggle(!compRenderToggle)
-  };
+  const handleBackBtnClick = (): void => { isOnPlayerInfo && navigateToSec(1); };
 
 
   return (

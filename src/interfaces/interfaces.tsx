@@ -91,6 +91,13 @@ export interface TicTacToePageProps {
     willGoToHome?: Boolean
 }
 
+export interface GameObj {
+    currentLocation?: number,
+    isBot?: Boolean,
+    isTwoPlayer?: Boolean,
+    versusType?: Object
+}
+
 
 
 

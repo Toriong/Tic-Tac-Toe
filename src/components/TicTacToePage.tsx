@@ -10,7 +10,7 @@ import PlayerInfoSec from './gameSettings/PlayerInfoSec';
 import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
 import { useContext } from 'react';
-import { GameContext, ModalContext, SettingsContext } from '../provider/Providers';
+import { GameContext, LocationContext, ModalContext, SettingsContext } from '../provider/Providers';
 import history from '../history/history';
 import TicTacToeGameSec from './gameUI/TicTacToeGameSec';
 import Result from './modal/Result';
@@ -18,11 +18,17 @@ import GameIsOn from './modal/GameIsOn';
 import { FC } from 'react';
 
 
+// GOAL: when the user is on the versus section page, have the following occur:
+
+// when the user presses on the versus type, save changes into the local storage
+// disable the forward button when there is no selection made
+
 
 const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   const { player1, player2, versusType, setVersusType, bot } = useContext(SettingsContext);
   const { isResultModalOn, setIsResultModalOn, isGameOnNotifyModalOn, setIsGameOnNotifyModalOn, setIsSideModalOn } = useContext(ModalContext);
   const { isGameBeingPlayed: _isGameBeingPlayed } = useContext(GameContext);;
+  const { currentLocation, setCurrentLocation } = useContext(LocationContext)
   const { name: player1Name, isXChosen: isXPlayer1 } = player1;
   const { name: player2Name, isXChosen: isXPlayer2 } = player2;
   const [isDirectionsBtnOn, setIsDirectionsBtnOn]: HookBooleanVal = useState(true);
@@ -35,59 +41,16 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   const _isForwardBtnDisabled: HookBooleanVal = [isForwardBtnDisabled, setIsForwardBtnDisabled];
   const firstRender = useRef({ didOccur: false });
   const { isTwoPlayer, isBot } = versusType;
-  const path = history.location.pathname;
-  const isOnVersusSelection = path === '/';
-  const isOnPlayerInfo = path === '/playerInfo';
-  const isOnGameSection = path === '/game';
+  const isOnVersusSelection = currentLocation === 1;
+  const isOnPlayerInfo = currentLocation === 2;
+  const isOnGameSection = currentLocation === 3;
   const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
 
-  useEffect(() => history.listen(location => {
-    const isOnVersusSelection = location.location.pathname === '/';
-    const isOnPlayerInfo = location.location.pathname === '/playerInfo';
-    const isOnGameSection = location.location.pathname === '/game';
-    const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
-    console.log('isGameBeingPlayed: ', isGameBeingPlayed)
-    setIsResultModalOn(false);
+  // GOAL: if the current page is one, then the user is on versus type section
 
-    if ((isBot || isTwoPlayer) && isOnVersusSelection && firstRender.current.didOccur) {
-      setIsForwardBtnDisabled(false);
-      setIsBackBtnDisabled(true);
-      (isGameBeingPlayed ?? _isGameBeingPlayed) ? setIsGameOnNotifyModalOn(true) : setIsGameOnNotifyModalOn(false);
-      setIsSideModalOn(false);
-      debugger
-    }
-    if (isOnVersusSelection) {
-      setIsDirectionsBtnOn(true);
-      setIsBackBtnDisabled(true);
-      (isGameBeingPlayed ?? _isGameBeingPlayed) ? setIsGameOnNotifyModalOn(true) : setIsGameOnNotifyModalOn(false);
-      setIsSideModalOn(false);
-      debugger
-    };
+  // CASE: the user is on the first page, the user presses on the continue button
+  // GOAL: if the user is on the first page, presses on the continue button, take the user to the player info card section 
 
-    if (isOnGameSection) {
-      setIsDirectionsBtnOn(false);
-      setIsGameOnNotifyModalOn(false);
-      debugger
-    }
-
-    if (isOnPlayerInfo) {
-      setIsDirectionsBtnOn(true);
-      setIsBackBtnDisabled(false);
-      if (isTwoPlayer) {
-        const { isXChosen: isPlayer1X, name: player1Name } = player1;
-        const { isXChosen: isPlayer2X, name: player2Name } = player2;
-        const isNoShapeChosen = (isPlayer1X === false) && (isPlayer2X === false);
-        const isANameEmpty = (player1Name === "") || (player2Name === "");
-        (isANameEmpty || isNoShapeChosen) ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
-      } else {
-        const isANameEmpty = player1.name === "";
-        isANameEmpty ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
-      };
-      (isGameBeingPlayed ?? _isGameBeingPlayed) ? setIsGameOnNotifyModalOn(true) : setIsGameOnNotifyModalOn(false);
-      setIsSideModalOn(false);
-      debugger
-    };
-  }), [history]);
 
 
 

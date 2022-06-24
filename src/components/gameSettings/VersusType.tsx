@@ -11,18 +11,20 @@ import { handleElementClick } from '../../fns/handleElementClick'
 
 const VersusType: FC = () => {
   const { versusType, setVersusType } = useContext(SettingsContext);
-  const { setIsGameOnNotifyModalOn } = useContext(ModalContext);
   const { isBot, isTwoPlayer } = versusType
 
-
   const handleBtnClick = (isBot: Boolean, isTwoPlayer: boolean) => () => {
-    const isGameBeingPlayed = handleElementClick(setIsGameOnNotifyModalOn);
-    if (isGameBeingPlayed) return;
     const _versusType: VersusTypeSelectionObj = {
       isBot: isBot,
       isTwoPlayer: isTwoPlayer
     };
-    localStorage.setItem('versusType', JSON.stringify(_versusType));
+    let _game: (string | Object | null) = localStorage.getItem('game');
+    if (typeof _game === 'string') {
+      _game = JSON.parse(_game);
+      _game = { ...(_game as Object), versusType: _versusType };
+    };
+    _game = !_game ? { versusType: _versusType } : _game;
+    localStorage.setItem('game', JSON.stringify(_game));
     setVersusType(_versusType);
   }
 

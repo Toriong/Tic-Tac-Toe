@@ -1,5 +1,5 @@
 import React, { useState, createContext, Dispatch, SetStateAction, ReactNode } from 'react'
-import { CurrentTurn, Player, VersusTypeSelectionObj } from '../interfaces/interfaces';
+import { CurrentTurn, GameObj, Player, VersusTypeSelectionObj } from '../interfaces/interfaces';
 import { HookBooleanVal, ObjectState, StringState } from '../types/types';
 
 
@@ -22,11 +22,11 @@ export const SettingsContext = createContext({
 });
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
+  const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
   const _player1 = localStorage.getItem('Player 1') && JSON.parse(localStorage.getItem('Player 1') as string);
   const _player2 = localStorage.getItem('Player 2') && JSON.parse(localStorage.getItem('Player 2') as string);
   const _botSavedVal = localStorage.getItem('Bot') && JSON.parse(localStorage.getItem('Bot') as string);
-  const _versusTypeSavedVal = localStorage.getItem('versusType') && JSON.parse(localStorage.getItem('versusType') as string);
-  const versusTypeDefaultVal = _versusTypeSavedVal ?? { isTwoPlayer: false, isBot: false };
+  const versusTypeDefaultVal = game?.versusType ?? { isTwoPlayer: false, isBot: false };
   const { name: player1Name, isXChosen: isXPlayer1, spotsChosen: player1SpotsChosen } = _player1 ?? {};
   const { name: player2Name, isXChosen: isXPlayer2, spotsChosen: player2SpotsChosen } = _player2 ?? {};
   const _defaultValPlayer1 = { isPlayer1: true, name: (player1Name || player1Name === "") ? player1Name : "Player 1", isXChosen: !!isXPlayer1, spotsChosen: player1SpotsChosen ?? [] }
@@ -102,6 +102,21 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
     <ModalContext.Provider value={{ isResultModalOn, setIsResultModalOn, isSideModalOn, setIsSideModalOn, isGameOnNotifyModalOn, setIsGameOnNotifyModalOn }}>
       {children}
     </ModalContext.Provider>
+  )
+}
+
+export const LocationContext = createContext({
+  currentLocation: 1,
+  setCurrentLocation: {} as Function
+});
+
+export const LocationProvider = ({ children }: { children: ReactNode }) => {
+  const game = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string)
+  const [currentLocation, setCurrentLocation] = useState(game?.currentLocation ? game.currentLocation : 1)
+  return (
+    <LocationContext.Provider value={{ currentLocation, setCurrentLocation }}>
+      {children}
+    </LocationContext.Provider>
   )
 }
 
