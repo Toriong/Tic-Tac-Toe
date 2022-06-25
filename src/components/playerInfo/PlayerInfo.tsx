@@ -4,11 +4,12 @@ import { useContext } from 'react';
 import { SettingsContext } from '../../provider/Providers';
 import { MdOutlineClose } from "react-icons/md";
 import { BsCircle } from "react-icons/bs";
-import { Player, PlayerInfoProps } from '../../interfaces/interfaces';
-import { HookBooleanVal, SelectedBtnStylesObj } from '../../types/types';
+import { GameObj, Player, PlayerInfoProps } from '../../interfaces/interfaces';
+import { HookBooleanVal, PlayerState, SelectedBtnStylesObj } from '../../types/types';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import '../../css/gameSettings/playerInfo.css'
+import { useRef } from 'react';
 
 
 
@@ -38,68 +39,81 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     } else if (isNameErrorForOtherPlayer && versusType.isTwoPlayer) {
       setPlayer(val => { return { ...val, name: _name } })
       setWillSaveNameChanges(true);
-      isPlayer1 ? setIsErrorOnPlayer1(_name.length > 10) : setIsErrorOnPlayer2(_name.length > 10)
-      setDidErrorOccur(true);
+      isPlayer1 ? setIsErrorOnPlayer2(_name.length > 10) : setIsErrorOnPlayer1(_name.length > 10)
+      // setDidErrorOccur(true);
     } else {
       setDidErrorOccur(false);
       setIsErrorOnPlayer1(false);
       setIsErrorOnPlayer2(false);
       setPlayer(val => { return { ...val, name: _name } })
       setWillSaveNameChanges(true);
+      debugger
     };
+    setIsNoInput(false);
+  }
+
+  // CASE: player one inputs a name
+
+  // GOAL: save the changes into local storage under the name of 'game'
+
+
+  // write a test for this function
+  const saveNameChanges = (name: string, game: GameObj): void => {
+    let _player: Player;
+    let _game: GameObj = { player1: (player1 as Player) }
+    if (isPlayer1 && game.player1) {
+      _player = { ...game.player1, name: name };
+      _game = { ...game, player1: _player };
+    }
+
+    if (isPlayer1) {
+      _player = { ...player, name: name };
+      _game = { ...game, player1: _player };
+    }
+
+    if (!isPlayer1 && game.player2) {
+      _player = { ...game.player2, name: name };
+      _game = { ...game, player2: _player };
+    }
+
+    if (!isPlayer1) {
+      _player = { ...player, name: name };
+      _game = { ...game, player2: _player };
+    }
+
+    localStorage.setItem('game', JSON.stringify(_game));
+    setWillSaveNameChanges(false);
   }
 
 
-
-
-
   useEffect(() => {
-    const player1 = localStorage.getItem('Player 1');
-    const player2 = localStorage.getItem('Player 2');
-    if (willSaveNameChanges && player1 && isPlayer1) {
-      const _player1 = JSON.parse(player1);
-      localStorage.setItem('Player 1', JSON.stringify({ ..._player1, name: name }));
-      setWillSaveNameChanges(false);
-    } else if (willSaveNameChanges && isPlayer1) {
-      localStorage.setItem('Player 1', JSON.stringify({ name: name }));
-      setWillSaveNameChanges(false);
-    } else if (willSaveNameChanges && player2) {
-      const _player2 = JSON.parse(player2);
-      localStorage.setItem('Player 2', JSON.stringify({ ..._player2, name: name }));
-      setWillSaveNameChanges(false);
-    } else if (willSaveNameChanges) {
-      localStorage.setItem('Player 2', JSON.stringify({ name: name }));
-      setWillSaveNameChanges(false);
-    }
+    const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string)
 
-    if (willSaveShapeChanges) {
-      if (isPlayer1) {
-        const _player1 = player1 && JSON.parse(player1);
-        const player1ObjToSave = _player1 ? { ..._player1, isXChosen } : { isXChosen };
-        localStorage.setItem('Player 1', JSON.stringify(player1ObjToSave));
-        debugger
-        if (versusType.isTwoPlayer) {
-          setPlayer2(player1 => { return { ...player1, isXChosen: !isXChosen } })
-          const _player2 = player2 && JSON.parse(player2);
-          const player2ObjToSave = _player2 ? { ..._player2, isXChosen: !isXChosen } : { isXChosen: !isXChosen };
-          localStorage.setItem('Player 2', JSON.stringify(player2ObjToSave))
-        } else {
-          const _bot = bot ? { ...bot, isXChosen: !isXChosen } : { isXChosen: !isXChosen };
-          setBot(_bot);
-          localStorage.setItem('Bot', JSON.stringify(_bot));
-          debugger
-        }
-      } else {
-        const _player2 = player2 && JSON.parse(player2);
-        const player2ObjToSave = _player2 ? { ..._player2, isXChosen } : { isXChosen };
-        localStorage.setItem('Player 2', JSON.stringify(player2ObjToSave))
-        setPlayer1(player1 => { return { ...player1, isXChosen: !isXChosen } })
-        const _player1 = player1 && JSON.parse(player1);
-        const player1ObjToSave = _player1 ? { ..._player1, isXChosen: isXChosen ? false : true } : { isXChosen: isXChosen ? false : true };
-        localStorage.setItem('Player 1', JSON.stringify(player1ObjToSave))
-      };
-      setWillSaveShapeChanges(false);
+
+    if (willSaveNameChanges && isPlayer1 && game?.player1) {
+      const _player1: Player = { ...game.player1, name: name }
+      const _game: GameObj = { ...game, player1: _player1 };
+      localStorage.setItem('game', JSON.stringify(_game));
+      setWillSaveNameChanges(false);
+    } else if (willSaveNameChanges && isPlayer1 && game && !game.player1) {
+      const player1: Player = { ...player, name: name };
+      const _game: GameObj = { ...game, player1 };
+      localStorage.setItem('game', JSON.stringify(_game));
+      setWillSaveNameChanges(false);
+    } else if (willSaveNameChanges && !isPlayer1 && game && !game?.player2) {
+      // the first character change to player 2's name 
+      const player2: Player = { ...player, name: name };
+      const _game: GameObj = { ...game, player2 };
+      localStorage.setItem('game', JSON.stringify(_game));
+      setWillSaveNameChanges(false);
+    } else if (willSaveNameChanges && !isPlayer1 && game?.player2) {
+      // if the player 2 exist in the local storage, then update the local storage with player 2's local storage values 
+      saveNameChanges(name as string, game);
+
     }
+    debugger
+
+
   }, [willSaveNameChanges, willSaveShapeChanges])
 
 

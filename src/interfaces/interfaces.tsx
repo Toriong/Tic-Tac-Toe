@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react'
+import VersusType from '../components/gameSettings/VersusType';
 import { HookBooleanVal, PlayerState, VersusTypeSelection } from "../types/types";
 
 
@@ -39,7 +40,6 @@ export interface Player {
     name?: String,
     isPlayer1?: boolean,
     isBot?: boolean,
-    // research the array type
     spotsChosen: Array<number>
 }
 
@@ -91,11 +91,16 @@ export interface TicTacToePageProps {
     willGoToHome?: Boolean
 }
 
+export interface VersusTypeObj {
+    isBot: Boolean,
+    isTwoPlayer: Boolean
+}
+
 export interface GameObj {
     currentLocation?: number,
-    isBot?: Boolean,
-    isTwoPlayer?: Boolean,
-    versusType?: Object
+    versusType?: VersusTypeObj
+    player1: Player,
+    player2?: Player
 }
 
 

@@ -8,6 +8,16 @@ import { GameContext, SettingsContext } from '../../provider/Providers'
 import useNavigate from '../../customHooks/useNavigate'
 import '../../css/directionBtnsContainer.css'
 
+// CASE: the user is playing against another player
+
+// GOAL: when the user presses on the start game button, save player1 info and player2 info into the local storage
+
+// CASE: the user is playing against another player
+
+// GOAL: when the user presses on the start game button, save player1 info and the bot info into the local storage 
+
+
+
 
 const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled }) => {
   const { currentTurn, setCurrentTurn, setIsGameBeingPlayed } = useContext(GameContext);
@@ -40,7 +50,13 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
     }
   }
 
-  const handleBackBtnClick = (): void => { isOnPlayerInfo && navigateToSec(1); };
+  const handleBackBtnClick = (): void => {
+    if (isOnPlayerInfo) {
+      navigateToSec(1);
+    }
+    isOnPlayerInfo && navigateToSec(1);
+    debugger;
+  };
 
 
   return (
