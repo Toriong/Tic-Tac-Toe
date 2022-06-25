@@ -23,12 +23,10 @@ export const SettingsContext = createContext({
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
-  const _player1 = localStorage.getItem('Player 1') && JSON.parse(localStorage.getItem('Player 1') as string);
-  const _player2 = localStorage.getItem('Player 2') && JSON.parse(localStorage.getItem('Player 2') as string);
   const _botSavedVal = localStorage.getItem('Bot') && JSON.parse(localStorage.getItem('Bot') as string);
   const versusTypeDefaultVal = game?.versusType ?? { isTwoPlayer: false, isBot: false };
-  const { name: player1Name, isXChosen: isXPlayer1, spotsChosen: player1SpotsChosen } = _player1 ?? {};
-  const { name: player2Name, isXChosen: isXPlayer2, spotsChosen: player2SpotsChosen } = _player2 ?? {};
+  const { name: player1Name, isXChosen: isXPlayer1, spotsChosen: player1SpotsChosen } = game?.player1 ?? {};
+  const { name: player2Name, isXChosen: isXPlayer2, spotsChosen: player2SpotsChosen } = game?.player2 ?? {};
   const _defaultValPlayer1 = { isPlayer1: true, name: (player1Name || player1Name === "") ? player1Name : "Player 1", isXChosen: !!isXPlayer1, spotsChosen: player1SpotsChosen ?? [] }
   const _defaultValPlayer2 = { name: (player2Name || player2Name === "") ? player2Name : "Player 2", isXChosen: !!isXPlayer2, spotsChosen: player2SpotsChosen ?? [] }
   const [versusType, setVersusType] = useState(versusTypeDefaultVal as Object);

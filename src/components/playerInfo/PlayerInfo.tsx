@@ -22,6 +22,10 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const [isErrorOnPlayer2, setIsErrorOnPlayer2]: HookBooleanVal = useState(false);
   const [isNoInput, setIsNoInput] = useState(false);
 
+  useEffect(() => {
+    console.log('name: ', name)
+  })
+
   const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const _name = (event.target as HTMLInputElement).value;
     if (!_name) {
@@ -89,29 +93,10 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   useEffect(() => {
     const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string)
 
-
-    if (willSaveNameChanges && isPlayer1 && game?.player1) {
-      const _player1: Player = { ...game.player1, name: name }
-      const _game: GameObj = { ...game, player1: _player1 };
-      localStorage.setItem('game', JSON.stringify(_game));
-      setWillSaveNameChanges(false);
-    } else if (willSaveNameChanges && isPlayer1 && game && !game.player1) {
-      const player1: Player = { ...player, name: name };
-      const _game: GameObj = { ...game, player1 };
-      localStorage.setItem('game', JSON.stringify(_game));
-      setWillSaveNameChanges(false);
-    } else if (willSaveNameChanges && !isPlayer1 && game && !game?.player2) {
-      // the first character change to player 2's name 
-      const player2: Player = { ...player, name: name };
-      const _game: GameObj = { ...game, player2 };
-      localStorage.setItem('game', JSON.stringify(_game));
-      setWillSaveNameChanges(false);
-    } else if (willSaveNameChanges && !isPlayer1 && game?.player2) {
-      // if the player 2 exist in the local storage, then update the local storage with player 2's local storage values 
+    if (willSaveNameChanges && game) {
       saveNameChanges(name as string, game);
-
     }
-    debugger
+
 
 
   }, [willSaveNameChanges, willSaveShapeChanges])
