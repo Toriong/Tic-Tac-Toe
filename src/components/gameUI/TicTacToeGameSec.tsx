@@ -9,6 +9,8 @@ import { FC } from 'react';
 import { useLayoutEffect } from 'react';
 import RedLine from './RedLine';
 import '../../css/game/ticTacToeGameSec.css'
+import { GameObj, GridSpotToSave, Player } from '../../interfaces/interfaces';
+import { HookBooleanVal } from '../../types/types';
 
 const SPOTS_NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -17,8 +19,9 @@ const SPOTS_NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const TicTacToeGrid: FC = () => {
   const { player1, player2, bot, versusType, setBot, } = useContext(SettingsContext);
   const { setIsResultModalOn, setIsGameOnNotifyModalOn } = useContext(ModalContext);
-  const { currentTurn, setCurrentTurn, setIsGameDone, setRedLineClassName, setRedLine2ClassName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec, setIsGameBeingPlayed, redLineClassName, redLine2ClassName } = useContext(GameContext);
-  const [willRotate, setWillRotate] = useState(false);
+  const { currentTurn, setCurrentTurn, setIsGameDone, setRedLineClassName, setRedLine2ClassName, isGameDone, isStaleMate, setIsStaleMate, setIsOnGameSec, redLineClassName, redLine2ClassName } = useContext(GameContext);
+  const [willRotate, setWillRotate]: HookBooleanVal = useState(false);
+  const [gridSpotToSave, setGridSpotToSave] = useState<null | GridSpotToSave>(null);
   const { isTwoPlayer } = versusType;
   const ticTacToeNumRows = new Array(3).fill('');
 
@@ -245,20 +248,28 @@ const TicTacToeGrid: FC = () => {
 
   useEffect(() => {
     if (currentTurn.isBot && !isGameDone) {
-      setTimeout(() => {
-        placeBotShape();
-      }, 1000);
+      setTimeout(() => { placeBotShape(); }, 1000);
     }
-  }, [currentTurn.isBot])
+
+    if (gridSpotToSave) {
+      let game: GameObj = JSON.parse(localStorage.getItem('game') as string);
+      const { isPlayerOne, spot } = gridSpotToSave;
+      const playerFieldName = isPlayerOne ? 'player1' : 'player2';
+      const player: Player = { ...game[playerFieldName], spotsChosen: [...(game?.[playerFieldName]?.spotsChosen as Array<number>), spot] }
+      game = { ...game, [playerFieldName]: player };
+      localStorage.setItem('game', JSON.stringify(game));
+      setGridSpotToSave(null);
+    }
+  }, [currentTurn.isBot, gridSpotToSave])
 
   useLayoutEffect(() => {
     if ((localStorage.getItem('isGameDone') as string)) {
       setIsGameDone(JSON.parse(localStorage.getItem('isGameDone') as string));
       setIsResultModalOn(true);
     }
+
     setIsOnGameSec(true);
     setIsGameOnNotifyModalOn(false);
-    setIsGameBeingPlayed(true);
     localStorage.getItem('isGameBeingPlayed') && localStorage.setItem('isGameBeingPlayed', JSON.stringify(true));
 
     return () => {
@@ -267,9 +278,7 @@ const TicTacToeGrid: FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log('isGameDone: ', isGameDone)
-  })
+
 
 
 
@@ -280,13 +289,13 @@ const TicTacToeGrid: FC = () => {
         {(isGameDone && !isStaleMate && redLine2ClassName) && <RedLine redLine2ClassName={redLine2ClassName} />}
         <table id='ticTacToeGrid'>
           <tr className='ticTacToeRow'>
-            {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 1} setWillRotate={setWillRotate} />)}
+            {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 1} setWillRotate={setWillRotate} setGridSpotToSave={setGridSpotToSave} />)}
           </tr>
           <tr className='ticTacToeRow'>
-            {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 4} setWillRotate={setWillRotate} />)}
+            {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 4} setWillRotate={setWillRotate} setGridSpotToSave={setGridSpotToSave} />)}
           </tr>
           <tr className='ticTacToeRow'>
-            {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 7} setWillRotate={setWillRotate} />)}
+            {ticTacToeNumRows.map((_, index) => <TicTacToeSpace gridPosition={index + 7} setWillRotate={setWillRotate} setGridSpotToSave={setGridSpotToSave} />)}
           </tr>
         </table>
       </div>

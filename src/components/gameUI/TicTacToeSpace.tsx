@@ -1,16 +1,15 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { useContext } from 'react'
+import { useEffect } from 'react'
 import { FC } from 'react'
 import { BsCircle } from 'react-icons/bs'
 import { MdOutlineClose } from 'react-icons/md'
-import { handleElementClick } from '../../fns/handleElementClick'
-import history from '../../history/history'
 import { TicTacToeSpaceProps } from '../../interfaces/interfaces'
 import { GameContext, ModalContext, SettingsContext } from '../../provider/Providers'
 
 
-const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillRotate }) => {
+const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillRotate, setGridSpotToSave }: { gridPosition: number, setWillRotate: Function, setGridSpotToSave: Function }) => {
   const { player1, player2, bot, setPlayer1, setPlayer2 } = useContext(SettingsContext);
   const { currentTurn, isGameDone } = useContext(GameContext);
   const { isSideModalOn } = useContext(ModalContext)
@@ -23,13 +22,20 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillRotate }
   const wasSpotChosen = didBotPickSpot || didPlayer1PickSpot || didPlayer2PickSpot;
 
   const handleOnClick = (): void => {
-    const isGameBeingPlayed = handleElementClick();
-    if (isGameBeingPlayed) return;
+    // GOAL: save the player spot chosen into the local storage 
+    // the spots are updated for the current player and saved into the local storage
+    // the new spot is added to the field of spotsChosen: [] (game.(the current player).spotsChosen)
+    // the current player is accessed from the game object 
+    // get the game object found from the local storage 
+    // the current player identity is found
+    // find the current player identity (either player one or player two)
     const _player = { ...player, spotsChosen: player?.spotsChosen?.length ? [...player.spotsChosen, gridPosition] : [gridPosition] };
-    localStorage.setItem(`${player.name}`, JSON.stringify(_player));
+    setGridSpotToSave({ isPlayerOne: isPlayerOne, spot: gridPosition });
     updatePlayer(_player as Object);
     setWillRotate(true);
-  }
+  };
+
+
 
 
   return (

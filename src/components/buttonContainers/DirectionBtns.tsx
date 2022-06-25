@@ -8,19 +8,9 @@ import { GameContext, SettingsContext } from '../../provider/Providers'
 import useNavigate from '../../customHooks/useNavigate'
 import '../../css/directionBtnsContainer.css'
 
-// CASE: the user is playing against another player
-
-// GOAL: when the user presses on the start game button, save player1 info and player2 info into the local storage
-
-// CASE: the user is playing against another player
-
-// GOAL: when the user presses on the start game button, save player1 info and the bot info into the local storage 
-
-
-
 
 const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled }) => {
-  const { currentTurn, setCurrentTurn, setIsGameBeingPlayed } = useContext(GameContext);
+  const { currentTurn, setCurrentTurn } = useContext(GameContext);
   const { didErrorOccur, versusType } = useContext(SettingsContext);
   const { currentLocation, navigateToSec } = useNavigate();
   const [isBackBtnDisabled,]: HookBooleanVal = _isBackBtnDisabled;
@@ -43,20 +33,13 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
       const _currentTurn = { ...currentTurn, isPlayerOne: true };
       (_currentTurn?.isPlayerTwo && versusType.isBot) && delete _currentTurn.isPlayerTwo;
       setCurrentTurn(_currentTurn);
-      localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
-      localStorage.setItem('isGameBeingPlayed', JSON.stringify(true))
-      setIsGameBeingPlayed(true);
+      _game = _game ? { ...JSON.parse(_game as string), currentTurn: _currentTurn, currentLocation: 3 } : { currentTurn: _currentTurn, currentLocation: 3 };
+      localStorage.setItem('game', JSON.stringify(_game));
       navigateToSec(3)
     }
   }
 
-  const handleBackBtnClick = (): void => {
-    if (isOnPlayerInfo) {
-      navigateToSec(1);
-    }
-    isOnPlayerInfo && navigateToSec(1);
-    debugger;
-  };
+  const handleBackBtnClick = (): void => { isOnPlayerInfo && navigateToSec(1); };
 
 
   return (

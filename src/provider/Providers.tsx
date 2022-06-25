@@ -53,7 +53,6 @@ export const GameContext = createContext({
   isStaleMate: false,
   isGameDone: false,
   isOnGameSec: false,
-  isGameBeingPlayed: false,
   redLine2ClassName: "",
   currentTurn: {} as Partial<CurrentTurn>,
   redLineClassName: "",
@@ -62,24 +61,21 @@ export const GameContext = createContext({
   setIsGameDone: {} as Function,
   setIsStaleMate: {} as Function,
   setRedLineClassName: {} as Function,
-  setIsOnGameSec: {} as Function,
-  setIsGameBeingPlayed: {} as Function
+  setIsOnGameSec: {} as Function
 });
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-  const currentTurnSavedVal = localStorage.getItem('currentTurn') && JSON.parse(localStorage.getItem('currentTurn') as string);
-  const currentTurnDefaultVal = currentTurnSavedVal ?? { isPlayerOne: false, isPlayerTwo: false, isBot: false };
-  const _isGameBeingPlayed = localStorage.getItem('isGameBeingPlayed') && JSON.parse(localStorage.getItem('isGameBeingPlayed') as string)
+  const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
+  const currentTurnDefaultVal = game?.currentTurn ?? { isPlayerOne: false, isPlayerTwo: false, isBot: false };
   const [currentTurn, setCurrentTurn] = useState(currentTurnDefaultVal as Object);
-  const [isStaleMate, setIsStaleMate]: HookBooleanVal = useState(localStorage.getItem('isStaleMate') ? JSON.parse(localStorage.getItem('isStaleMate') as string) as boolean : false);
+  const [isStaleMate, setIsStaleMate]: HookBooleanVal = useState(!!game?.isStaleMate);
   const [isGameDone, setIsGameDone]: HookBooleanVal = useState(false);
-  const [isGameBeingPlayed, setIsGameBeingPlayed]: HookBooleanVal = useState(!!_isGameBeingPlayed);
   const [isOnGameSec, setIsOnGameSec]: HookBooleanVal = useState(false);
   const [redLineClassName, setRedLineClassName]: StringState = useState("");
   const [redLine2ClassName, setRedLine2ClassName]: StringState = useState("")
 
   return (
-    <GameContext.Provider value={{ currentTurn, redLine2ClassName, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, redLineClassName, setRedLineClassName, isOnGameSec, setIsOnGameSec, isGameBeingPlayed, setIsGameBeingPlayed, setRedLine2ClassName }}>
+    <GameContext.Provider value={{ currentTurn, redLine2ClassName, setCurrentTurn, isStaleMate, setIsStaleMate, isGameDone, setIsGameDone, redLineClassName, setRedLineClassName, isOnGameSec, setIsOnGameSec, setRedLine2ClassName }}>
       {children}
     </GameContext.Provider>
   )

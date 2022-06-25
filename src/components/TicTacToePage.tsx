@@ -27,7 +27,6 @@ import { FC } from 'react';
 const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   const { player1, player2, versusType, setVersusType, bot, wasShapeBtnClicked } = useContext(SettingsContext);
   const { isResultModalOn, isGameOnNotifyModalOn } = useContext(ModalContext);
-  const { isGameBeingPlayed: _isGameBeingPlayed } = useContext(GameContext);;
   const { currentLocation } = useContext(LocationContext)
   const { name: player1Name, isXChosen: isXPlayer1 } = player1;
   const { name: player2Name, isXChosen: isXPlayer2 } = player2;
@@ -120,7 +119,7 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
         {isOnVersusSelection && <VersusType />}
         {isOnPlayerInfo && <PlayerInfoSec />}
         {isDirectionsBtnOn && <DirectionBtns _isBackBtnDisabled={_isBackBtnDisabled} _isForwardBtnDisabled={_isForwardBtnDisabled} _compRenderToggle={_compRenderToggle} />}
-        {(isOnGameSection && isGameBeingPlayed) && <TicTacToeGameSec />}
+        {isOnGameSection && <TicTacToeGameSec />}
       </section>
       {isResultModalOn && <Result />}
       {isGameOnNotifyModalOn && <GameIsOn />}

@@ -65,8 +65,9 @@ export interface SelectedBtnStyles {
 }
 
 export interface TicTacToeSpaceProps {
-    gridPosition: Number,
-    setWillRotate: Function
+    gridPosition: number,
+    setWillRotate: Function,
+    setGridSpotToSave: Function
 }
 
 // export interface NavbarProps {
@@ -101,9 +102,14 @@ export interface GameObj {
     versusType?: VersusTypeObj
     player1: Player,
     player2?: Player
+    currentTurn?: CurrentTurn,
+    isStaleMate?: Boolean
 }
 
 
-
+export interface GridSpotToSave {
+    spot: number,
+    isPlayerOne: Boolean
+}
 
 

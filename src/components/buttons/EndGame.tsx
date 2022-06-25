@@ -7,14 +7,13 @@ import { GameContext, ModalContext, SettingsContext } from '../../provider/Provi
 const EndGame: FC = () => {
     const { setIsSideModalOn } = useContext(ModalContext);
     const { setPlayer1, setPlayer2, setBot, setVersusType } = useContext(SettingsContext)
-    const { setIsGameBeingPlayed, setIsGameDone, isGameDone, setIsStaleMate, setRedLineClassName, setRedLine2ClassName } = useContext(GameContext)
+    const { setIsGameDone, isGameDone, setIsStaleMate, setRedLineClassName, setRedLine2ClassName } = useContext(GameContext)
 
     const resetGameUI = () => {
         setPlayer1({ name: 'Player 1', isXChosen: false, spotsChosen: [], isPlayer1: true });
         setPlayer2({ name: 'Player 2', isXChosen: false, spotsChosen: [] });
         setBot({ isBot: true });
         setVersusType({ isBot: false, isTwoPlayer: false });
-        setIsGameBeingPlayed(false);
         setIsGameDone(false);
         setIsStaleMate(false);
         setRedLine2ClassName("");
