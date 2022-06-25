@@ -15,16 +15,14 @@ import { useRef } from 'react';
 
 const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const { name, isXChosen, isPlayer1 }: Player = player;
-  const { setPlayer2, setPlayer1, player1, player2, versusType, setBot, bot, didErrorOccur, setDidErrorOccur, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
+  const { setPlayer2, setPlayer1, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, didErrorOccur, setDidErrorOccur, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
   const [isErrorOnPlayer1, setIsErrorOnPlayer1]: HookBooleanVal = useState(false);
   const [isErrorOnPlayer2, setIsErrorOnPlayer2]: HookBooleanVal = useState(false);
   const [isNoInput, setIsNoInput] = useState(false);
 
-  useEffect(() => {
-    console.log('name: ', name)
-  })
+
 
   const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const _name = (event.target as HTMLInputElement).value;
@@ -41,10 +39,13 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
       setDidErrorOccur(true);
       isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
     } else if (isNameErrorForOtherPlayer && versusType.isTwoPlayer) {
-      setPlayer(val => { return { ...val, name: _name } })
-      setWillSaveNameChanges(true);
-      isPlayer1 ? setIsErrorOnPlayer2(_name.length > 10) : setIsErrorOnPlayer1(_name.length > 10)
-      // setDidErrorOccur(true);
+      setPlayer(val => { return { ...val, name: _name } });
+      if (_name.length <= 10) {
+        setWillSaveNameChanges(true);
+        isPlayer1 ? setIsErrorOnPlayer1(false) : setIsErrorOnPlayer2(false);
+      } else if (_name.length > 10) {
+        isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+      }
     } else {
       setDidErrorOccur(false);
       setIsErrorOnPlayer1(false);
@@ -56,16 +57,13 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     setIsNoInput(false);
   }
 
-  // CASE: player one inputs a name
-
-  // GOAL: save the changes into local storage under the name of 'game'
-
 
   // write a test for this function
-  const saveNameChanges = (name: string, game: GameObj): void => {
+  const saveNameChanges = (name: string): void => {
+    const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
     let _player: Player;
     let _game: GameObj = { player1: (player1 as Player) }
-    if (isPlayer1 && game.player1) {
+    if (isPlayer1 && game?.player1) {
       _player = { ...game.player1, name: name };
       _game = { ...game, player1: _player };
     }
@@ -75,34 +73,84 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
       _game = { ...game, player1: _player };
     }
 
-    if (!isPlayer1 && game.player2) {
+    if (!isPlayer1 && game?.player2) {
       _player = { ...game.player2, name: name };
       _game = { ...game, player2: _player };
     }
 
     if (!isPlayer1) {
       _player = { ...player, name: name };
-      _game = { ...game, player2: _player };
+      _game = { ...(game as GameObj), player2: _player };
     }
 
     localStorage.setItem('game', JSON.stringify(_game));
     setWillSaveNameChanges(false);
   }
 
+  // if player1, then save changes for player2 
+  const saveShapeChoice = (isXChosen: boolean, willUpdateOtherUser?: boolean) => {
+    const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
+    let _player: Player = player;
+    let _game: GameObj = { player1: (player1 as Player) };
 
-  useEffect(() => {
-    const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string)
-
-    if (willSaveNameChanges && game) {
-      saveNameChanges(name as string, game);
+    if (isPlayer1 && ((willUpdateOtherUser && game?.player2) || game?.player1)) {
+      const playerInfo = willUpdateOtherUser ? (game.player2 as Player) : game.player1
+      _player = { ...playerInfo, isXChosen: isXChosen };
+      const playerFieldName = willUpdateOtherUser ? 'player2' : 'player1';
+      _game = { ...game, [playerFieldName]: _player };
     }
 
+    if (isPlayer1) {
+      const playerInfo: Player = willUpdateOtherUser ? (player2 as Player) : player;
+      _player = { ...playerInfo, isXChosen: isXChosen };
+      const playerFieldName = willUpdateOtherUser ? 'player2' : 'player1';
+      _game = { ...(game as GameObj), [playerFieldName]: _player }
+    }
 
+    if (!isPlayer1 && ((willUpdateOtherUser && game?.player1) || game?.player2)) {
+      const playerInfo = willUpdateOtherUser ? game.player1 : (game.player2 as Player)
+      _player = { ...playerInfo, isXChosen: isXChosen };
+      const playerFieldName = willUpdateOtherUser ? 'player1' : 'player2';
+      _game = { ...game, [playerFieldName]: _player };
+    }
+
+    if (!isPlayer1) {
+      const playerInfo: Player = willUpdateOtherUser ? (player1 as Player) : player;
+      _player = { ...playerInfo, isXChosen: isXChosen };
+      const playerFieldName = willUpdateOtherUser ? 'player1' : 'player2';
+      _game = { ...(game as GameObj), [playerFieldName]: _player }
+    }
+
+    if (willUpdateOtherUser) {
+      isPlayer1 ? setPlayer2(_player) : setPlayer1(_player)
+    }
+
+    localStorage.setItem('game', JSON.stringify(_game));
+    setWillSaveShapeChanges(false);
+    debugger
+  }
+
+
+
+  useEffect(() => {
+    if (willSaveNameChanges) {
+      saveNameChanges(name as string);
+    }
+
+    if (willSaveShapeChanges) {
+      // save for changes for current user
+      saveShapeChoice(!!isXChosen);
+      // save for changes for the other user
+      saveShapeChoice(!isXChosen, true);
+    }
 
   }, [willSaveNameChanges, willSaveShapeChanges])
 
 
+
+
   const handleShapeBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    !wasShapeBtnClicked && setWasShapeBtnClicked(true);
     const isXChosen = event.currentTarget.name === 'X';
     setPlayer(player => { return { ...player, isXChosen } });
     setWillSaveShapeChanges(true);
@@ -118,7 +166,7 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     xShapeStyles = { backgroundColor: 'darkgray' };
   } else if ((!isPlayer1 && !isXChosen) && player1.isXChosen) {
     oShapeStyles = { backgroundColor: 'darkgray' }
-  }
+  };
 
 
 

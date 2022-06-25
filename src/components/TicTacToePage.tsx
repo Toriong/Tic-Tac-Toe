@@ -25,10 +25,10 @@ import { FC } from 'react';
 
 
 const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
-  const { player1, player2, versusType, setVersusType, bot } = useContext(SettingsContext);
-  const { isResultModalOn, setIsResultModalOn, isGameOnNotifyModalOn, setIsGameOnNotifyModalOn, setIsSideModalOn } = useContext(ModalContext);
+  const { player1, player2, versusType, setVersusType, bot, wasShapeBtnClicked } = useContext(SettingsContext);
+  const { isResultModalOn, isGameOnNotifyModalOn } = useContext(ModalContext);
   const { isGameBeingPlayed: _isGameBeingPlayed } = useContext(GameContext);;
-  const { currentLocation, setCurrentLocation } = useContext(LocationContext)
+  const { currentLocation } = useContext(LocationContext)
   const { name: player1Name, isXChosen: isXPlayer1 } = player1;
   const { name: player2Name, isXChosen: isXPlayer2 } = player2;
   const [isDirectionsBtnOn, setIsDirectionsBtnOn]: HookBooleanVal = useState(true);
@@ -45,14 +45,6 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   const isOnPlayerInfo = currentLocation === 2;
   const isOnGameSection = currentLocation === 3;
   const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
-
-  // GOAL: if the current page is one, then the user is on versus type section
-
-  // CASE: the user is on the first page, the user presses on the continue button
-  // GOAL: if the user is on the first page, presses on the continue button, take the user to the player info card section 
-
-
-
 
 
 
@@ -83,8 +75,7 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
           (isANameEmpty || isNoShapeChosen) ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
         } else {
           const isANameEmpty = player1?.name === "";
-          const isNoShapeChosen = (player1?.isXChosen === false) && (bot?.isXChosen === undefined) && (bot?.isXChosen !== true);
-          (isANameEmpty || isNoShapeChosen) ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
+          (isANameEmpty || !wasShapeBtnClicked) ? setIsForwardBtnDisabled(true) : setIsForwardBtnDisabled(false);
         }
       }
       isOnGameSection && setIsDirectionsBtnOn(false);
@@ -116,15 +107,10 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   }, [willShowAlert]);
 
   useEffect(() => {
-    const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
-    if (isOnGameSection && !isGameBeingPlayed) {
-      setWillShowAlert(true);
-      history.replace('/');
-    };
-
-    willGoToHome && history.push('/');
-
-    ((isGameBeingPlayed ?? _isGameBeingPlayed) && !isOnGameSection) ? setIsGameOnNotifyModalOn(true) : setIsGameOnNotifyModalOn(false);
+    if (willGoToHome) {
+      alert('An error has ocurred. You will be redirected to the home page.');
+      history.push('/');
+    }
   }, []);
 
 

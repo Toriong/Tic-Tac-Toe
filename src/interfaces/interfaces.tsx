@@ -36,7 +36,7 @@ export interface UseGetPathVals {
 }
 
 export interface Player {
-    isXChosen: boolean,
+    isXChosen?: boolean,
     name?: String,
     isPlayer1?: boolean,
     isBot?: boolean,
