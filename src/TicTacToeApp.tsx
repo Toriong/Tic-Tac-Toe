@@ -18,7 +18,7 @@ const TicTacToeApp = () => {
               <Navbar />
               <Routes>
                 <Route path='/' element={<TicTacToePage />} />
-                <Route path='*' element={<TicTacToePage willGoToHome={true} />} />
+                <Route path='*' element={<TicTacToePage didErrorOccur={true} />} />
               </Routes>
             </SettingsProvider>
           </GameProvider>

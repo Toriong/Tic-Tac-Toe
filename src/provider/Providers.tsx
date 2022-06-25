@@ -25,7 +25,6 @@ export const SettingsContext = createContext({
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
-  const _botSavedVal = localStorage.getItem('Bot') && JSON.parse(localStorage.getItem('Bot') as string);
   const versusTypeDefaultVal = game?.versusType ?? { isTwoPlayer: false, isBot: false };
   const { name: player1Name, isXChosen: isXPlayer1, spotsChosen: player1SpotsChosen } = game?.player1 ?? {};
   const { name: player2Name, isXChosen: isXPlayer2, spotsChosen: player2SpotsChosen } = game?.player2 ?? {};
@@ -34,7 +33,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [versusType, setVersusType] = useState(versusTypeDefaultVal as Object);
   const [player1, setPlayer1] = useState(_defaultValPlayer1 as Object);
   const [player2, setPlayer2] = useState(_defaultValPlayer2 as Object);
-  const [bot, setBot] = useState(_botSavedVal as Object);
+  const [bot, setBot] = useState(game?.bot ?? {});
   const [currentNamePlayer1, setCurrentNamePlayer1]: StringState = useState("");
   const [currentNamePlayer2, setCurrentNamePlayer2]: StringState = useState("");
   const [wasShapeBtnClicked, setWasShapeBtnClicked]: HookBooleanVal = useState(false);

@@ -89,7 +89,7 @@ export interface ResetButtonProps {
 }
 
 export interface TicTacToePageProps {
-    willGoToHome?: Boolean
+    didErrorOccur?: Boolean
 }
 
 export interface VersusTypeObj {
@@ -101,9 +101,11 @@ export interface GameObj {
     currentLocation?: number,
     versusType?: VersusTypeObj
     player1: Player,
-    player2?: Player
+    player2?: Player,
+    bot?: Player,
     currentTurn?: CurrentTurn,
     isStaleMate?: Boolean
+    isDone?: Boolean
 }
 
 

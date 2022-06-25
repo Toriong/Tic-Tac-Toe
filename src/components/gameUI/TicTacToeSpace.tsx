@@ -22,13 +22,6 @@ const TicTacToeSpace: FC<TicTacToeSpaceProps> = ({ gridPosition, setWillRotate, 
   const wasSpotChosen = didBotPickSpot || didPlayer1PickSpot || didPlayer2PickSpot;
 
   const handleOnClick = (): void => {
-    // GOAL: save the player spot chosen into the local storage 
-    // the spots are updated for the current player and saved into the local storage
-    // the new spot is added to the field of spotsChosen: [] (game.(the current player).spotsChosen)
-    // the current player is accessed from the game object 
-    // get the game object found from the local storage 
-    // the current player identity is found
-    // find the current player identity (either player one or player two)
     const _player = { ...player, spotsChosen: player?.spotsChosen?.length ? [...player.spotsChosen, gridPosition] : [gridPosition] };
     setGridSpotToSave({ isPlayerOne: isPlayerOne, spot: gridPosition });
     updatePlayer(_player as Object);

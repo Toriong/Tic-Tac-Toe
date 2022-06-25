@@ -15,7 +15,7 @@ import { useRef } from 'react';
 
 const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const { name, isXChosen, isPlayer1 }: Player = player;
-  const { setPlayer2, setPlayer1, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, didErrorOccur, setDidErrorOccur, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
+  const { setPlayer2, setPlayer1, setBot, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, didErrorOccur, setDidErrorOccur, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
   const [isErrorOnPlayer1, setIsErrorOnPlayer1]: HookBooleanVal = useState(false);
@@ -88,10 +88,18 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   }
 
   // if player1, then save changes for player2 
-  const saveShapeChoice = (isXChosen: boolean, willUpdateOtherUser?: boolean) => {
+  const saveShapeChoice = (isXChosen: boolean, willUpdateOtherUser?: boolean, willUpdateBot?: boolean) => {
     const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
     let _player: Player = player;
     let _game: GameObj = { player1: (player1 as Player) };
+
+    if (willUpdateBot) {
+      const _bot: Player = { isXChosen: isXChosen, spotsChosen: [] };
+      setBot(_bot);
+      setWillSaveShapeChanges(false);
+      localStorage.setItem('game', JSON.stringify({ ...game, bot: _bot }))
+      return;
+    }
 
     if (isPlayer1 && ((willUpdateOtherUser && game?.player2) || game?.player1)) {
       const playerInfo = willUpdateOtherUser ? (game.player2 as Player) : game.player1
@@ -127,7 +135,6 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
 
     localStorage.setItem('game', JSON.stringify(_game));
     setWillSaveShapeChanges(false);
-    debugger
   }
 
 
@@ -141,10 +148,19 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
       // save for changes for current user
       saveShapeChoice(!!isXChosen);
       // save for changes for the other user
-      saveShapeChoice(!isXChosen, true);
+      versusType.isTwoPlayer ? saveShapeChoice(!isXChosen, true) : saveShapeChoice(!isXChosen, false, true)
     }
 
-  }, [willSaveNameChanges, willSaveShapeChanges])
+  }, [willSaveNameChanges, willSaveShapeChanges]);
+
+  useLayoutEffect(() => {
+    const { isTwoPlayer, isBot } = versusType;
+
+    if ((isTwoPlayer && (((player1.isXChosen !== false) && (player2.isXChosen !== false)) || (player1.isXChosen || player2.isXChosen))) || (isBot && (player1.isXChosen || bot.isXChosen))) {
+      setWasShapeBtnClicked(true);
+    }
+
+  }, []);
 
 
 

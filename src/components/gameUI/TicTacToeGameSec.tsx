@@ -11,6 +11,7 @@ import RedLine from './RedLine';
 import '../../css/game/ticTacToeGameSec.css'
 import { GameObj, GridSpotToSave, Player } from '../../interfaces/interfaces';
 import { HookBooleanVal } from '../../types/types';
+import { saveGame } from '../../fns/saveGame';
 
 const SPOTS_NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -48,13 +49,28 @@ const TicTacToeGrid: FC = () => {
     return false;;
   })?.name
 
+  const updateTurn = (playerFieldName: string) => {
+    const _currentTurn = currentTurn.isPlayerOne ? { ...currentTurn, [playerFieldName]: true, isPlayerOne: false } : { ...currentTurn, isPlayerOne: true, [playerFieldName]: false }
+    saveGame('currentTurn', _currentTurn)
+    setCurrentTurn(_currentTurn);
+  };
+
+  const updateBotSpotsChosen = (num: number): void => {
+    const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, num] : [num] } : { spotsChosen: [num] };
+    saveGame('bot', _bot)
+    setBot(_bot);
+    setWillRotate(true);
+  };
+
+
+
   useEffect(() => {
     if (willRotate) {
       const redLineClassName = (player1?.spotsChosen?.length as number >= 3) && checkingForAWinner();
       const isStaleMateVersusBot = (player1?.spotsChosen?.length && bot?.spotsChosen?.length) && ((player1.spotsChosen.length + bot.spotsChosen.length) === 9) && !redLineClassName;
       const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && player2?.spotsChosen?.length) && ((player1.spotsChosen.length + player2.spotsChosen.length) === 9) && !redLineClassName;
       if (isStaleMateTwoPlayers || isStaleMateVersusBot) {
-        localStorage.setItem('isStaleMate', JSON.stringify(true))
+        saveGame('isStaleMate', true);
         setIsStaleMate(true);
         setIsGameDone(true);
         setIsResultModalOn(true);
@@ -62,34 +78,22 @@ const TicTacToeGrid: FC = () => {
         const redLine2ClassName = checkingForAWinner(true);
         if (redLine2ClassName !== redLineClassName) {
           setRedLine2ClassName(redLine2ClassName);
-          localStorage.setItem('redLine2ClassName', JSON.stringify(redLine2ClassName));
+          saveGame('redLine2ClassName', JSON.stringify(redLine2ClassName))
         };
         setIsResultModalOn(true);
         setRedLineClassName(redLineClassName);
-        localStorage.setItem('redLineClassName', JSON.stringify(redLineClassName));
-        localStorage.setItem('isGameDone', JSON.stringify(true));
+        saveGame('isDone', true);
+        saveGame('redLineClassName', JSON.stringify(redLineClassName));
         setIsGameDone(true);
-        debugger
       } else if (isTwoPlayer) {
-        const _currentTurn = currentTurn.isPlayerOne ? { ...currentTurn, isPlayerTwo: true, isPlayerOne: false } : { ...currentTurn, isPlayerOne: true, isPlayerTwo: false }
-        localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
-        setCurrentTurn(_currentTurn);
+        updateTurn('isPlayerTwo');
       } else {
-        const _currentTurn = currentTurn.isPlayerOne ? { ...currentTurn, isBot: true, isPlayerOne: false } : { ...currentTurn, isPlayerOne: true, isBot: false }
-        localStorage.setItem('currentTurn', JSON.stringify(_currentTurn));
-        setCurrentTurn(_currentTurn);
+        updateTurn('isBot');
       }
       setWillRotate(false);
     }
   }, [willRotate]);
 
-
-  const updateBotSpotsChosen = (num: number): void => {
-    const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, num] : [num] } : { spotsChosen: [num] };
-    localStorage.setItem('Bot', JSON.stringify(_bot));
-    setBot(_bot);
-    setWillRotate(true);
-  }
 
   const placeBotShape = () => {
     let takenSpots: Array<number> = [];
@@ -235,15 +239,11 @@ const TicTacToeGrid: FC = () => {
 
 
       // if there no options on defense nor any options for the win, then choose a spot at random
-      const index = Math.floor(Math.random() * freeSpots.length);
-      const spotChosen = freeSpots[index];
-      const _bot = bot ? { ...bot, spotsChosen: bot?.spotsChosen ? [...bot?.spotsChosen, spotChosen] : [spotChosen] } : { spotsChosen: [spotChosen] };
-      setBot(_bot);
-      debugger
-      localStorage.setItem('Bot', JSON.stringify(_bot));
+      const randomSpot = Math.floor(Math.random() * freeSpots.length);
+      const spotChosen = freeSpots[randomSpot];
+      updateBotSpotsChosen(spotChosen);
+
     };
-    debugger
-    setWillRotate(true);
   }
 
   useEffect(() => {
@@ -263,20 +263,18 @@ const TicTacToeGrid: FC = () => {
   }, [currentTurn.isBot, gridSpotToSave])
 
   useLayoutEffect(() => {
-    if ((localStorage.getItem('isGameDone') as string)) {
-      setIsGameDone(JSON.parse(localStorage.getItem('isGameDone') as string));
+    const game: GameObj = localStorage.getItem('game') ? JSON.parse(localStorage.getItem('game') as string) : {};
+    if (game.isDone || game.isStaleMate) {
+      setIsGameDone(true);
+      game.isStaleMate && setIsStaleMate(true);
       setIsResultModalOn(true);
-    }
-
+    };
     setIsOnGameSec(true);
-    setIsGameOnNotifyModalOn(false);
-    localStorage.getItem('isGameBeingPlayed') && localStorage.setItem('isGameBeingPlayed', JSON.stringify(true));
 
-    return () => {
-      setIsResultModalOn(false);
-      setIsOnGameSec(false);
-    }
+    return () => { setIsOnGameSec(false); };
   }, []);
+
+
 
 
 

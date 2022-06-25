@@ -12,8 +12,7 @@ const RedLine: FC<RedLineProps> = ({ isRedLine1 }) => {
     const { setRedLineClassName, redLineClassName, redLine2ClassName, setRedLine2ClassName } = useContext(GameContext);
 
     const getSavedRedLineCssClassNames = (): { redLine2ClassName: String | null, redLineClassName: String | null } => {
-        const redLineClassName = localStorage.getItem('redLineClassName');
-        const redLine2ClassName = localStorage.getItem('redLine2ClassName');
+        const { redLine2ClassName, redLineClassName } = JSON.parse(localStorage.getItem('game') as string);
 
         return { redLine2ClassName, redLineClassName }
     }

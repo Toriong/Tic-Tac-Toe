@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { HookBooleanVal } from '../types/types';
 import DirectionBtns from './buttonContainers/DirectionBtns';
 import { useEffect } from 'react';
-import { TicTacToePageProps, VersusTypeSelectionObj } from '../interfaces/interfaces';
+import { GameObj, TicTacToePageProps, VersusTypeSelectionObj } from '../interfaces/interfaces';
 import PlayerInfoSec from './gameSettings/PlayerInfoSec';
 import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
@@ -16,6 +16,7 @@ import TicTacToeGameSec from './gameUI/TicTacToeGameSec';
 import Result from './modal/Result';
 import GameIsOn from './modal/GameIsOn';
 import { FC } from 'react';
+import useNavigate from '../customHooks/useNavigate';
 
 
 // GOAL: when the user is on the versus section page, have the following occur:
@@ -24,10 +25,9 @@ import { FC } from 'react';
 // disable the forward button when there is no selection made
 
 
-const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
+const TicTacToePage: FC<TicTacToePageProps> = ({ didErrorOccur }) => {
   const { player1, player2, versusType, setVersusType, bot, wasShapeBtnClicked } = useContext(SettingsContext);
   const { isResultModalOn, isGameOnNotifyModalOn } = useContext(ModalContext);
-  const { currentLocation } = useContext(LocationContext)
   const { name: player1Name, isXChosen: isXPlayer1 } = player1;
   const { name: player2Name, isXChosen: isXPlayer2 } = player2;
   const [isDirectionsBtnOn, setIsDirectionsBtnOn]: HookBooleanVal = useState(true);
@@ -40,10 +40,10 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   const _isForwardBtnDisabled: HookBooleanVal = [isForwardBtnDisabled, setIsForwardBtnDisabled];
   const firstRender = useRef({ didOccur: false });
   const { isTwoPlayer, isBot } = versusType;
+  const { currentLocation, navigateToSec } = useNavigate()
   const isOnVersusSelection = currentLocation === 1;
   const isOnPlayerInfo = currentLocation === 2;
   const isOnGameSection = currentLocation === 3;
-  const isGameBeingPlayed = !!localStorage.getItem('isGameBeingPlayed');
 
 
 
@@ -82,35 +82,43 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ willGoToHome }) => {
   }, [isOnGameSection, isOnVersusSelection, versusType, player2Name, player1Name, isXPlayer1, isXPlayer2, isOnPlayerInfo, bot?.isXChosen])
 
   useLayoutEffect(() => {
-    !isDirectionsBtnOn && setIsDirectionsBtnOn(true);
-    const versusType = localStorage.getItem('versusType');
-    if (versusType) {
-      const _versusType: VersusTypeSelectionObj = JSON.parse(versusType);
-      setVersusType(_versusType);
+    const game: GameObj = JSON.parse(localStorage.getItem('game') as string);
+    if (game?.versusType) {
+      setVersusType(game.versusType as Object);
+      setIsDirectionsBtnOn(true);
     }
 
     if (isOnPlayerInfo) {
       setIsBackBtnDisabled(false);
       setIsForwardBtnDisabled(true);
+      setIsDirectionsBtnOn(true);
     }
+
+    isOnGameSection && setIsDirectionsBtnOn(false);
   }, []);
 
 
 
 
   useEffect(() => {
-    if (willShowAlert && isOnVersusSelection) {
-      alert("You must start a game to access the game section.")
+    if (willShowAlert) {
+      alert("An error has occurred.")
       setWillShowAlert(false);
     }
   }, [willShowAlert]);
 
   useEffect(() => {
-    if (willGoToHome) {
-      alert('An error has ocurred. You will be redirected to the home page.');
+    if (didErrorOccur) {
+      setWillShowAlert(true);
+      const { currentLocation }: GameObj = localStorage.getItem('game') ? JSON.parse(localStorage.getItem('game') as string) : {}
+      currentLocation && navigateToSec(currentLocation);
       history.push('/');
     }
   }, []);
+
+  useEffect(() => {
+    console.log('bot: ', bot)
+  })
 
 
   return (
