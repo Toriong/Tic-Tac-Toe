@@ -105,7 +105,8 @@ export interface GameObj {
     bot?: Player,
     currentTurn?: CurrentTurn,
     isStaleMate?: Boolean
-    isDone?: Boolean
+    isDone?: Boolean,
+    isGameDone?: Boolean
 }
 
 
@@ -114,4 +115,7 @@ export interface GridSpotToSave {
     isPlayerOne: Boolean
 }
 
+export interface EndGameBtnProps {
+    isOnResultsModal?: Boolean
+}
 

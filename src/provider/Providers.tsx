@@ -1,6 +1,6 @@
 import React, { useState, createContext, Dispatch, SetStateAction, ReactNode } from 'react'
 import { CurrentTurn, GameObj, Player, VersusTypeSelectionObj } from '../interfaces/interfaces';
-import { HookBooleanVal, ObjectState, StringState } from '../types/types';
+import { HookBooleanVal, StringState } from '../types/types';
 
 
 // this sets the value for the SettingsContext.Provider
@@ -68,7 +68,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const currentTurnDefaultVal = game?.currentTurn ?? { isPlayerOne: false, isPlayerTwo: false, isBot: false };
   const [currentTurn, setCurrentTurn] = useState(currentTurnDefaultVal as Object);
   const [isStaleMate, setIsStaleMate]: HookBooleanVal = useState(!!game?.isStaleMate);
-  const [isGameDone, setIsGameDone]: HookBooleanVal = useState(false);
+  const [isGameDone, setIsGameDone]: HookBooleanVal = useState(!!game?.isStaleMate);
   const [isOnGameSec, setIsOnGameSec]: HookBooleanVal = useState(false);
   const [redLineClassName, setRedLineClassName]: StringState = useState("");
   const [redLine2ClassName, setRedLine2ClassName]: StringState = useState("")

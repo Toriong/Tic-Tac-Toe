@@ -23,7 +23,7 @@ const Result = () => {
                 <span> {isStaleMate ? 'STALEMATE' : `WINNER: ${winner}`} </span>
             </section>
             <section>
-                <EndGame />
+                <EndGame isOnResultsModal={true} />
                 <Reset resetBtnTxt={resetBtnTxt} />
             </section>
         </div>

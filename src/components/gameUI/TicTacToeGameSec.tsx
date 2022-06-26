@@ -71,6 +71,7 @@ const TicTacToeGrid: FC = () => {
       const isStaleMateTwoPlayers = (player1?.spotsChosen?.length && player2?.spotsChosen?.length) && ((player1.spotsChosen.length + player2.spotsChosen.length) === 9) && !redLineClassName;
       if (isStaleMateTwoPlayers || isStaleMateVersusBot) {
         saveGame('isStaleMate', true);
+        saveGame('isGameDone', true);
         setIsStaleMate(true);
         setIsGameDone(true);
         setIsResultModalOn(true);

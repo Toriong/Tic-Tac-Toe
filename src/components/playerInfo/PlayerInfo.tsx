@@ -18,18 +18,19 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const { setPlayer2, setPlayer1, setBot, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, didErrorOccur, setDidErrorOccur, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
-  const [isErrorOnPlayer1, setIsErrorOnPlayer1]: HookBooleanVal = useState(false);
-  const [isErrorOnPlayer2, setIsErrorOnPlayer2]: HookBooleanVal = useState(false);
-  const [isNoInput, setIsNoInput] = useState(false);
+  const [isLongNamePlayer1, setIsLongNamePlayer1]: HookBooleanVal = useState(false);
+  const [isLongNamePlayer2, setIsLongNamePlayer2]: HookBooleanVal = useState(false);
+  const [isNoInputPlayer1, setIsNoInputPlayer1]: HookBooleanVal = useState(false);
+  const [isNoInputPlayer2, setIsNoInputPlayer2]: HookBooleanVal = useState(false);
+  const [isNoInput, setIsNoInput]: HookBooleanVal = useState(false);
 
 
 
   const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const _name = (event.target as HTMLInputElement).value;
     if (!_name) {
-      setIsNoInput(true);
       setDidErrorOccur(true);
-      isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+      setIsNoInput(true);
       return;
     }
     isPlayer1 ? setCurrentNamePlayer1(_name) : setCurrentNamePlayer2(_name);
@@ -37,22 +38,23 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     const isNameErrorForOtherPlayer = otherPlayerName && (otherPlayerName.length > 10)
     if (_name.length > 10) {
       setDidErrorOccur(true);
-      isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+      isPlayer1 ? setIsLongNamePlayer1(true) : setIsLongNamePlayer2(true);
     } else if (isNameErrorForOtherPlayer && versusType.isTwoPlayer) {
       setPlayer(val => { return { ...val, name: _name } });
       if (_name.length <= 10) {
         setWillSaveNameChanges(true);
-        isPlayer1 ? setIsErrorOnPlayer1(false) : setIsErrorOnPlayer2(false);
+        isPlayer1 ? setIsLongNamePlayer1(false) : setIsLongNamePlayer2(false);
       } else if (_name.length > 10) {
-        isPlayer1 ? setIsErrorOnPlayer1(true) : setIsErrorOnPlayer2(true);
+        isPlayer1 ? setIsLongNamePlayer1(true) : setIsLongNamePlayer2(true);
       }
     } else {
-      setDidErrorOccur(false);
-      setIsErrorOnPlayer1(false);
-      setIsErrorOnPlayer2(false);
       setPlayer(val => { return { ...val, name: _name } })
+      if (otherPlayerName) {
+        setDidErrorOccur(false);
+        setIsLongNamePlayer1(false);
+        setIsLongNamePlayer2(false);
+      }
       setWillSaveNameChanges(true);
-      debugger
     };
     setIsNoInput(false);
   }
@@ -163,6 +165,17 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   }, []);
 
 
+  const [isSameName, setIsSameName] = useState(false);
+  useEffect(() => {
+    if ((player1.name && player2.name) && (player1.name?.trim() === player2.name?.trim())) {
+      setDidErrorOccur(true);
+      setIsSameName(true);
+    } else {
+      setIsSameName(false);
+    }
+  }, [player1.name, player2.name])
+
+
 
 
   const handleShapeBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -184,7 +197,17 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     oShapeStyles = { backgroundColor: 'darkgray' }
   };
 
+  const getErrorTxt = (): string => {
+    if (isLongNamePlayer1 || isLongNamePlayer2) {
+      return "*Name can't be over 10 characters";
+    }
 
+    if (isNoInputPlayer1) {
+      return '*Please enter in a name';
+    }
+
+    return "*Name cannot be the same";
+  }
 
   return (
     <div className='playerInfo'>
@@ -193,11 +216,11 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
         <div className='inputNameContainer'>
           <input
             defaultValue={name as string}
-            style={{ color: (didErrorOccur && (isErrorOnPlayer1 || isErrorOnPlayer2)) ? 'red' : 'white' }}
+            style={{ color: (didErrorOccur && (isLongNamePlayer1 || isLongNamePlayer2 || isSameName || isNoInput)) ? 'red' : 'white' }}
             onKeyUp={event => { handleOnKeyUp(event) }}
           />
           {<span>
-            {(didErrorOccur && (isErrorOnPlayer1 || isErrorOnPlayer2)) && (isNoInput ? '*Please enter in a name.' : "*Name can't be over 10 characters")}
+            {(didErrorOccur && (isLongNamePlayer1 || isLongNamePlayer2 || isSameName || isNoInput)) && getErrorTxt()}
           </span>}
         </div>
       </section>

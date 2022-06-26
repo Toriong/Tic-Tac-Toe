@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { FC } from 'react';
-import { ResetButtonProps } from '../../interfaces/interfaces';
+import { GameObj, ResetButtonProps } from '../../interfaces/interfaces';
 import { GameContext, ModalContext, SettingsContext } from '../../provider/Providers';
 
 const Reset: FC<ResetButtonProps> = ({ resetBtnTxt }) => {
@@ -16,23 +16,27 @@ const Reset: FC<ResetButtonProps> = ({ resetBtnTxt }) => {
 
     const resetGameUI = () => {
         const _player1 = { ...player1, spotsChosen: [] };
-        localStorage.setItem('Player 1', JSON.stringify(_player1));
+        let game: GameObj = JSON.parse(localStorage.getItem('game') as string)
+        game = { ...game, player1: _player1 }
         setPlayer1(_player1);
+
         if (isTwoPlayer) {
             const _player2 = { ...player2, spotsChosen: [] };
-            localStorage.setItem('Player 2', JSON.stringify(_player2));
+            game = { ...game, player2: _player2 }
             setPlayer2(_player2);
-        }
+        };
+
         if (isBot) {
             const _bot = { ...bot, spotsChosen: [] }
-            localStorage.setItem('bot', JSON.stringify(_bot));
+            game = { ...game, bot: _bot }
             setBot(_bot);
         };
+
         !currentTurn.isPlayerOne && setCurrentTurn(isTwoPlayer ? { isPlayerOne: true, isPlayerTwo: false } : { isPlayerOne: true, isBot: false });
         isGameDone && setIsGameDone(false);
         isStaleMate && setIsStaleMate(false);
-        localStorage.removeItem('isGameDone');
-        localStorage.getItem('isStaleMate') && localStorage.removeItem('isStaleMate');
+        game.isGameDone && delete game.isGameDone;
+        game.isStaleMate && delete game.isStaleMate
         setRedLine2ClassName("");
         setRedLineClassName("");
         setIsResultModalOn(false)
@@ -40,12 +44,12 @@ const Reset: FC<ResetButtonProps> = ({ resetBtnTxt }) => {
     }
 
     const handleResetGameBtnClick = () => {
-        const willResetGame = !isGameDone && window.confirm('Are you sure you want to reset this game?')
-        if (willResetGame) {
+        if (isGameDone) {
             resetGameUI();
             return;
         };
-        resetGameUI();
+        const willResetGame = window.confirm('Are you sure you want to reset this game?');
+        willResetGame && resetGameUI();
     };
 
 

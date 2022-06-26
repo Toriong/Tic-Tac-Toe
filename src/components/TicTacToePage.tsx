@@ -5,12 +5,12 @@ import { useState } from 'react';
 import { HookBooleanVal } from '../types/types';
 import DirectionBtns from './buttonContainers/DirectionBtns';
 import { useEffect } from 'react';
-import { GameObj, TicTacToePageProps, VersusTypeSelectionObj } from '../interfaces/interfaces';
+import { GameObj, TicTacToePageProps } from '../interfaces/interfaces';
 import PlayerInfoSec from './gameSettings/PlayerInfoSec';
 import { useRef } from 'react';
 import { useLayoutEffect } from 'react';
 import { useContext } from 'react';
-import { GameContext, LocationContext, ModalContext, SettingsContext } from '../provider/Providers';
+import { ModalContext, SettingsContext } from '../provider/Providers';
 import history from '../history/history';
 import TicTacToeGameSec from './gameUI/TicTacToeGameSec';
 import Result from './modal/Result';
@@ -18,11 +18,6 @@ import GameIsOn from './modal/GameIsOn';
 import { FC } from 'react';
 import useNavigate from '../customHooks/useNavigate';
 
-
-// GOAL: when the user is on the versus section page, have the following occur:
-
-// when the user presses on the versus type, save changes into the local storage
-// disable the forward button when there is no selection made
 
 
 const TicTacToePage: FC<TicTacToePageProps> = ({ didErrorOccur }) => {

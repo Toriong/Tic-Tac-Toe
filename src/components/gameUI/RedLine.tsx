@@ -1,11 +1,10 @@
 import React from 'react'
 import { useContext } from 'react'
 import { GameContext } from '../../provider/Providers'
-import { FC } from 'react'
-import { useEffect } from 'react'
-import { useLayoutEffect } from 'react'
-import { RedLineProps } from '../../interfaces/interfaces'
-import '../../css/game/redLine.css'
+import { FC } from 'react';
+import { useLayoutEffect } from 'react';
+import { RedLineProps } from '../../interfaces/interfaces';
+import '../../css/game/redLine.css';
 
 
 const RedLine: FC<RedLineProps> = ({ isRedLine1 }) => {
@@ -27,10 +26,6 @@ const RedLine: FC<RedLineProps> = ({ isRedLine1 }) => {
             setRedLine2ClassName(_redLine2ClassName);
         }
     }, []);
-
-    useEffect(() => {
-        console.log('redLineClassName: ', redLineClassName)
-    })
 
     return <div className={`redLine ${isRedLine1 ? redLineClassName : redLine2ClassName}`} />
 }
