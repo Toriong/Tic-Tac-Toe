@@ -10,53 +10,53 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import '../../css/gameSettings/playerInfo.css'
 import { useRef } from 'react';
+import { ChangeEventHandler } from 'react';
 
 
 
 const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const { name, isXChosen, isPlayer1 }: Player = player;
-  const { setPlayer2, setPlayer1, setBot, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, didErrorOccur, setDidErrorOccur, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
+  const { setPlayer2, setPlayer1, setBot, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, setDidErrorOccurPlayer1, setDidErrorOccurPlayer2, didErrorOccurPlayer1, didErrorOccurPlayer2, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
   const [isLongNamePlayer1, setIsLongNamePlayer1]: HookBooleanVal = useState(false);
   const [isLongNamePlayer2, setIsLongNamePlayer2]: HookBooleanVal = useState(false);
   const [isNoInputPlayer1, setIsNoInputPlayer1]: HookBooleanVal = useState(false);
   const [isNoInputPlayer2, setIsNoInputPlayer2]: HookBooleanVal = useState(false);
-  const [isNoInput, setIsNoInput]: HookBooleanVal = useState(false);
 
 
 
-  const handleOnKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const _name = (event.target as HTMLInputElement).value;
     if (!_name) {
-      setDidErrorOccur(true);
-      setIsNoInput(true);
+      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
+      isPlayer1 ? setIsNoInputPlayer1(true) : setIsNoInputPlayer2(true);
       return;
-    }
+    };
+    isPlayer1 ? setIsNoInputPlayer1(false) : setIsNoInputPlayer2(false);
     isPlayer1 ? setCurrentNamePlayer1(_name) : setCurrentNamePlayer2(_name);
     const otherPlayerName = versusType?.isTwoPlayer && (isPlayer1 ? currentNamePlayer2 : currentNamePlayer1);
     const isNameErrorForOtherPlayer = otherPlayerName && (otherPlayerName.length > 10)
     if (_name.length > 10) {
-      setDidErrorOccur(true);
+      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
       isPlayer1 ? setIsLongNamePlayer1(true) : setIsLongNamePlayer2(true);
     } else if (isNameErrorForOtherPlayer && versusType.isTwoPlayer) {
       setPlayer(val => { return { ...val, name: _name } });
       if (_name.length <= 10) {
         setWillSaveNameChanges(true);
         isPlayer1 ? setIsLongNamePlayer1(false) : setIsLongNamePlayer2(false);
+        isPlayer1 ? setDidErrorOccurPlayer1(false) : setDidErrorOccurPlayer2(false);
       } else if (_name.length > 10) {
         isPlayer1 ? setIsLongNamePlayer1(true) : setIsLongNamePlayer2(true);
+        isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
       }
     } else {
       setPlayer(val => { return { ...val, name: _name } })
-      if (otherPlayerName) {
-        setDidErrorOccur(false);
-        setIsLongNamePlayer1(false);
-        setIsLongNamePlayer2(false);
-      }
+      isPlayer1 ? setIsLongNamePlayer1(false) : setIsLongNamePlayer2(false);
+      isPlayer1 ? setDidErrorOccurPlayer1(false) : setDidErrorOccurPlayer2(false);
       setWillSaveNameChanges(true);
     };
-    setIsNoInput(false);
+
   }
 
 
@@ -168,12 +168,21 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const [isSameName, setIsSameName] = useState(false);
   useEffect(() => {
     if ((player1.name && player2.name) && (player1.name?.trim() === player2.name?.trim())) {
-      setDidErrorOccur(true);
+      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
+      if (!name?.length && isPlayer1) {
+        setIsNoInputPlayer1(true);
+        setIsLongNamePlayer1(false);
+      } else if (!name?.length) {
+        setIsNoInputPlayer2(true);
+        setIsLongNamePlayer2(false);
+      }
       setIsSameName(true);
+      debugger
     } else {
       setIsSameName(false);
+      isPlayer1 ? setDidErrorOccurPlayer1(false) : setDidErrorOccurPlayer2(false);
     }
-  }, [player1.name, player2.name])
+  }, [player1.name, player2.name, name])
 
 
 
@@ -198,15 +207,23 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   };
 
   const getErrorTxt = (): string => {
-    if (isLongNamePlayer1 || isLongNamePlayer2) {
+    if (isPlayer1 ? isLongNamePlayer1 : isLongNamePlayer2) {
       return "*Name can't be over 10 characters";
     }
 
-    if (isNoInputPlayer1) {
+    if (isPlayer1 ? isNoInputPlayer1 : isNoInputPlayer2) {
       return '*Please enter in a name';
     }
 
     return "*Name cannot be the same";
+  }
+
+  const getPlayerErrorBooleans = () => {
+    if (isPlayer1) {
+      return isLongNamePlayer1 || isNoInputPlayer1
+    }
+
+    return isLongNamePlayer2 || isNoInputPlayer2
   }
 
   return (
@@ -216,11 +233,11 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
         <div className='inputNameContainer'>
           <input
             defaultValue={name as string}
-            style={{ color: (didErrorOccur && (isLongNamePlayer1 || isLongNamePlayer2 || isSameName || isNoInput)) ? 'red' : 'white' }}
-            onKeyUp={event => { handleOnKeyUp(event) }}
+            style={{ color: ((isPlayer1 ? didErrorOccurPlayer1 : didErrorOccurPlayer2) && (getPlayerErrorBooleans() || isSameName)) ? 'red' : 'white' }}
+            onChange={event => { handleOnchange(event) }}
           />
           {<span>
-            {(didErrorOccur && (isLongNamePlayer1 || isLongNamePlayer2 || isSameName || isNoInput)) && getErrorTxt()}
+            {((isPlayer1 ? didErrorOccurPlayer1 : didErrorOccurPlayer2) && (getPlayerErrorBooleans() || isSameName)) && getErrorTxt()}
           </span>}
         </div>
       </section>

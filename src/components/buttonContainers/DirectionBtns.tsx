@@ -8,11 +8,12 @@ import { GameContext, SettingsContext } from '../../provider/Providers'
 import useNavigate from '../../customHooks/useNavigate'
 import '../../css/directionBtnsContainer.css'
 import { GiSteeltoeBoots } from 'react-icons/gi'
+import { useEffect } from 'react'
 
 
 const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled }) => {
   const { currentTurn, setCurrentTurn } = useContext(GameContext);
-  const { didErrorOccur, versusType, setBot, player1 } = useContext(SettingsContext);
+  const { didErrorOccurPlayer1, didErrorOccurPlayer2, versusType, setBot, player1 } = useContext(SettingsContext);
   const { currentLocation, navigateToSec } = useNavigate();
   const [isBackBtnDisabled,]: HookBooleanVal = _isBackBtnDisabled;
   const [isForwardBtnDisabled]: HookBooleanVal = _isForwardBtnDisabled;
@@ -52,6 +53,10 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
 
   const handleBackBtnClick = (): void => { isOnPlayerInfo && navigateToSec(1); };
 
+  useEffect(() => {
+    console.log('didErrorOccurPlayer1: ', didErrorOccurPlayer1)
+    console.log('didErrorOccurPlayer2: ', didErrorOccurPlayer2)
+  })
 
   return (
     <section className='directionBtnSec'>
@@ -62,9 +67,9 @@ const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardB
         Back
       </button>
       <button
-        disabled={(isForwardBtnDisabled || didErrorOccur) as boolean}
-        className={(isForwardBtnDisabled || didErrorOccur) ? 'disabledBtn' : ''}
-        style={{ pointerEvents: (isForwardBtnDisabled || didErrorOccur) ? 'none' : 'auto' }}
+        disabled={(isForwardBtnDisabled || (didErrorOccurPlayer1 || didErrorOccurPlayer2)) as boolean}
+        className={(isForwardBtnDisabled || (didErrorOccurPlayer1 || didErrorOccurPlayer2)) ? 'disabledBtn' : ''}
+        style={{ pointerEvents: (isForwardBtnDisabled || (didErrorOccurPlayer1 || didErrorOccurPlayer2)) ? 'none' : 'auto' }}
         onClick={handleContinueBtnClick}
       >
         {isOnPlayerInfo ? 'Start game' : "Continue"}

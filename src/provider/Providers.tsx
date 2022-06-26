@@ -5,7 +5,8 @@ import { HookBooleanVal, StringState } from '../types/types';
 
 // this sets the value for the SettingsContext.Provider
 export const SettingsContext = createContext({
-  didErrorOccur: false,
+  didErrorOccurPlayer1: false,
+  didErrorOccurPlayer2: false,
   wasShapeBtnClicked: false,
   player1: {} as Partial<Player>,
   player2: {} as Partial<Player>,
@@ -13,8 +14,9 @@ export const SettingsContext = createContext({
   currentNamePlayer1: "",
   currentNamePlayer2: "",
   versusType: {} as Partial<VersusTypeSelectionObj>,
-  setDidErrorOccur: {} as Function,
   setWasShapeBtnClicked: {} as Function,
+  setDidErrorOccurPlayer1: {} as Function,
+  setDidErrorOccurPlayer2: {} as Function,
   setPlayer1: {} as Dispatch<SetStateAction<Partial<Player>>>,
   setPlayer2: {} as Dispatch<SetStateAction<Partial<Player>>>,
   setBot: {} as Dispatch<SetStateAction<Partial<Player>>>,
@@ -37,11 +39,12 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [currentNamePlayer1, setCurrentNamePlayer1]: StringState = useState("");
   const [currentNamePlayer2, setCurrentNamePlayer2]: StringState = useState("");
   const [wasShapeBtnClicked, setWasShapeBtnClicked]: HookBooleanVal = useState(false);
-  const [didErrorOccur, setDidErrorOccur]: HookBooleanVal = useState(false);
+  const [didErrorOccurPlayer1, setDidErrorOccurPlayer1]: HookBooleanVal = useState(false)
+  const [didErrorOccurPlayer2, setDidErrorOccurPlayer2]: HookBooleanVal = useState(false)
 
   return (
     <SettingsContext.Provider value={{
-      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot, didErrorOccur, setDidErrorOccur, currentNamePlayer2, setCurrentNamePlayer2, currentNamePlayer1, setCurrentNamePlayer1, wasShapeBtnClicked, setWasShapeBtnClicked
+      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot, didErrorOccurPlayer2, setDidErrorOccurPlayer2, didErrorOccurPlayer1, setDidErrorOccurPlayer1, currentNamePlayer2, setCurrentNamePlayer2, currentNamePlayer1, setCurrentNamePlayer1, wasShapeBtnClicked, setWasShapeBtnClicked
     }}>
       {children}
     </SettingsContext.Provider>
