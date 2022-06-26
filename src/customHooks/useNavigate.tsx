@@ -1,6 +1,5 @@
 import React from 'react'
 import { useContext } from 'react'
-import { GameObj } from '../interfaces/interfaces';
 import { LocationContext } from '../provider/Providers'
 
 const useNavigate = () => {

@@ -2,11 +2,6 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { CurrentTurn, Player, SelectedBtnStyles, VersusTypeSelectionObj } from "../interfaces/interfaces";
 
 
-// THINGS TO DO MORE RESEARCH ON:
-// dispatch
-// setStateAction
-// Function
-
 export type HookBooleanVal = [boolean, Function];
 
 export type StringState = [string, Function];

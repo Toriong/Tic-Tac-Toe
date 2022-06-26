@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction } from 'react'
-import VersusType from '../components/gameSettings/VersusType';
 import { HookBooleanVal, PlayerState, VersusTypeSelection } from "../types/types";
 
 
@@ -69,10 +68,6 @@ export interface TicTacToeSpaceProps {
     setWillRotate: Function,
     setGridSpotToSave: Function
 }
-
-// export interface NavbarProps {
-//     isOnGame: Boolean,
-// }
 
 export interface CurrentTurn {
     isPlayerOne: Boolean,

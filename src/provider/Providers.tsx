@@ -3,7 +3,6 @@ import { CurrentTurn, GameObj, Player, VersusTypeSelectionObj } from '../interfa
 import { HookBooleanVal, StringState } from '../types/types';
 
 
-// this sets the value for the SettingsContext.Provider
 export const SettingsContext = createContext({
   didErrorOccurPlayer1: false,
   didErrorOccurPlayer2: false,
