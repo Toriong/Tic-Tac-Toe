@@ -21,7 +21,7 @@ const RedLine: FC<RedLineProps> = ({ isRedLine1 }) => {
         if (redLineClassName && isRedLine1) {
             const _redLineClassName = JSON.parse(redLineClassName as string);
             setRedLineClassName(_redLineClassName);
-        } else if (redLine2ClassName && !isRedLine1) {
+        } else if (redLine2ClassName) {
             const _redLine2ClassName = JSON.parse(redLine2ClassName as string);
             setRedLine2ClassName(_redLine2ClassName);
         }

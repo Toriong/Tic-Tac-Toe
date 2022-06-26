@@ -2,16 +2,15 @@ import React from 'react'
 import { FC } from 'react'
 import { VersusTypeSelectionObj } from '../../interfaces/interfaces'
 import { useContext } from 'react'
-import { ModalContext, SettingsContext } from '../../provider/Providers'
+import { SettingsContext } from '../../provider/Providers'
 import '../../css/gameSettings/versusType.css'
-import { handleElementClick } from '../../fns/handleElementClick'
 
 
 
 
 const VersusType: FC = () => {
   const { versusType, setVersusType } = useContext(SettingsContext);
-  const { isBot, isTwoPlayer } = versusType
+  const { isBot, isTwoPlayer } = versusType;
 
   const handleBtnClick = (isBot: Boolean, isTwoPlayer: boolean) => () => {
     const _versusType: VersusTypeSelectionObj = {

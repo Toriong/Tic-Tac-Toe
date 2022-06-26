@@ -5,18 +5,17 @@ import { SettingsContext } from '../../provider/Providers';
 import { MdOutlineClose } from "react-icons/md";
 import { BsCircle } from "react-icons/bs";
 import { GameObj, Player, PlayerInfoProps } from '../../interfaces/interfaces';
-import { HookBooleanVal, PlayerState, SelectedBtnStylesObj } from '../../types/types';
+import { HookBooleanVal, SelectedBtnStylesObj } from '../../types/types';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import '../../css/gameSettings/playerInfo.css'
-import { useRef } from 'react';
-import { ChangeEventHandler } from 'react';
 
 
 
 const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const { name, isXChosen, isPlayer1 }: Player = player;
-  const { setPlayer2, setPlayer1, setBot, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, setDidErrorOccurPlayer1, setDidErrorOccurPlayer2, didErrorOccurPlayer1, didErrorOccurPlayer2, currentNamePlayer1, currentNamePlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2 } = useContext(SettingsContext);
+  const { setPlayer2, setPlayer1, setBot, player1, player2, versusType, wasShapeBtnClicked, setWasShapeBtnClicked, bot, setDidErrorOccurPlayer1, setDidErrorOccurPlayer2, didErrorOccurPlayer1, didErrorOccurPlayer2, setCurrentNamePlayer1, setCurrentNamePlayer2, setIsSameName, isSameName } = useContext(SettingsContext);
+  const updatePlayer = isPlayer1 ? setPlayer1 : setPlayer2;
   const [willSaveNameChanges, setWillSaveNameChanges]: HookBooleanVal = useState(false);
   const [willSaveShapeChanges, setWillSaveShapeChanges]: HookBooleanVal = useState(false);
   const [isLongNamePlayer1, setIsLongNamePlayer1]: HookBooleanVal = useState(false);
@@ -25,42 +24,15 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
   const [isNoInputPlayer2, setIsNoInputPlayer2]: HookBooleanVal = useState(false);
 
 
-
   const handleOnchange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const _name = (event.target as HTMLInputElement).value;
-    if (!_name) {
-      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
-      isPlayer1 ? setIsNoInputPlayer1(true) : setIsNoInputPlayer2(true);
-      return;
-    };
-    isPlayer1 ? setIsNoInputPlayer1(false) : setIsNoInputPlayer2(false);
-    isPlayer1 ? setCurrentNamePlayer1(_name) : setCurrentNamePlayer2(_name);
-    const otherPlayerName = versusType?.isTwoPlayer && (isPlayer1 ? currentNamePlayer2 : currentNamePlayer1);
-    const isNameErrorForOtherPlayer = otherPlayerName && (otherPlayerName.length > 10)
-    if (_name.length > 10) {
-      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
-      isPlayer1 ? setIsLongNamePlayer1(true) : setIsLongNamePlayer2(true);
-    } else if (isNameErrorForOtherPlayer && versusType.isTwoPlayer) {
-      setPlayer(val => { return { ...val, name: _name } });
-      if (_name.length <= 10) {
-        setWillSaveNameChanges(true);
-        isPlayer1 ? setIsLongNamePlayer1(false) : setIsLongNamePlayer2(false);
-        isPlayer1 ? setDidErrorOccurPlayer1(false) : setDidErrorOccurPlayer2(false);
-      } else if (_name.length > 10) {
-        isPlayer1 ? setIsLongNamePlayer1(true) : setIsLongNamePlayer2(true);
-        isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
-      }
-    } else {
-      setPlayer(val => { return { ...val, name: _name } })
-      isPlayer1 ? setIsLongNamePlayer1(false) : setIsLongNamePlayer2(false);
-      isPlayer1 ? setDidErrorOccurPlayer1(false) : setDidErrorOccurPlayer2(false);
-      setWillSaveNameChanges(true);
-    };
-
+    updatePlayer(player => { return { ...player, name: event.target.value } });
+    isPlayer1 ? setCurrentNamePlayer1(event.target.value) : setCurrentNamePlayer2(event.target.value);
+    (event.target.value.length <= 10) && setWillSaveNameChanges(true);
   }
 
 
-  // write a test for this function
+
+
   const saveNameChanges = (name: string): void => {
     const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
     let _player: Player;
@@ -89,7 +61,7 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     setWillSaveNameChanges(false);
   }
 
-  // if player1, then save changes for player2 
+
   const saveShapeChoice = (isXChosen: boolean, willUpdateOtherUser?: boolean, willUpdateBot?: boolean) => {
     const game: (null | GameObj) = localStorage.getItem('game') && JSON.parse(localStorage.getItem('game') as string);
     let _player: Player = player;
@@ -139,54 +111,6 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     setWillSaveShapeChanges(false);
   }
 
-
-
-  useEffect(() => {
-    if (willSaveNameChanges) {
-      saveNameChanges(name as string);
-    }
-
-    if (willSaveShapeChanges) {
-      // save for changes for current user
-      saveShapeChoice(!!isXChosen);
-      // save for changes for the other user
-      versusType.isTwoPlayer ? saveShapeChoice(!isXChosen, true) : saveShapeChoice(!isXChosen, false, true)
-    }
-
-  }, [willSaveNameChanges, willSaveShapeChanges]);
-
-  useLayoutEffect(() => {
-    const { isTwoPlayer, isBot } = versusType;
-
-    if ((isTwoPlayer && (((player1.isXChosen !== false) && (player2.isXChosen !== false)) || (player1.isXChosen || player2.isXChosen))) || (isBot && (player1.isXChosen || bot.isXChosen))) {
-      setWasShapeBtnClicked(true);
-    }
-
-  }, []);
-
-
-  const [isSameName, setIsSameName] = useState(false);
-  useEffect(() => {
-    if ((player1.name && player2.name) && (player1.name?.trim() === player2.name?.trim())) {
-      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
-      if (!name?.length && isPlayer1) {
-        setIsNoInputPlayer1(true);
-        setIsLongNamePlayer1(false);
-      } else if (!name?.length) {
-        setIsNoInputPlayer2(true);
-        setIsLongNamePlayer2(false);
-      }
-      setIsSameName(true);
-      debugger
-    } else {
-      setIsSameName(false);
-      isPlayer1 ? setDidErrorOccurPlayer1(false) : setDidErrorOccurPlayer2(false);
-    }
-  }, [player1.name, player2.name, name])
-
-
-
-
   const handleShapeBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
     !wasShapeBtnClicked && setWasShapeBtnClicked(true);
     const isXChosen = event.currentTarget.name === 'X';
@@ -224,7 +148,54 @@ const PlayerInfo: FC<PlayerInfoProps> = ({ player, setPlayer }) => {
     }
 
     return isLongNamePlayer2 || isNoInputPlayer2
-  }
+  };
+
+
+  useEffect(() => {
+    if (willSaveNameChanges) {
+      saveNameChanges(name as string);
+    }
+
+    if (willSaveShapeChanges) {
+      // save for changes for current user
+      saveShapeChoice(!!isXChosen);
+      // save for changes for the other user
+      versusType.isTwoPlayer ? saveShapeChoice(!isXChosen, true) : saveShapeChoice(!isXChosen, false, true)
+    }
+
+  }, [willSaveNameChanges, willSaveShapeChanges]);
+
+  useLayoutEffect(() => {
+    const { isTwoPlayer, isBot } = versusType;
+
+    if ((isTwoPlayer && (((player1.isXChosen !== false) && (player2.isXChosen !== false)) || (player1.isXChosen || player2.isXChosen))) || (isBot && (player1.isXChosen || bot.isXChosen))) {
+      setWasShapeBtnClicked(true);
+    }
+
+  }, []);
+
+  useEffect(() => {
+    const isNameInvalidLength = (name?.length as number) > 10;
+    const isSameName = (player1.name as string).trim() === (player2.name as string).trim()
+    if (isNameInvalidLength) {
+      isPlayer1 ? setIsLongNamePlayer1(true) : setIsLongNamePlayer2(true);
+      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
+    } else if (!name?.length) {
+      isPlayer1 ? setIsNoInputPlayer1(true) : setIsNoInputPlayer2(true);
+      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
+      debugger
+    } else if (isSameName) {
+      setIsSameName(true);
+      isPlayer1 ? setDidErrorOccurPlayer1(true) : setDidErrorOccurPlayer2(true);
+      debugger
+    } else {
+      isPlayer1 ? setIsNoInputPlayer1(false) : setIsNoInputPlayer2(false);
+      isPlayer1 ? setIsLongNamePlayer1(false) : setIsLongNamePlayer2(false);
+      isPlayer1 ? setDidErrorOccurPlayer1(false) : setDidErrorOccurPlayer2(false);
+      setIsSameName(false);
+    }
+  }, [name, player1.name, player2.name]);
+
 
   return (
     <div className='playerInfo'>

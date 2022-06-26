@@ -8,7 +8,6 @@ import { MdOutlineClose } from 'react-icons/md'
 import { AiFillCloseCircle } from "react-icons/ai";
 import SideModal from './modal/SideModal';
 import '../css/navbar.css'
-import { useEffect } from 'react';
 
 
 const Navbar: FC = () => {
@@ -36,10 +35,6 @@ const Navbar: FC = () => {
   } else {
     gameInfoTxt = 'Turn'
   }
-
-  useEffect(() => {
-    console.log('isStaleMate: ', isStaleMate)
-  })
 
 
   return (

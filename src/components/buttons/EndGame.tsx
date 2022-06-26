@@ -8,6 +8,7 @@ import { GameContext, ModalContext, SettingsContext } from '../../provider/Provi
 const EndGame: FC<EndGameBtnProps> = ({ isOnResultsModal }) => {
     const { setIsSideModalOn, setIsResultModalOn } = useContext(ModalContext);
     const { setPlayer1, setPlayer2, setBot, setVersusType } = useContext(SettingsContext)
+    const { setCurrentTurn } = useContext(GameContext)
     const { navigateToSec } = useNavigate();
     const { setIsGameDone, isGameDone, setIsStaleMate, setRedLineClassName, setRedLine2ClassName } = useContext(GameContext)
 
@@ -16,6 +17,7 @@ const EndGame: FC<EndGameBtnProps> = ({ isOnResultsModal }) => {
         setPlayer2({ name: 'Player 2', isXChosen: false, spotsChosen: [] });
         setBot({ isBot: true, spotsChosen: [] });
         setVersusType({ isBot: false, isTwoPlayer: false });
+        setCurrentTurn({ isBot: false, isPlayerOne: true, isPlayerTwo: false });
         setIsGameDone(false);
         setIsStaleMate(false);
         setRedLine2ClassName("");

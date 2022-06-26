@@ -1,7 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
 import { useContext } from 'react'
-import { useEffect } from 'react'
 import { FC } from 'react'
 import { BsCircle } from 'react-icons/bs'
 import { MdOutlineClose } from 'react-icons/md'

@@ -8,6 +8,7 @@ export const SettingsContext = createContext({
   didErrorOccurPlayer1: false,
   didErrorOccurPlayer2: false,
   wasShapeBtnClicked: false,
+  isSameName: false,
   player1: {} as Partial<Player>,
   player2: {} as Partial<Player>,
   bot: {} as Partial<Player>,
@@ -15,6 +16,7 @@ export const SettingsContext = createContext({
   currentNamePlayer2: "",
   versusType: {} as Partial<VersusTypeSelectionObj>,
   setWasShapeBtnClicked: {} as Function,
+  setIsSameName: {} as Function,
   setDidErrorOccurPlayer1: {} as Function,
   setDidErrorOccurPlayer2: {} as Function,
   setPlayer1: {} as Dispatch<SetStateAction<Partial<Player>>>,
@@ -40,11 +42,12 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [currentNamePlayer2, setCurrentNamePlayer2]: StringState = useState("");
   const [wasShapeBtnClicked, setWasShapeBtnClicked]: HookBooleanVal = useState(false);
   const [didErrorOccurPlayer1, setDidErrorOccurPlayer1]: HookBooleanVal = useState(false)
-  const [didErrorOccurPlayer2, setDidErrorOccurPlayer2]: HookBooleanVal = useState(false)
+  const [didErrorOccurPlayer2, setDidErrorOccurPlayer2]: HookBooleanVal = useState(false);
+  const [isSameName, setIsSameName] = useState(false);
 
   return (
     <SettingsContext.Provider value={{
-      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot, didErrorOccurPlayer2, setDidErrorOccurPlayer2, didErrorOccurPlayer1, setDidErrorOccurPlayer1, currentNamePlayer2, setCurrentNamePlayer2, currentNamePlayer1, setCurrentNamePlayer1, wasShapeBtnClicked, setWasShapeBtnClicked
+      bot, player1, player2, versusType, setPlayer2, setPlayer1, setVersusType, setBot, didErrorOccurPlayer2, setDidErrorOccurPlayer2, didErrorOccurPlayer1, setDidErrorOccurPlayer1, currentNamePlayer2, setCurrentNamePlayer2, currentNamePlayer1, setCurrentNamePlayer1, wasShapeBtnClicked, setWasShapeBtnClicked, isSameName, setIsSameName
     }}>
       {children}
     </SettingsContext.Provider>
@@ -71,7 +74,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const currentTurnDefaultVal = game?.currentTurn ?? { isPlayerOne: false, isPlayerTwo: false, isBot: false };
   const [currentTurn, setCurrentTurn] = useState(currentTurnDefaultVal as Object);
   const [isStaleMate, setIsStaleMate]: HookBooleanVal = useState(!!game?.isStaleMate);
-  const [isGameDone, setIsGameDone]: HookBooleanVal = useState(!!game?.isStaleMate);
+  const [isGameDone, setIsGameDone]: HookBooleanVal = useState(!!game?.isDone);
   const [isOnGameSec, setIsOnGameSec]: HookBooleanVal = useState(false);
   const [redLineClassName, setRedLineClassName]: StringState = useState("");
   const [redLine2ClassName, setRedLine2ClassName]: StringState = useState("")

@@ -106,7 +106,8 @@ export interface GameObj {
     currentTurn?: CurrentTurn,
     isStaleMate?: Boolean
     isDone?: Boolean,
-    isGameDone?: Boolean
+    redLineClassName?: string,
+    redLine2ClassName?: string
 }
 
 

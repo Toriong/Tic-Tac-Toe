@@ -1,5 +1,4 @@
 import React from 'react'
-import { useEffect } from 'react';
 import { useContext } from 'react';
 import { FC } from 'react';
 import { GameObj, ResetButtonProps } from '../../interfaces/interfaces';
@@ -11,7 +10,7 @@ const Reset: FC<ResetButtonProps> = ({ resetBtnTxt }) => {
     const { setIsSideModalOn, setIsResultModalOn } = useContext(ModalContext);
     const { isBot, isTwoPlayer } = versusType;
 
-    const didGameStart = player1?.spotsChosen?.length;
+    const didGameStart = (player1?.spotsChosen?.length || player2?.spotsChosen?.length || bot?.spotsChosen?.length);
     const _pointerEvents = !didGameStart ? 'none' : 'initial';
 
     const resetGameUI = () => {
@@ -35,8 +34,11 @@ const Reset: FC<ResetButtonProps> = ({ resetBtnTxt }) => {
         !currentTurn.isPlayerOne && setCurrentTurn(isTwoPlayer ? { isPlayerOne: true, isPlayerTwo: false } : { isPlayerOne: true, isBot: false });
         isGameDone && setIsGameDone(false);
         isStaleMate && setIsStaleMate(false);
-        game.isGameDone && delete game.isGameDone;
+        game.isDone && delete game.isDone;
         game.isStaleMate && delete game.isStaleMate
+        game.redLineClassName && delete game.redLineClassName;
+        game.redLine2ClassName && delete game.redLine2ClassName;
+        localStorage.setItem('game', JSON.stringify(game) as string);
         setRedLine2ClassName("");
         setRedLineClassName("");
         setIsResultModalOn(false)

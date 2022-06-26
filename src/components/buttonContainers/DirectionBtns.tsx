@@ -1,14 +1,12 @@
 import React from 'react'
 import { FC } from 'react'
 import { CurrentTurn, DirectionBtnsProps, GameObj } from '../../interfaces/interfaces'
-import history from '../../history/history'
 import { HookBooleanVal } from '../../types/types'
 import { useContext } from 'react'
 import { GameContext, SettingsContext } from '../../provider/Providers'
 import useNavigate from '../../customHooks/useNavigate'
-import '../../css/directionBtnsContainer.css'
-import { GiSteeltoeBoots } from 'react-icons/gi'
 import { useEffect } from 'react'
+import '../../css/directionBtnsContainer.css'
 
 
 const DirectionBtns: FC<DirectionBtnsProps> = ({ _isBackBtnDisabled, _isForwardBtnDisabled }) => {

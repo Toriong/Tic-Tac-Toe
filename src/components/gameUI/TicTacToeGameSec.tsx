@@ -105,7 +105,6 @@ const TicTacToeGrid: FC = () => {
       takenSpots = takenSpots.concat(bot.spotsChosen)
     };
     const freeSpots = takenSpots?.length && SPOTS_NUMS.filter(spotNum => !takenSpots?.includes(spotNum));
-    debugger
     if ((typeof freeSpots === 'object') && freeSpots.length) {
       const isUserOn1 = player1.spotsChosen?.includes(1);
       const isUserOn2 = player1.spotsChosen?.includes(2);
@@ -129,13 +128,11 @@ const TicTacToeGrid: FC = () => {
       // MANEUVERS FOR THE WIN
       if (((isBotOn2 && isBotOn3) || (isBotOn5 && isBotOn9) || (isBotOn4 && isBotOn6)) && !isUserOn1 && !isBotOn1) {
         updateBotSpotsChosen(1);
-        debugger
         return;
       }
 
       if (((isBotOn1 && isBotOn3) || (isBotOn5 && isBotOn8)) && !isUserOn2 && !isBotOn2) {
         updateBotSpotsChosen(2);
-        debugger
         return;
       }
 
@@ -151,13 +148,11 @@ const TicTacToeGrid: FC = () => {
 
       if (((isBotOn1 && isBotOn4) || (isBotOn5 && isBotOn3) || (isBotOn9 && isBotOn8)) && !isBotOn7 && !isUserOn7) {
         updateBotSpotsChosen(7);
-        debugger
         return;
       }
 
       if (((isBotOn3 && isBotOn9) || (isBotOn4 && isBotOn5)) && !isBotOn6 && !isUserOn6) {
         updateBotSpotsChosen(6);
-        debugger
         return;
       }
 
@@ -168,13 +163,11 @@ const TicTacToeGrid: FC = () => {
 
       if (((isBotOn2 && isBotOn5) || (isBotOn7 && isBotOn9)) && !isBotOn8 && !isUserOn8) {
         updateBotSpotsChosen(8);
-        debugger
         return;
       }
 
       if (((isBotOn7 && isBotOn8) || (isBotOn3 && isBotOn6) || (isBotOn5 && isBotOn1)) && !isBotOn9 && !isUserOn9) {
         updateBotSpotsChosen(9);
-        debugger
         return;
       }
 
@@ -189,32 +182,30 @@ const TicTacToeGrid: FC = () => {
 
       if (((isUserOn4 && isUserOn1) || (isUserOn5 && isUserOn3) || (isUserOn8 && isUserOn9)) && !isBotOn7 && !isUserOn7) {
         updateBotSpotsChosen(7);
-        debugger
+
         return;
       }
 
 
       if (((isUserOn2 && isUserOn5) || (isUserOn7 && isUserOn9)) && !isBotOn8 && !isUserOn8) {
         updateBotSpotsChosen(8);
-        debugger
+
         return;
       }
 
       if (((isUserOn7 && isUserOn8) || (isUserOn3 && isUserOn6) || (isUserOn5 && isUserOn1)) && !isBotOn9 && !isUserOn9) {
         updateBotSpotsChosen(9);
-        debugger
         return;
       }
 
       if (((isUserOn2 && isUserOn3) || (isUserOn5 && isUserOn9) || (isUserOn7 && isUserOn4)) && !isBotOn1 && !isUserOn1) {
         updateBotSpotsChosen(1);
-        debugger
+
         return;
       }
 
       if (((isUserOn3 && isUserOn9) || (isUserOn4 && isUserOn5)) && !isBotOn6 && !isUserOn6) {
         updateBotSpotsChosen(6);
-        debugger
         return;
       }
 
@@ -243,7 +234,6 @@ const TicTacToeGrid: FC = () => {
       const randomSpot = Math.floor(Math.random() * freeSpots.length);
       const spotChosen = freeSpots[randomSpot];
       updateBotSpotsChosen(spotChosen);
-
     };
   }
 
