@@ -256,9 +256,11 @@ const TicTacToeGrid: FC = () => {
   useLayoutEffect(() => {
     const game: GameObj = localStorage.getItem('game') ? JSON.parse(localStorage.getItem('game') as string) : {};
     if (game.isDone || game.isStaleMate) {
+      const { isStaleMate, redLine2ClassName } = game;
       setIsGameDone(true);
-      game.isStaleMate && setIsStaleMate(true);
+      isStaleMate && setIsStaleMate(true);
       setIsResultModalOn(true);
+      redLine2ClassName && setRedLine2ClassName(redLine2ClassName)
     };
     setIsOnGameSec(true);
 
