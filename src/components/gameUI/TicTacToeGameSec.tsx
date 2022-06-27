@@ -229,6 +229,14 @@ const TicTacToeGrid: FC = () => {
       };
 
 
+      const isFirstMoveByUser = (player1?.spotsChosen?.length as number) === 1;
+      if (isFirstMoveByUser && isUserOn5) {
+        const cornerSpots = [1, 3, 7, 9];
+        const randomSpot = Math.floor(Math.random() * cornerSpots.length);
+        const spotChosen = cornerSpots[randomSpot];
+        updateBotSpotsChosen(spotChosen);
+        return;
+      }
 
       // if there no options on defense nor any options for the win, then choose a spot at random
       const randomSpot = Math.floor(Math.random() * freeSpots.length);
