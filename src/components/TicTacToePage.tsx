@@ -111,10 +111,6 @@ const TicTacToePage: FC<TicTacToePageProps> = ({ didErrorOccur }) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log('bot: ', bot)
-  })
-
 
   return (
     <div className='ticTacToeMainPage'>
