@@ -10,4 +10,4 @@ const useNavigate = () => {
     return { currentLocation, navigateToSec };
 }
 
-export default useNavigate
+export default useNavigate;
