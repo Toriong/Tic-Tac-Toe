@@ -122,7 +122,9 @@
         transform: translateY(40px);
     }
 
-
+    .redLine.horizontalBottom{
+        bottom: 45px;
+    }
 }
 
 @media (max-width: 767px) and (min-width: 425px) {
